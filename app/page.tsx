@@ -14,7 +14,7 @@ export default function Home() {
           href="#"
           className="text-xl font-bold tracking-tight"
         >
-          J<span className="text-[#00A9A5]">.</span>DUDU
+          JOLOMI<span className="text-[#00A9A5]">.</span>DUDU
         </a>
 
         <div className="hidden items-center gap-8 text-sm font-medium md:flex">
@@ -1002,12 +1002,12 @@ export default function Home() {
 
 
           <a
-            href="mailto:hello@jolomidudu.com"
+            href="mailto:jollofdudu@gmail.com"
             className="group flex items-center gap-5"
           >
 
             <span className="text-lg font-semibold">
-              hello@jolomidudu.com
+              jollofdudu@gmail.com
             </span>
 
             <span className="flex h-14 w-14 items-center justify-center rounded-full border border-black transition-all group-hover:bg-black group-hover:text-white">
