@@ -1,14 +1,19 @@
 
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
 
 export default function Home() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <main className="min-h-screen bg-[#f5f5f0] text-[#111111]">
 
       {/* =====================================================
           NAVIGATION
       ====================================================== */}
-      <nav className="flex items-center justify-between px-6 py-6 md:px-12 lg:px-16">
+      <nav className="relative flex items-center justify-between px-6 py-6 md:px-12 lg:px-16">
 
         <a
           href="#"
@@ -77,10 +82,42 @@ export default function Home() {
 
         <button
           className="flex h-10 w-10 items-center justify-center rounded-full border border-black md:hidden"
-          aria-label="Open menu"
+          type="button"
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={menuOpen}
+          aria-controls="mobile-navigation"
+          onClick={() => setMenuOpen(!menuOpen)}
         >
-          ☰
+          {menuOpen ? "×" : "☰"}
         </button>
+
+        {menuOpen && (
+          <div
+            id="mobile-navigation"
+            className="absolute left-6 right-6 top-[76px] z-20 border border-black bg-[#f5f5f0] p-6 shadow-[6px_6px_0_#111111] md:hidden"
+          >
+            <div className="flex flex-col gap-5 text-sm font-semibold tracking-[0.12em]">
+              {[
+                ["WORK", "#work"],
+                ["ABOUT", "#about"],
+                ["SERVICES", "/services"],
+                ["LEARN", "/learn"],
+                ["JOURNAL", "/blog"],
+                ["EXPERIENCE", "#experience"],
+                ["CONTACT", "#contact"],
+              ].map(([label, href]) => (
+                <a
+                  key={label}
+                  href={href}
+                  className="border-b border-black/10 pb-3 transition-opacity hover:opacity-50"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {label}
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
 
       </nav>
 
