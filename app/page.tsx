@@ -33,10 +33,24 @@ export default function Home() {
           </a>
 
           <a
-            href="#services"
+            href="/services"
             className="transition-opacity hover:opacity-50"
           >
             SERVICES
+          </a>
+
+          <a
+            href="/learn"
+            className="transition-opacity hover:opacity-50"
+          >
+            LEARN
+          </a>
+
+          <a
+            href="/blog"
+            className="transition-opacity hover:opacity-50"
+          >
+            JOURNAL
           </a>
 
           <a
@@ -55,10 +69,10 @@ export default function Home() {
         </div>
 
         <a
-          href="#contact"
+          href="/services#booking"
           className="hidden rounded-full border border-black px-5 py-2.5 text-sm font-medium transition-all hover:bg-black hover:text-white md:block"
         >
-          Let&apos;s Talk
+          Start a project
         </a>
 
         <button
@@ -292,6 +306,42 @@ export default function Home() {
 
   </div>
 </section>
+
+
+      {/* =====================================================
+          WAYS TO WORK TOGETHER
+      ====================================================== */}
+      <section className="border-t border-black/10 bg-[#dce9e3] px-6 py-24 md:px-12 md:py-32 lg:px-16">
+        <div className="grid gap-12 lg:grid-cols-[0.75fr_1.25fr]">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#078f8a]">
+              More than a portfolio
+            </p>
+            <h2 className="mt-5 max-w-md text-5xl font-semibold leading-[0.95] tracking-[-0.05em] md:text-6xl">
+              Build, learn, or grow with me.
+            </h2>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-3">
+            {[
+              ["01", "Hire a builder", "Websites, web apps, mobile apps, analytics and digital systems.", "/services"],
+              ["02", "Learn practical tech", "Focused tutoring for websites, graphics design and mobile apps.", "/learn"],
+              ["03", "Read the journal", "Useful notes on business, technology, lifestyle and finance.", "/blog"],
+            ].map(([number, title, description, href]) => (
+              <a
+                key={number}
+                href={href}
+                className="group border-t border-black/20 pt-5 transition-transform hover:-translate-y-1"
+              >
+                <span className="text-xs font-semibold uppercase tracking-[0.15em] text-black/40">{number}</span>
+                <h3 className="mt-12 text-2xl font-semibold tracking-tight group-hover:text-[#078f8a]">{title}</h3>
+                <p className="mt-3 text-sm leading-6 text-black/60">{description}</p>
+                <span className="mt-6 block text-xl">↗</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
 
 
       {/* =====================================================

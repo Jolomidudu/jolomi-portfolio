@@ -13,8 +13,43 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Jolomi Dudu",
-  description: "Software Engineer",
+  metadataBase: new URL("https://jolomi.vercel.app"),
+  title: {
+    default: "Jolomi Dudu | Software Engineer & Digital Product Builder",
+    template: "%s | Jolomi Dudu",
+  },
+  description:
+    "Jolomi Dudu designs and builds useful web and mobile products, teaches practical technology and helps businesses grow digitally.",
+  keywords: [
+    "Jolomi Dudu",
+    "software engineer Nigeria",
+    "web development",
+    "mobile app development",
+    "UI UX design",
+    "data analytics",
+    "technology tutor",
+  ],
+  authors: [{ name: "Jolomi Dudu" }],
+  creator: "Jolomi Dudu",
+  openGraph: {
+    type: "website",
+    locale: "en_NG",
+    url: "https://jolomi.vercel.app",
+    siteName: "Jolomi Dudu",
+    title: "Jolomi Dudu | Software Engineer & Digital Product Builder",
+    description:
+      "Web, mobile, design, analytics, tutoring and digital growth services.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Jolomi Dudu | Software Engineer & Digital Product Builder",
+    description:
+      "Web, mobile, design, analytics, tutoring and digital growth services.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
