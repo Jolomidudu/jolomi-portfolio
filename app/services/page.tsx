@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import SiteChrome from "../site-chrome";
 
 export const metadata: Metadata = {
   title: "Services | Jolomi Dudu",
@@ -17,15 +17,8 @@ const services = [
 
 export default function ServicesPage() {
   return (
-    <main className="min-h-screen bg-[#f5f5f0] text-[#111111]">
-      <nav className="flex items-center justify-between px-6 py-6 md:px-12 lg:px-16">
-        <Link href="/" className="text-xl font-bold tracking-tight">JOLOMI<span className="text-[#00A9A5]">.</span>DUDU</Link>
-        <div className="flex items-center gap-5 text-sm font-medium md:gap-8">
-          <Link href="/" className="hidden transition-opacity hover:opacity-50 md:block">HOME</Link>
-          <a href="/learn" className="transition-opacity hover:opacity-50">LEARN</a>
-          <a href="/blog" className="transition-opacity hover:opacity-50">JOURNAL</a>
-        </div>
-      </nav>
+    <SiteChrome>
+      <main className="min-h-screen bg-[#f5f5f0] text-[#111111]">
 
       <section className="px-6 pb-24 pt-20 md:px-12 md:pb-32 md:pt-28 lg:px-16">
         <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#00A9A5]">Services & pricing</p>
@@ -53,6 +46,7 @@ export default function ServicesPage() {
           <div className="border-t border-black/15 pt-6"><p className="max-w-md leading-7 text-black/60">For now, payments are completed by invoice after your scope is approved. Paystack and Flutterwave checkout can be connected once your business keys and preferred currency are configured.</p><a href="mailto:jollofdudu@gmail.com?subject=Project%20enquiry" className="mt-8 inline-flex rounded-full bg-[#00A9A5] px-6 py-4 text-sm font-semibold text-white transition-transform hover:-translate-y-1">Request a quote ↗</a></div>
         </div>
       </section>
-    </main>
+      </main>
+    </SiteChrome>
   );
 }

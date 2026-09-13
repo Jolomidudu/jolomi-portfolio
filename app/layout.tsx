@@ -50,6 +50,11 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  icons: {
+    icon: "/engineer.png",
+    shortcut: "/engineer.png",
+    apple: "/engineer.png",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
