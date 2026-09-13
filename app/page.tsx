@@ -13,7 +13,7 @@ export default function Home() {
       {/* =====================================================
           NAVIGATION
       ====================================================== */}
-      <nav className="relative flex items-center justify-between px-6 py-6 md:px-12 lg:px-16">
+      <nav className={`relative z-50 flex items-center justify-between px-6 py-6 md:px-12 lg:px-16 ${menuOpen ? "text-[#f5f5f0]" : "text-[#111111]"}`}>
 
         <a
           href="#"
@@ -81,7 +81,7 @@ export default function Home() {
         </a>
 
         <button
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-black md:hidden"
+          className={`flex h-10 w-10 items-center justify-center rounded-full border md:hidden ${menuOpen ? "border-white/35 text-[#f5f5f0]" : "border-black text-[#111111]"}`}
           type="button"
           aria-label={menuOpen ? "Close menu" : "Open menu"}
           aria-expanded={menuOpen}
@@ -94,9 +94,14 @@ export default function Home() {
         {menuOpen && (
           <div
             id="mobile-navigation"
-            className="absolute left-6 right-6 top-[76px] z-20 border border-black bg-[#f5f5f0] p-6 shadow-[6px_6px_0_#111111] md:hidden"
+            className="fixed inset-0 z-40 flex min-h-screen flex-col bg-[#12211f] px-6 pb-8 pt-28 text-[#f5f5f0] md:hidden"
           >
-            <div className="flex flex-col gap-5 text-sm font-semibold tracking-[0.12em]">
+            <div className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#78d8ca]">
+              <span className="h-2 w-2 rounded-full bg-[#78d8ca]" />
+              <span>Menu / Available for work</span>
+            </div>
+
+            <div className="flex flex-1 flex-col">
               {[
                 ["WORK", "#work"],
                 ["ABOUT", "#about"],
@@ -109,12 +114,21 @@ export default function Home() {
                 <a
                   key={label}
                   href={href}
-                  className="border-b border-black/10 pb-3 transition-opacity hover:opacity-50"
+                  className="group flex items-center justify-between border-b border-white/15 py-4 transition-colors first:border-t hover:text-[#78d8ca]"
                   onClick={() => setMenuOpen(false)}
                 >
-                  {label}
+                  <span className="flex items-center gap-4">
+                    <span className="text-xs font-normal text-white/35">0{["WORK", "ABOUT", "SERVICES", "LEARN", "JOURNAL", "EXPERIENCE", "CONTACT"].indexOf(label) + 1}</span>
+                    <span className="text-3xl font-semibold tracking-[-0.04em]">{label}</span>
+                  </span>
+                  <span className="text-xl text-white/35 transition-transform group-hover:translate-x-1 group-hover:text-[#78d8ca]">↗</span>
                 </a>
               ))}
+            </div>
+
+            <div className="mt-10 flex items-end justify-between border-t border-white/15 pt-5 text-xs uppercase tracking-[0.15em] text-white/45">
+              <span>Lagos / Nigeria</span>
+              <a href="/services#booking" onClick={() => setMenuOpen(false)} className="text-[#78d8ca]">Start a project ↗</a>
             </div>
           </div>
         )}
