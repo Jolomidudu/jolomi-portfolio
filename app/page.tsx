@@ -2,10 +2,20 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setShowScrollTop(window.scrollY > 500);
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <main className="min-h-screen bg-[#f5f5f0] text-[#111111]">
@@ -13,7 +23,7 @@ export default function Home() {
       {/* =====================================================
           NAVIGATION
       ====================================================== */}
-      <nav className={`relative z-50 flex items-center justify-between px-6 py-6 md:px-12 lg:px-16 ${menuOpen ? "text-[#f5f5f0]" : "text-[#111111]"}`}>
+      <nav className={`sticky top-0 z-50 flex items-center justify-between px-6 py-5 backdrop-blur-md transition-colors md:px-12 lg:px-16 ${menuOpen ? "bg-[#12211f] text-[#f5f5f0]" : "bg-[#f5f5f0]/90 text-[#111111]"}`}>
 
         <a
           href="#"
@@ -81,7 +91,7 @@ export default function Home() {
         </a>
 
         <button
-          className={`flex h-10 w-10 items-center justify-center rounded-full border md:hidden ${menuOpen ? "border-white/35 text-[#f5f5f0]" : "border-black text-[#111111]"}`}
+          className={`flex h-10 w-10 items-center justify-center rounded-full border md:hidden ${menuOpen ? "invisible" : "border-black text-[#111111]"}`}
           type="button"
           aria-label={menuOpen ? "Close menu" : "Open menu"}
           aria-expanded={menuOpen}
@@ -94,8 +104,17 @@ export default function Home() {
         {menuOpen && (
           <div
             id="mobile-navigation"
-            className="fixed inset-0 z-40 flex min-h-screen flex-col bg-[#12211f] px-6 pb-8 pt-28 text-[#f5f5f0] md:hidden"
+            className="fixed inset-0 z-[60] flex min-h-screen flex-col bg-[#12211f] px-6 pb-8 pt-28 text-[#f5f5f0] md:hidden"
           >
+            <button
+              type="button"
+              aria-label="Close menu"
+              onClick={() => setMenuOpen(false)}
+              className="absolute right-6 top-5 flex h-10 w-10 items-center justify-center rounded-full border border-white/35 text-2xl font-light text-[#f5f5f0] transition-colors hover:border-[#78d8ca] hover:text-[#78d8ca]"
+            >
+              ×
+            </button>
+
             <div className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#78d8ca]">
               <span className="h-2 w-2 rounded-full bg-[#78d8ca]" />
               <span>Menu / Available for work</span>
@@ -134,6 +153,17 @@ export default function Home() {
         )}
 
       </nav>
+
+      {showScrollTop && (
+        <button
+          type="button"
+          aria-label="Scroll to top"
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className="fixed bottom-6 right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-[#12211f] text-xl text-[#78d8ca] shadow-lg transition-all hover:-translate-y-1 hover:bg-[#00A9A5] hover:text-white"
+        >
+          ↑
+        </button>
+      )}
 
 
       {/* =====================================================
