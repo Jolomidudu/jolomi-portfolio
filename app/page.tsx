@@ -176,7 +176,7 @@ export default function Home() {
           <span className="h-2.5 w-2.5 rounded-full bg-[#00A9A5]" />
 
           <span>
-            Available for new opportunities
+            Available for making progress
           </span>
 
         </div>
@@ -185,7 +185,7 @@ export default function Home() {
         <div className="max-w-7xl">
 
           <p className="mb-4 text-lg font-medium md:text-xl">
-            Hello, I&apos;m Jolomi.
+            Hello, I&apos;m Oritsejolomi Dudu.
           </p>
 
           <h1 className="text-[16vw] font-bold leading-[0.8] tracking-[-0.07em] md:text-[13vw] lg:text-[11vw]">
@@ -216,7 +216,7 @@ export default function Home() {
           <div className="max-w-xl">
 
             <p className="text-lg leading-relaxed text-black/65 md:text-xl">
-              I design and build modern web and mobile applications
+              I design, develop, Build and engineer modern web and mobile applications
               that transform ideas into useful digital experiences.
             </p>
 
@@ -229,7 +229,7 @@ export default function Home() {
           >
 
             <span className="text-sm font-semibold uppercase tracking-wider">
-              Explore my work
+              Explore my works
             </span>
 
             <span className="flex h-12 w-12 items-center justify-center rounded-full border border-black transition-all duration-300 group-hover:bg-black group-hover:text-white">
@@ -250,6 +250,10 @@ export default function Home() {
           <span>Backend Engineering</span>
 
           <span>Data Analytics</span>
+
+          <span>Product Design</span>
+
+          <span>Digital Marketing</span>
 
           <span className="md:text-right">
             Nigeria
@@ -273,10 +277,10 @@ export default function Home() {
     {/* Section Label */}
     <div>
       <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#00A9A5]">
-        About Me
+        Get To Know Me
       </p>
 
-      <p className="mt-6 max-w-xs text-sm leading-relaxed text-white/45">
+      <p className="mt-6 max-w-xs text-md leading-relaxed text-white/45">
         Developer, problem solver and digital product builder.
       </p>
     </div>
@@ -340,7 +344,7 @@ export default function Home() {
 
         <div>
           <p className="text-4xl font-semibold tracking-tight md:text-5xl">
-            9+
+            10+
           </p>
 
           <p className="mt-2 text-xs uppercase tracking-wider text-white/40">
@@ -351,7 +355,7 @@ export default function Home() {
 
         <div>
           <p className="text-4xl font-semibold tracking-tight md:text-5xl">
-            20+
+           65+
           </p>
 
           <p className="mt-2 text-xs uppercase tracking-wider text-white/40">
@@ -362,7 +366,7 @@ export default function Home() {
 
         <div className="mt-8 md:mt-0">
           <p className="text-4xl font-semibold tracking-tight md:text-5xl">
-            4+
+            6+
           </p>
 
           <p className="mt-2 text-xs uppercase tracking-wider text-white/40">
@@ -396,7 +400,7 @@ export default function Home() {
         <div className="grid gap-12 lg:grid-cols-[0.75fr_1.25fr]">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#078f8a]">
-              More than a portfolio
+              BEST TIME TO WORK TOGETHER
             </p>
             <h2 className="mt-5 max-w-md text-5xl font-semibold leading-[0.95] tracking-[-0.05em] md:text-6xl">
               Build, learn, or grow with me.
@@ -505,9 +509,13 @@ export default function Home() {
 
             {[
               "Next.js",
+              "Nest.js",
+              "Node.js",
+              "flutter.js",
               "TypeScript",
-              "Tailwind CSS",
-              "Responsive UI",
+              "PostgreSQL",
+              "Railway",
+              "Neon",
             ].map((tech) => (
               <span
                 key={tech}
@@ -536,7 +544,7 @@ export default function Home() {
         <div className="relative aspect-[16/9]">
 
           <Image
-            src="/images/projects/school-management.png"
+            src="/images/projects/kidscollege-mckp.png"
             alt="School management platform dashboard"
             fill
             sizes="(max-width: 768px) 100vw, 90vw"
@@ -552,7 +560,7 @@ export default function Home() {
 
         <div>
           <p className="text-xs font-medium uppercase tracking-[0.15em] text-black/40">
-            02 / SaaS Platform
+            02 / School Management
           </p>
 
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">
@@ -572,8 +580,14 @@ export default function Home() {
           <div className="mt-5 flex flex-wrap gap-2">
 
             {[
-              "Next.js",
-              "MySQL",
+               "Next.js",
+              "Nest.js",
+              "Node.js",
+              "flutter.js",
+              "TypeScript",
+              "PostgreSQL",
+              "Railway",
+              "Neon",
               "REST API",
               "Dashboard",
             ].map((tech) => (
@@ -639,8 +653,14 @@ export default function Home() {
           <div className="mt-5 flex flex-wrap gap-2">
 
             {[
-              "Next.js",
-              "MySQL",
+               "Next.js",
+              "Nest.js",
+              "Node.js",
+              "React Native.js",
+              "TypeScript",
+              "PostgreSQL",
+              "Railway",
+              "Neon",
               "REST API",
               "Dashboard",
             ].map((tech) => (
@@ -704,10 +724,14 @@ export default function Home() {
           <div className="mt-5 flex flex-wrap gap-2">
 
             {[
-              "Flutter",
+               "Next.js",
+              "Nest.js",
               "Node.js",
+              "flutter.js",
+              "TypeScript",
               "PostgreSQL",
-              "REST API",
+              "Railway",
+              "Neon",
             ].map((tech) => (
               <span
                 key={tech}
@@ -770,7 +794,8 @@ export default function Home() {
           <div className="mt-5 flex flex-wrap gap-2">
 
             {[
-              "Flutter",
+              "Next.js",
+              "Nest.js",
               "Node.js",
               "PostgreSQL",
               "REST API",
@@ -836,10 +861,14 @@ export default function Home() {
           <div className="mt-5 flex flex-wrap gap-2">
 
             {[
-              "Flutter",
+               "Next.js",
+              "Nest.js",
               "Node.js",
+              "flutter.js",
+              "TypeScript",
               "PostgreSQL",
-              "REST API",
+              "Railway",
+              "Neon",
             ].map((tech) => (
               <span
                 key={tech}
@@ -903,10 +932,16 @@ export default function Home() {
           <div className="mt-5 flex flex-wrap gap-2">
 
             {[
-              "Flutter",
+              "Next.js",
+              "Nest.js",
               "Node.js",
+              "flutter.js",
+              "TypeScript",
               "PostgreSQL",
-              "REST API",
+              "Railway",
+              "Neon",
+              "Dashboard",
+              "Wallet"
             ].map((tech) => (
               <span
                 key={tech}
@@ -970,10 +1005,15 @@ export default function Home() {
           <div className="mt-5 flex flex-wrap gap-2">
 
             {[
-              "Flutter",
+              "Next.js",
+              "Nest.js",
               "Node.js",
+              "flutter.js",
+              "TypeScript",
               "PostgreSQL",
-              "REST API",
+              "Railway",
+              "Neon",
+              "paystack"
             ].map((tech) => (
               <span
                 key={tech}
@@ -1036,10 +1076,15 @@ export default function Home() {
           <div className="mt-5 flex flex-wrap gap-2">
 
             {[
-              "Flutter",
+               "Next.js",
+              "Nest.js",
               "Node.js",
+              "flutter.js",
+              "TypeScript",
               "PostgreSQL",
-              "REST API",
+              "Railway",
+              "Neon",
+              "paystack"
             ].map((tech) => (
               <span
                 key={tech}
@@ -1110,10 +1155,15 @@ export default function Home() {
           <div className="mt-5 flex flex-wrap gap-2">
 
             {[
-              "Next.js",
+               "Next.js",
+              "Nest.js",
               "Node.js",
-              "MongoDB",
-              "Maps API",
+              "flutter.js",
+              "TypeScript",
+              "PostgreSQL",
+              "Railway",
+              "Neon",
+              "paystack"
             ].map((tech) => (
               <span
                 key={tech}
@@ -1302,23 +1352,23 @@ export default function Home() {
 
               <div>
                 <p className="text-sm text-black/40">
-                  2024 — Present
+                  2018 — Present
                 </p>
               </div>
 
               <div>
                 <h3 className="text-2xl font-semibold tracking-tight">
-                  Software Engineer
+                  Grenstack Technology 
                 </h3>
 
                 <p className="mt-1 text-sm text-[#00A9A5]">
-                  Independent / Freelance
+                  Founder / Senior Software Engineer
                 </p>
 
                 <p className="mt-5 max-w-xl text-base leading-7 text-black/55">
                   Designing and developing web and mobile applications,
                   backend systems and digital products for businesses,
-                  startups and personal ventures.
+                  startups and conglomerates.
                 </p>
 
                 <div className="mt-5 flex flex-wrap gap-2">
@@ -1340,7 +1390,7 @@ export default function Home() {
               </div>
 
               <div className="text-sm text-black/40 md:text-right">
-                Nigeria
+                Lagos, Nigeria
               </div>
 
             </div>
@@ -1351,17 +1401,17 @@ export default function Home() {
 
               <div>
                 <p className="text-sm text-black/40">
-                  Previous
+                 2022 - 2025
                 </p>
               </div>
 
               <div>
                 <h3 className="text-2xl font-semibold tracking-tight">
-                  Web & Mobile Developer
+                  Gentleboard Real Estate
                 </h3>
 
                 <p className="mt-1 text-sm text-[#00A9A5]">
-                  Software Development
+                  Software Developer
                 </p>
 
                 <p className="mt-5 max-w-xl text-base leading-7 text-black/55">
@@ -1389,7 +1439,7 @@ export default function Home() {
               </div>
 
               <div className="text-sm text-black/40 md:text-right">
-                Nigeria
+                Lagos,Nigeria
               </div>
 
             </div>
@@ -1609,7 +1659,7 @@ export default function Home() {
           </p>
 
           <p>
-            Built with Next.js
+            Built By Oritsejolomi
           </p>
 
         </div>
