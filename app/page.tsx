@@ -443,7 +443,7 @@ export default function Home() {
       </p>
 
       <h2 className="mt-5 text-5xl font-semibold tracking-[-0.05em] md:text-6xl lg:text-7xl">
-        Things I&apos;ve built.
+        Projects I&apos;ve built.
       </h2>
     </div>
 
@@ -459,74 +459,6 @@ export default function Home() {
   <div className="grid gap-14">
 
     {/* =====================================================
-        GREYFUNDR
-    ====================================================== */}
-    <article className="group">
-
-      <div className="overflow-hidden rounded-[1.5rem] bg-[#111111]">
-
-        <div className="relative aspect-[16/9]">
-
-          <Image
-            src="/images/projects/greyfundr.png"
-            alt="Greyfundr crowdfunding platform"
-            fill
-            sizes="(max-width: 768px) 100vw, 90vw"
-            className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-          />
-
-        </div>
-
-      </div>
-
-
-      <div className="mt-6 grid gap-5 md:grid-cols-[0.7fr_1.3fr]">
-
-        <div>
-          <p className="text-xs font-medium uppercase tracking-[0.15em] text-black/40">
-            01 / Web & Mobile
-          </p>
-
-          <h3 className="mt-2 text-2xl font-semibold tracking-tight">
-            Greyfundr
-          </h3>
-        </div>
-
-
-        <div className="max-w-2xl">
-
-          <p className="text-sm leading-7 text-black/55 md:text-base">
-            A crowdfunding and digital community platform designed
-            to help people raise funds, support causes and connect
-            with communities.
-          </p>
-
-          <div className="mt-5 flex flex-wrap gap-2">
-
-            {[
-              "Flutter",
-              "Node.js",
-              "PostgreSQL",
-              "REST API",
-            ].map((tech) => (
-              <span
-                key={tech}
-                className="rounded-full border border-black/15 px-3 py-1.5 text-xs"
-              >
-                {tech}
-              </span>
-            ))}
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </article>
-
-
-    {/* =====================================================
         SPA ELARIS
     ====================================================== */}
     <article className="group">
@@ -536,7 +468,7 @@ export default function Home() {
         <div className="relative aspect-[16/9]">
 
           <Image
-            src="/images/projects/spaelaris.png"
+            src="/images/projects/spaelaris-mckp.png"
             alt="Spa Elaris wellness website"
             fill
             sizes="(max-width: 768px) 100vw, 90vw"
@@ -552,7 +484,7 @@ export default function Home() {
 
         <div>
           <p className="text-xs font-medium uppercase tracking-[0.15em] text-black/40">
-            02 / Web Development
+            01 / Web & Mobile
           </p>
 
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">
@@ -594,8 +526,8 @@ export default function Home() {
     </article>
 
 
-    {/* =====================================================
-        SCHOOL MANAGEMENT
+     {/* =====================================================
+        Kids College School Management
     ====================================================== */}
     <article className="group">
 
@@ -620,11 +552,11 @@ export default function Home() {
 
         <div>
           <p className="text-xs font-medium uppercase tracking-[0.15em] text-black/40">
-            03 / SaaS Platform
+            02 / SaaS Platform
           </p>
 
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">
-            School Management Platform
+            Kids College School Management System
           </h3>
         </div>
 
@@ -662,18 +594,84 @@ export default function Home() {
     </article>
 
 
-    {/* =====================================================
-        FOOD DELIVERY
+    
+     {/* =====================================================
+        Dating Platform
     ====================================================== */}
     <article className="group">
 
-      <div className="overflow-hidden rounded-[1.5rem] bg-[#dfe7df]">
+      <div className="overflow-hidden rounded-[1.5rem] bg-[#111111]">
 
         <div className="relative aspect-[16/9]">
 
           <Image
-            src="/images/projects/food-delivery.png"
-            alt="Food delivery application"
+            src="/images/projects/lovenorth-mckp.png"
+            alt="School management platform dashboard"
+            fill
+            sizes="(max-width: 768px) 100vw, 90vw"
+            className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+          />
+
+        </div>
+
+      </div>
+
+
+      <div className="mt-6 grid gap-5 md:grid-cols-[0.7fr_1.3fr]">
+
+        <div>
+          <p className="text-xs font-medium uppercase tracking-[0.15em] text-black/40">
+            03 / Dating Platform
+          </p>
+
+          <h3 className="mt-2 text-2xl font-semibold tracking-tight">
+            A dating platform connecting singles and helping them find meaningful relationships.
+          </h3>
+        </div>
+
+
+        <div className="max-w-2xl">
+
+          <p className="text-sm leading-7 text-black/55 md:text-base">
+            A comprehensive dating platform connecting singles and helping them find meaningful relationships.
+          </p>
+
+          <div className="mt-5 flex flex-wrap gap-2">
+
+            {[
+              "Next.js",
+              "MySQL",
+              "REST API",
+              "Dashboard",
+            ].map((tech) => (
+              <span
+                key={tech}
+                className="rounded-full border border-black/15 px-3 py-1.5 text-xs"
+              >
+                {tech}
+              </span>
+            ))}
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </article>
+
+     {/* =====================================================
+        A Hotel Booking Platform
+    ====================================================== */}
+    <article className="group">
+
+      <div className="overflow-hidden rounded-[1.5rem] bg-[#111111]">
+
+        <div className="relative aspect-[16/9]">
+
+          <Image
+            src="/images/projects/elvara-mckp.png"
+            alt="A hotel booking platform"
             fill
             sizes="(max-width: 768px) 100vw, 90vw"
             className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
@@ -692,7 +690,411 @@ export default function Home() {
           </p>
 
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">
-            Food Delivery Platform
+            Elvara
+          </h3>
+        </div>
+
+
+        <div className="max-w-2xl">
+
+          <p className="text-sm leading-7 text-black/55 md:text-base">
+            A hotel booking platform designed to help users discover, book and manage hotel stays through a seamless digital experience.
+          </p>
+
+          <div className="mt-5 flex flex-wrap gap-2">
+
+            {[
+              "Flutter",
+              "Node.js",
+              "PostgreSQL",
+              "REST API",
+            ].map((tech) => (
+              <span
+                key={tech}
+                className="rounded-full border border-black/15 px-3 py-1.5 text-xs"
+              >
+                {tech}
+              </span>
+            ))}
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </article>
+
+
+     {/* =====================================================
+        A Cosmetics E-commerce Platform
+    ====================================================== */}
+    <article className="group">
+
+      <div className="overflow-hidden rounded-[1.5rem] bg-[#111111]">
+
+        <div className="relative aspect-[16/9]">
+
+          <Image
+            src="/images/projects/spinettcosmetics-mckp.png"
+            alt="A cosmetics e-commerce platform"
+            fill
+            sizes="(max-width: 768px) 100vw, 90vw"
+            className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+          />
+
+        </div>
+
+      </div>
+
+
+      <div className="mt-6 grid gap-5 md:grid-cols-[0.7fr_1.3fr]">
+
+        <div>
+          <p className="text-xs font-medium uppercase tracking-[0.15em] text-black/40">
+            05 / Web & Mobile
+          </p>
+
+          <h3 className="mt-2 text-2xl font-semibold tracking-tight">
+            Spinettcosmetics
+          </h3>
+        </div>
+
+
+        <div className="max-w-2xl">
+
+          <p className="text-sm leading-7 text-black/55 md:text-base">
+            A cosmetics e-commerce platform that allows users to browse and purchase beauty products from various brands.
+          </p>
+
+          <div className="mt-5 flex flex-wrap gap-2">
+
+            {[
+              "Flutter",
+              "Node.js",
+              "PostgreSQL",
+              "REST API",
+            ].map((tech) => (
+              <span
+                key={tech}
+                className="rounded-full border border-black/15 px-3 py-1.5 text-xs"
+              >
+                {tech}
+              </span>
+            ))}
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </article>
+
+
+    {/* =====================================================
+        Food Delivery Platform
+    ====================================================== */}
+    <article className="group">
+
+      <div className="overflow-hidden rounded-[1.5rem] bg-[#111111]">
+
+        <div className="relative aspect-[16/9]">
+
+          <Image
+            src="/images/projects/mealgo-mckp.png"
+            alt="A food delivery platform"
+            fill
+            sizes="(max-width: 768px) 100vw, 90vw"
+            className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+          />
+
+        </div>
+
+      </div>
+
+
+      <div className="mt-6 grid gap-5 md:grid-cols-[0.7fr_1.3fr]">
+
+        <div>
+          <p className="text-xs font-medium uppercase tracking-[0.15em] text-black/40">
+            06 / Web & Mobile
+          </p>
+
+          <h3 className="mt-2 text-2xl font-semibold tracking-tight">
+            Mealgo
+          </h3>
+        </div>
+
+
+        <div className="max-w-2xl">
+
+          <p className="text-sm leading-7 text-black/55 md:text-base">
+            A food delivery platform that connects users with local restaurants and enables seamless ordering and tracking.
+          </p>
+
+          <div className="mt-5 flex flex-wrap gap-2">
+
+            {[
+              "Flutter",
+              "Node.js",
+              "PostgreSQL",
+              "REST API",
+            ].map((tech) => (
+              <span
+                key={tech}
+                className="rounded-full border border-black/15 px-3 py-1.5 text-xs"
+              >
+                {tech}
+              </span>
+            ))}
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </article>
+
+
+
+    {/* =====================================================
+        A Logistics Platform
+    ====================================================== */}
+    <article className="group">
+
+      <div className="overflow-hidden rounded-[1.5rem] bg-[#111111]">
+
+        <div className="relative aspect-[16/9]">
+
+          <Image
+            src="/images/projects/misanlogistics-mckp.png"
+            alt="A logistics platform"
+            fill
+            sizes="(max-width: 768px) 100vw, 90vw"
+            className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+          />
+
+        </div>
+
+      </div>
+
+
+      <div className="mt-6 grid gap-5 md:grid-cols-[0.7fr_1.3fr]">
+
+        <div>
+          <p className="text-xs font-medium uppercase tracking-[0.15em] text-black/40">
+            07 / Web & Mobile
+          </p>
+
+          <h3 className="mt-2 text-2xl font-semibold tracking-tight">
+            Misan Logistics
+          </h3>
+        </div>
+
+
+        <div className="max-w-2xl">
+
+          <p className="text-sm leading-7 text-black/55 md:text-base">
+            A logistics platform designed to help users discover, book and manage logistics services through a seamless digital experience.
+          </p>
+
+          <div className="mt-5 flex flex-wrap gap-2">
+
+            {[
+              "Flutter",
+              "Node.js",
+              "PostgreSQL",
+              "REST API",
+            ].map((tech) => (
+              <span
+                key={tech}
+                className="rounded-full border border-black/15 px-3 py-1.5 text-xs"
+              >
+                {tech}
+              </span>
+            ))}
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </article>
+
+    {/* =====================================================
+        HAPPYGIFT A Crowdfunding Platform
+    ====================================================== */}
+    <article className="group">
+
+      <div className="overflow-hidden rounded-[1.5rem] bg-[#111111]">
+
+        <div className="relative aspect-[16/9]">
+
+          <Image
+            src="/images/projects/happygift-mckp.png"
+            alt="HappyGift crowdfunding platform"
+            fill
+            sizes="(max-width: 768px) 100vw, 90vw"
+            className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+          />
+
+        </div>
+
+      </div>
+
+
+      <div className="mt-6 grid gap-5 md:grid-cols-[0.7fr_1.3fr]">
+
+        <div>
+          <p className="text-xs font-medium uppercase tracking-[0.15em] text-black/40">
+            08 / Web & Mobile
+          </p>
+
+          <h3 className="mt-2 text-2xl font-semibold tracking-tight">
+            HappyGift
+          </h3>
+        </div>
+
+
+        <div className="max-w-2xl">
+
+          <p className="text-sm leading-7 text-black/55 md:text-base">
+            A crowdfunding and digital community platform designed
+            to help people raise funds, support causes and connect
+            with communities.
+          </p>
+
+          <div className="mt-5 flex flex-wrap gap-2">
+
+            {[
+              "Flutter",
+              "Node.js",
+              "PostgreSQL",
+              "REST API",
+            ].map((tech) => (
+              <span
+                key={tech}
+                className="rounded-full border border-black/15 px-3 py-1.5 text-xs"
+              >
+                {tech}
+              </span>
+            ))}
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </article>
+
+     {/* =====================================================
+        Car Ride Sharing Platform
+    ====================================================== */}
+    <article className="group">
+
+      <div className="overflow-hidden rounded-[1.5rem] bg-[#111111]">
+
+        <div className="relative aspect-[16/9]">
+
+          <Image
+            src="/images/projects/routeride-mckp.png"
+            alt="Car ride sharing platform"
+            fill
+            sizes="(max-width: 768px) 100vw, 90vw"
+            className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+          />
+
+        </div>
+
+      </div>
+
+
+      <div className="mt-6 grid gap-5 md:grid-cols-[0.7fr_1.3fr]">
+
+        <div>
+          <p className="text-xs font-medium uppercase tracking-[0.15em] text-black/40">
+            09 / Web & Mobile
+          </p>
+
+          <h3 className="mt-2 text-2xl font-semibold tracking-tight">
+            Routeride
+          </h3>
+        </div>
+
+
+        <div className="max-w-2xl">
+
+          <p className="text-sm leading-7 text-black/55 md:text-base">
+            A car ride sharing platform designed
+            to help people find rides, connect with drivers and enjoy seamless travel experiences.
+          </p>
+
+          <div className="mt-5 flex flex-wrap gap-2">
+
+            {[
+              "Flutter",
+              "Node.js",
+              "PostgreSQL",
+              "REST API",
+            ].map((tech) => (
+              <span
+                key={tech}
+                className="rounded-full border border-black/15 px-3 py-1.5 text-xs"
+              >
+                {tech}
+              </span>
+            ))}
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </article>
+
+
+    
+
+
+   
+
+
+    {/* =====================================================
+        FOOD DELIVERY
+    ====================================================== */}
+    <article className="group">
+
+      <div className="overflow-hidden rounded-[1.5rem] bg-[#dfe7df]">
+
+        <div className="relative aspect-[16/9]">
+
+          <Image
+            src="/images/projects/mealgo-mckp.png"
+            alt="Mealgo Food Delivery Platform"
+            fill
+            sizes="(max-width: 768px) 100vw, 90vw"
+            className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+          />
+
+        </div>
+
+      </div>
+
+
+      <div className="mt-6 grid gap-5 md:grid-cols-[0.7fr_1.3fr]">
+
+        <div>
+          <p className="text-xs font-medium uppercase tracking-[0.15em] text-black/40">
+            10 / Web & Mobile
+          </p>
+
+          <h3 className="mt-2 text-2xl font-semibold tracking-tight">
+            Mealgo Food Delivery Platform
           </h3>
         </div>
 

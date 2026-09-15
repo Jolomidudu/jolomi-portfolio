@@ -16,6 +16,17 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Payment setup
+
+The Services page supports Paystack hosted checkout. Copy `.env.example` to `.env.local` for local testing, then add your Paystack secret key:
+
+```env
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+PAYSTACK_SECRET_KEY=sk_test_...
+```
+
+For Vercel, add the same variables in Project Settings > Environment Variables for the Production environment, using live keys only when you are ready to accept real payments. The payment callback verifies transactions server-side before redirecting the customer back to `/services`.
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
