@@ -782,7 +782,7 @@ export default function Home() {
         <div className="relative aspect-[16/9]">
 
           <Image
-            src="/images/projects/mealcourt-mckp.png"
+            src="/images/projects/mealcourt.jpg"
             alt="A food delivery platform"
             fill
             sizes="(max-width: 768px) 100vw, 90vw"
@@ -1008,7 +1008,7 @@ export default function Home() {
         <div className="relative aspect-[16/9]">
 
           <Image
-            src="/images/projects/routyride-mckp.png"
+            src="/images/projects/routyride.jpg"
             alt="Car ride sharing platform"
             fill
             sizes="(max-width: 768px) 100vw, 90vw"
