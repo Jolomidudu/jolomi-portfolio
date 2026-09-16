@@ -1066,7 +1066,7 @@ export default function Home() {
         <div className="relative aspect-[16/9]">
 
           <Image
-            src="/images/projects/routeride-mckp.png"
+            src="/images/projects/routyride-mckp.png"
             alt="Car ride sharing platform"
             fill
             sizes="(max-width: 768px) 100vw, 90vw"
@@ -1086,10 +1086,10 @@ export default function Home() {
           </p>
 
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">
-            Routeride
+            Routyride
           </h3>
 
-          <a href="https://routerite.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
+          <a href="https://routyride.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
             View project <span aria-hidden="true" className="ml-2">-&gt;</span>
           </a>
         </div>
