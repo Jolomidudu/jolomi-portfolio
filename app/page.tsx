@@ -3,7 +3,6 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -472,7 +471,7 @@ export default function Home() {
         <div className="relative aspect-[16/9]">
 
           <Image
-            src="/images/projects/spaelaris-mckp.png"
+            src="/images/projects/spaelaris1-mckp.jpg"
             alt="Spa Elaris wellness website"
             fill
             sizes="(max-width: 768px) 100vw, 90vw"
@@ -494,6 +493,10 @@ export default function Home() {
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">
             Spa Elaris
           </h3>
+
+          <a href="https://spaelaris.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
+            View project <span aria-hidden="true" className="ml-2">-&gt;</span>
+          </a>
         </div>
 
 
@@ -566,6 +569,10 @@ export default function Home() {
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">
             Kids College School Management System
           </h3>
+
+          <a href="https://kcbn.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
+            View project <span aria-hidden="true" className="ml-2">-&gt;</span>
+          </a>
         </div>
 
 
@@ -641,6 +648,10 @@ export default function Home() {
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">
             A dating platform connecting singles and helping them find meaningful relationships.
           </h3>
+
+          <a href="https://lovenorth.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
+            View project <span aria-hidden="true" className="ml-2">-&gt;</span>
+          </a>
         </div>
 
 
@@ -690,7 +701,7 @@ export default function Home() {
         <div className="relative aspect-[16/9]">
 
           <Image
-            src="/images/projects/elvara-mckp.png"
+            src="/images/projects/elvarahotel-mckp.jpg"
             alt="A hotel booking platform"
             fill
             sizes="(max-width: 768px) 100vw, 90vw"
@@ -712,6 +723,10 @@ export default function Home() {
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">
             Elvara
           </h3>
+
+          <a href="https://elvarahotel.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
+            View project <span aria-hidden="true" className="ml-2">-&gt;</span>
+          </a>
         </div>
 
 
@@ -782,6 +797,10 @@ export default function Home() {
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">
             Spinettcosmetics
           </h3>
+
+          <a href="https://spinettcosmetics.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
+            View project <span aria-hidden="true" className="ml-2">-&gt;</span>
+          </a>
         </div>
 
 
@@ -849,6 +868,10 @@ export default function Home() {
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">
             Mealgo
           </h3>
+
+          <a href="https://mealgo.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
+            View project <span aria-hidden="true" className="ml-2">-&gt;</span>
+          </a>
         </div>
 
 
@@ -920,6 +943,10 @@ export default function Home() {
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">
             Misan Logistics
           </h3>
+
+          <a href="https://misanlogistics.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
+            View project <span aria-hidden="true" className="ml-2">-&gt;</span>
+          </a>
         </div>
 
 
@@ -991,6 +1018,10 @@ export default function Home() {
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">
             HappyGift
           </h3>
+
+          <a href="https://happygift.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
+            View project <span aria-hidden="true" className="ml-2">-&gt;</span>
+          </a>
         </div>
 
 
@@ -1063,6 +1094,10 @@ export default function Home() {
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">
             Routeride
           </h3>
+
+          <a href="https://routerite.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
+            View project <span aria-hidden="true" className="ml-2">-&gt;</span>
+          </a>
         </div>
 
 
@@ -1110,7 +1145,7 @@ export default function Home() {
 
 
     {/* =====================================================
-        FOOD DELIVERY
+        HEALTHCARE PLATFORM
     ====================================================== */}
     <article className="group">
 
@@ -1119,8 +1154,8 @@ export default function Home() {
         <div className="relative aspect-[16/9]">
 
           <Image
-            src="/images/projects/mealgo-mckp.png"
-            alt="Mealgo Food Delivery Platform"
+            src="/images/projects/skyhealth-mckp.png"
+            alt="SkyHealth Healthcare Platform"
             fill
             sizes="(max-width: 768px) 100vw, 90vw"
             className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
@@ -1139,17 +1174,93 @@ export default function Home() {
           </p>
 
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">
-            Mealgo Food Delivery Platform
+            SkyHealth Healthcare Platform
           </h3>
+
+          <a href="https://skyhealth.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
+            View project <span aria-hidden="true" className="ml-2">-&gt;</span>
+          </a>
         </div>
 
 
         <div className="max-w-2xl">
 
           <p className="text-sm leading-7 text-black/55 md:text-base">
-            A food ordering and delivery platform connecting
-            customers, restaurants and delivery partners through
-            a streamlined digital experience.
+            A healthcare platform designed to help users access medical services, connect with healthcare providers and manage their health records through a seamless digital experience.
+          </p>
+
+          <div className="mt-5 flex flex-wrap gap-2">
+
+            {[
+               "Next.js",
+              "Nest.js",
+              "Node.js",
+              "flutter.js",
+              "TypeScript",
+              "PostgreSQL",
+              "Railway",
+              "Neon",
+              "paystack"
+            ].map((tech) => (
+              <span
+                key={tech}
+                className="rounded-full border border-black/15 px-3 py-1.5 text-xs"
+              >
+                {tech}
+              </span>
+            ))}
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </article>
+
+     {/* =====================================================
+       FASHION DESIGNER PORTFOLIO
+    ====================================================== */}
+    <article className="group">
+
+      <div className="overflow-hidden rounded-[1.5rem] bg-[#dfe7df]">
+
+        <div className="relative aspect-[16/9]">
+
+          <Image
+            src="/images/projects/fashion-designer.png"
+            alt="Fashion Designer Portfolio"
+            fill
+            sizes="(max-width: 768px) 100vw, 90vw"
+            className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+          />
+
+        </div>
+
+      </div>
+
+
+      <div className="mt-6 grid gap-5 md:grid-cols-[0.7fr_1.3fr]">
+
+        <div>
+          <p className="text-xs font-medium uppercase tracking-[0.15em] text-black/40">
+            11 / Web & Mobile
+          </p>
+
+          <h3 className="mt-2 text-2xl font-semibold tracking-tight">
+            Fashion Designer Portfolio
+          </h3>
+
+          <a href="https://grandbox.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
+            View project <span aria-hidden="true" className="ml-2">-&gt;</span>
+          </a>
+        </div>
+
+
+        <div className="max-w-2xl">
+
+          <p className="text-sm leading-7 text-black/55 md:text-base">
+            A fashion designer portfolio website showcasing creative work and professional experience.
           </p>
 
           <div className="mt-5 flex flex-wrap gap-2">
