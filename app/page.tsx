@@ -276,7 +276,7 @@ export default function Home() {
         <div className="relative aspect-[4/5] overflow-hidden rounded-[1.5rem] bg-white/10">
 
           <Image
-            src="/images/jolomi2.jpg"
+            src="/images/jolomi.jpg"
             alt="Jolomi Dudu"
             fill
             priority
