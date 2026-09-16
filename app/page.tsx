@@ -239,25 +239,7 @@ export default function Home() {
         </div>
 
 
-        <div className="mt-16 grid grid-cols-2 gap-y-5 border-t border-black/15 pt-5 text-xs uppercase tracking-wider text-black/50 md:grid-cols-5">
-
-          <span>Web Development</span>
-
-          <span>Mobile Development</span>
-
-          <span>Backend Engineering</span>
-
-          <span>Data Analytics</span>
-
-          <span>Product Design</span>
-
-          <span>Digital Marketing</span>
-
-          <span className="md:text-right">
-            Nigeria
-          </span>
-
-        </div>
+        
 
       </section>
 
@@ -379,16 +361,7 @@ export default function Home() {
 </section>
 
 
-      {/* =====================================================
-          WAYS TO WORK TOGETHER
-      ====================================================== */}
-      <section className="border-t border-black/10 bg-[#dce9e3] px-6 py-24 md:px-12 md:py-32 lg:px-16">
-        <div className="grid gap-12 lg:grid-cols-[0.75fr_1.25fr]">
-          
-
-          
-        </div>
-      </section>
+      
 
 
       {/* =====================================================
@@ -449,7 +422,7 @@ export default function Home() {
       <div className="mt-6 grid gap-5 md:grid-cols-[0.7fr_1.3fr]">
 
         <div>
-          <p className="text-xs font-medium uppercase tracking-[0.15em] text-black/40">
+          <p className="text-xs font-medium uppercase tracking-[0.15em] text-black/60">
             01 / Web & Mobile
           </p>
 
@@ -458,14 +431,14 @@ export default function Home() {
           </h3>
 
           <a href="https://spaelaris.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
-            View project <span aria-hidden="true" className="ml-2">-&gt;</span>
+            View project <span aria-hidden="true" className="ml-2"></span>
           </a>
         </div>
 
 
         <div className="max-w-2xl">
 
-          <p className="text-sm leading-7 text-black/55 md:text-base">
+          <p className="text-md leading-7 text-black/55 md:text-base">
             A premium wellness and spa platform designed to showcase
             treatments, services, packages and provide a polished
             digital experience for customers.
@@ -526,7 +499,7 @@ export default function Home() {
       <div className="mt-6 grid gap-5 md:grid-cols-[0.7fr_1.3fr]">
 
         <div>
-          <p className="text-xs font-medium uppercase tracking-[0.15em] text-black/40">
+          <p className="text-xs font-medium uppercase tracking-[0.15em] text-black/60">
             02 / School Management
           </p>
 
@@ -535,14 +508,14 @@ export default function Home() {
           </h3>
 
           <a href="https://kcbn.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
-            View project <span aria-hidden="true" className="ml-2">-&gt;</span>
+            View project <span aria-hidden="true" className="ml-2"></span>
           </a>
         </div>
 
 
         <div className="max-w-2xl">
 
-          <p className="text-sm leading-7 text-black/55 md:text-base">
+          <p className="text-md leading-7 text-black/55 md:text-base">
             A comprehensive school management system connecting
             administrators, teachers, students and parents through
             a centralized digital platform.
@@ -613,14 +586,14 @@ export default function Home() {
           </h3>
 
           <a href="https://lovenorth.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
-            View project <span aria-hidden="true" className="ml-2">-&gt;</span>
+            View project <span aria-hidden="true" className="ml-2"></span>
           </a>
         </div>
 
 
         <div className="max-w-2xl">
 
-          <p className="text-sm leading-7 text-black/55 md:text-base">
+          <p className="text-md leading-7 text-black/55 md:text-base">
             A comprehensive dating platform connecting singles and helping them find meaningful relationships.
           </p>
 
@@ -688,14 +661,14 @@ export default function Home() {
           </h3>
 
           <a href="https://elvarahotel.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
-            View project <span aria-hidden="true" className="ml-2">-&gt;</span>
+            View project <span aria-hidden="true" className="ml-2"></span>
           </a>
         </div>
 
 
         <div className="max-w-2xl">
 
-          <p className="text-sm leading-7 text-black/55 md:text-base">
+          <p className="text-md leading-7 text-black/55 md:text-base">
             A hotel booking platform designed to help users discover, book and manage hotel stays through a seamless digital experience.
           </p>
 
@@ -762,14 +735,14 @@ export default function Home() {
           </h3>
 
           <a href="https://spinettcosmetics.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
-            View project <span aria-hidden="true" className="ml-2">-&gt;</span>
+            View project <span aria-hidden="true" className="ml-2"></span>
           </a>
         </div>
 
 
         <div className="max-w-2xl">
 
-          <p className="text-sm leading-7 text-black/55 md:text-base">
+          <p className="text-md leading-7 text-black/55 md:text-base">
             A cosmetics e-commerce platform that allows users to browse and purchase beauty products from various brands.
           </p>
 
@@ -833,14 +806,14 @@ export default function Home() {
           </h3>
 
           <a href="https://mealcourt.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
-            View project <span aria-hidden="true" className="ml-2">-&gt;</span>
+            View project <span aria-hidden="true" className="ml-2"></span>
           </a>
         </div>
 
 
         <div className="max-w-2xl">
 
-          <p className="text-sm leading-7 text-black/55 md:text-base">
+          <p className="text-md leading-7 text-black/55 md:text-base">
             A food delivery platform that connects users with local restaurants and enables seamless ordering and tracking.
           </p>
 
@@ -908,14 +881,14 @@ export default function Home() {
           </h3>
 
           <a href="https://misanlogistics.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
-            View project <span aria-hidden="true" className="ml-2">-&gt;</span>
+            View project <span aria-hidden="true" className="ml-2"></span>
           </a>
         </div>
 
 
         <div className="max-w-2xl">
 
-          <p className="text-sm leading-7 text-black/55 md:text-base">
+          <p className="text-md leading-7 text-black/55 md:text-base">
             A logistics platform designed to help users discover, book and manage logistics services through a seamless digital experience.
           </p>
 
@@ -983,14 +956,14 @@ export default function Home() {
           </h3>
 
           <a href="https://happygift.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
-            View project <span aria-hidden="true" className="ml-2">-&gt;</span>
+            View project <span aria-hidden="true" className="ml-2"></span>
           </a>
         </div>
 
 
         <div className="max-w-2xl">
 
-          <p className="text-sm leading-7 text-black/55 md:text-base">
+          <p className="text-md leading-7 text-black/55 md:text-base">
             A crowdfunding and digital community platform designed
             to help people raise funds, support causes and connect
             with communities.
@@ -1059,15 +1032,15 @@ export default function Home() {
           </h3>
 
           <a href="https://routyride.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
-            View project <span aria-hidden="true" className="ml-2">-&gt;</span>
+            View project <span aria-hidden="true" className="ml-2"></span>
           </a>
         </div>
 
 
         <div className="max-w-2xl">
 
-          <p className="text-sm leading-7 text-black/55 md:text-base">
-            A car ride sharing platform designed
+          <p className="text-md leading-7 text-black/55 md:text-base">
+            A car ride hailing platform designed
             to help people find rides, connect with drivers and enjoy seamless travel experiences.
           </p>
 
@@ -1141,14 +1114,14 @@ export default function Home() {
           </h3>
 
           <a href="https://skyhealth.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
-            View project <span aria-hidden="true" className="ml-2">-&gt;</span>
+            View project <span aria-hidden="true" className="ml-2"></span>
           </a>
         </div>
 
 
         <div className="max-w-2xl">
 
-          <p className="text-sm leading-7 text-black/55 md:text-base">
+          <p className="text-md leading-7 text-black/55 md:text-base">
             A healthcare platform designed to help users access medical services, connect with healthcare providers and manage their health records through a seamless digital experience.
           </p>
 
@@ -1215,14 +1188,14 @@ export default function Home() {
           </h3>
 
           <a href="https://grandbox.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
-            View project <span aria-hidden="true" className="ml-2">-&gt;</span>
+            View project <span aria-hidden="true" className="ml-2"></span>
           </a>
         </div>
 
 
         <div className="max-w-2xl">
 
-          <p className="text-sm leading-7 text-black/55 md:text-base">
+          <p className="text-md leading-7 text-black/55 md:text-base">
             A fashion designer portfolio website showcasing creative work and professional experience.
           </p>
 
