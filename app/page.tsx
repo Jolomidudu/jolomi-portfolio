@@ -1154,7 +1154,7 @@ export default function Home() {
         <div className="relative aspect-[16/9]">
 
           <Image
-            src="/images/projects/skyhealth-mckp.png"
+            src="/images/projects/skyhealth-mckp.jpg"
             alt="SkyHealth Healthcare Platform"
             fill
             sizes="(max-width: 768px) 100vw, 90vw"
