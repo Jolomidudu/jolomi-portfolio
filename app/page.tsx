@@ -1457,13 +1457,13 @@ export default function Home() {
 
               <div>
                 <p className="text-sm text-black/40">
-                  2018 — Present
+                 02/2022 - Present
                 </p>
               </div>
 
               <div>
                 <h3 className="text-2xl font-semibold tracking-tight">
-                  Grenstack Technology 
+                  Grenstack 
                 </h3>
 
                 <p className="mt-1 text-sm text-[#00A9A5]">
@@ -1471,27 +1471,15 @@ export default function Home() {
                 </p>
 
                 <p className="mt-5 max-w-xl text-base leading-7 text-black/55">
-                  Designing and developing web and mobile applications,
-                  backend systems and digital products for businesses,
-                  startups and conglomerates.
+                  Lead a 6-person software engineering team in the design, development 
+                  and delivery of scalable digital products and custom software 
+                  olutions for businesses across real estate, fintech, e-commerce, 
+                  healthcare, events and other industries. 
                 </p>
 
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {[
-                    "Flutter",
-                    "Next.js",
-                    "Node.js",
-                    "TypeScript",
-                    "Databases",
-                  ].map((skill) => (
-                    <span
-                      key={skill}
-                      className="rounded-full border border-black/15 px-3 py-1.5 text-xs"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
+                
+
+                
               </div>
 
               <div className="text-sm text-black/40 md:text-right">
@@ -1506,45 +1494,30 @@ export default function Home() {
 
               <div>
                 <p className="text-sm text-black/40">
-                 2022 - 2025
+                 04/2025 - 03/2026
                 </p>
               </div>
 
               <div>
                 <h3 className="text-2xl font-semibold tracking-tight">
-                  Gentleboard Real Estate
+                  Greyfundr
                 </h3>
 
                 <p className="mt-1 text-sm text-[#00A9A5]">
                   Software Developer
                 </p>
 
+               
+
                 <p className="mt-5 max-w-xl text-base leading-7 text-black/55">
-                  Building responsive websites, mobile applications,
-                  APIs and database-driven systems with a focus on
-                  usability and reliable performance.
+                  Designed, developed and maintained backend services powering crowdfunding campaigns, split-bill payments, user onboarding, event experiences and customer-facing workflows across multiple production applications.  
                 </p>
 
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {[
-                    "Flutter",
-                    "JavaScript",
-                    "React",
-                    "Node.js",
-                    "REST APIs",
-                  ].map((skill) => (
-                    <span
-                      key={skill}
-                      className="rounded-full border border-black/15 px-3 py-1.5 text-xs"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
+                
               </div>
 
               <div className="text-sm text-black/40 md:text-right">
-                Lagos,Nigeria
+                Lagos, Nigeria
               </div>
 
             </div>
@@ -1555,45 +1528,28 @@ export default function Home() {
 
               <div>
                 <p className="text-sm text-black/40">
-                  Previous
+                  05/2022 - 04/2025
                 </p>
               </div>
 
               <div>
                 <h3 className="text-2xl font-semibold tracking-tight">
-                  Data Analyst
+                  Gentleboard
                 </h3>
 
                 <p className="mt-1 text-sm text-[#00A9A5]">
-                  Data & Business Intelligence
+                  Software Developer
                 </p>
 
                 <p className="mt-5 max-w-xl text-base leading-7 text-black/55">
-                  Working with data to clean, analyze and visualize
-                  information, helping transform raw datasets into
-                  useful business insights and decisions.
+                  Designed and implemented scalable REST APIs powering property listings, property search, customer inquiries, shortlet bookings and internal operational workflows.
                 </p>
 
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {[
-                    "Excel",
-                    "SQL",
-                    "MySQL",
-                    "Tableau",
-                    "Data Cleaning",
-                  ].map((skill) => (
-                    <span
-                      key={skill}
-                      className="rounded-full border border-black/15 px-3 py-1.5 text-xs"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
+                
               </div>
 
               <div className="text-sm text-black/40 md:text-right">
-                Nigeria
+                Lagos,Nigeria
               </div>
 
             </div>
@@ -1604,44 +1560,90 @@ export default function Home() {
 
               <div>
                 <p className="text-sm text-black/40">
-                  Earlier
+                  02/2022 - 10/2026
                 </p>
               </div>
 
               <div>
                 <h3 className="text-2xl font-semibold tracking-tight">
-                  Business Development
+                  Business & App Developer
                 </h3>
 
                 <p className="mt-1 text-sm text-[#00A9A5]">
-                  Strategy & Growth
+                  ifitech & Associates Ltd
                 </p>
 
                 <p className="mt-5 max-w-xl text-base leading-7 text-black/55">
-                  Combining technology, strategy and business thinking
-                  to identify opportunities, develop solutions and
-                  help organizations grow.
+                  Collaborated closely with management, design and business teams to translate real estate requirements into intuitive digital experiences and customer-focused features. 
                 </p>
 
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {[
-                    "Strategy",
-                    "Business Development",
-                    "Product Thinking",
-                    "Planning",
-                  ].map((skill) => (
-                    <span
-                      key={skill}
-                      className="rounded-full border border-black/15 px-3 py-1.5 text-xs"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
+               
+              </div>
+
+              <div className="text-sm text-black/40 md:text-right">
+                Lagos, Nigeria
+              </div>
+
+            </div>
+
+             {/* Experience 05 */}
+            <div className="grid gap-6 py-10 md:grid-cols-[150px_1fr_120px]">
+
+              <div>
+                <p className="text-sm text-black/40">
+                  07/2021 - 11/2023
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-2xl font-semibold tracking-tight">
+                  Website Application Developer
+                </h3>
+
+                <p className="mt-1 text-sm text-[#00A9A5]">
+                  Spinettcosmetics
+                </p>
+
+                <p className="mt-5 max-w-xl text-base leading-7 text-black/55">
+                  Refactored existing applications into modular, maintainable architectures, reducing code complexity by approximately 35% and making future product and feature updates more efficient. 
+                </p>
+
+                
               </div>
 
               <div className="text-sm text-black/40 md:text-right">
                 Nigeria
+              </div>
+
+            </div>
+
+             {/* Experience 05 */}
+            <div className="grid gap-6 py-10 md:grid-cols-[150px_1fr_120px]">
+
+              <div>
+                <p className="text-sm text-black/40">
+                  07/2021 - 11/2023
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-2xl font-semibold tracking-tight">
+                 Social Media Manager
+                </h3>
+
+                <p className="mt-1 text-sm text-[#00A9A5]">
+                  Leros Comfort Foundation
+                </p>
+
+                <p className="mt-5 max-w-xl text-base leading-7 text-black/55">
+                  Managed the organization’s social media presence and digital communications, creating awareness around girl-child empowerment, human rights, education and humanitarian initiatives. 
+                </p>
+
+                
+              </div>
+
+              <div className="text-sm text-black/40 md:text-right">
+                Lagos, Nigeria
               </div>
 
             </div>
@@ -1663,14 +1665,14 @@ export default function Home() {
         <div className="max-w-6xl">
 
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#00A9A5]">
-            Have a project?
+            GET IN TOUCH
           </p>
 
           <h2 className="mt-6 text-[15vw] font-bold leading-[0.8] tracking-[-0.07em] md:text-[11vw]">
-            LET&apos;S
+            I love to hear from you. 
             <br />
             <span className="text-[#00A9A5]">
-              TALK.
+             Whether you have a question or want to collaborate, shoot me a message.
             </span>
           </h2>
 
@@ -1681,11 +1683,7 @@ export default function Home() {
 
           <div>
 
-            <p className="max-w-md text-lg leading-8 text-black/55">
-              Have an idea, project or opportunity you&apos;d like to
-              discuss? I&apos;d love to hear about it.
-            </p>
-
+           
           </div>
 
 
@@ -1719,7 +1717,7 @@ export default function Home() {
           <div>
 
             <p className="text-xl font-bold">
-              J<span className="text-[#00A9A5]">.</span>DUDU
+              J<span className="text-[#00A9A5]">.</span>D
             </p>
 
             <p className="mt-2 text-sm text-black/40">
@@ -1732,24 +1730,24 @@ export default function Home() {
           <div className="flex flex-wrap gap-6 text-sm">
 
             <a
-              href="#"
+              href="https://www.linkedin.com/in/jolomid"
               className="transition-opacity hover:opacity-50"
             >
               LinkedIn
             </a>
 
             <a
-              href="#"
+              href="https://github.com/jolomidudu"
               className="transition-opacity hover:opacity-50"
             >
               GitHub
             </a>
 
             <a
-              href="#"
+              href="https://www.instagram.com/jollof_tech"
               className="transition-opacity hover:opacity-50"
             >
-              X / Twitter
+              Instagram
             </a>
 
           </div>
