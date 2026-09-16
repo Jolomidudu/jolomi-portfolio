@@ -311,20 +311,14 @@ export default function Home() {
 
           <h2 className="text-4xl font-semibold leading-[1.05] tracking-[-0.04em] md:text-5xl lg:text-6xl">
 
-            I don&apos;t just write code.
+           I’m a Full Stack Software Engineer focused on building modern, scalable, and user-centered digital solutions. I have experience developing customer-facing applications and backend systems across industries including banking, fintech, healthcare, and SaaS.
 
-            <span className="text-[#00A9A5]">
-              {" "}I turn ideas into digital products.
-            </span>
+           
 
           </h2>
 
           <p className="mt-8 text-base leading-8 text-white/65 md:text-lg">
-            I&apos;m Jolomi Dudu, a software engineer focused on
-            building modern web and mobile applications. I enjoy
-            taking ideas from concept to functional, polished digital
-            products.
-          </p>
+        </p>
 
           <p className="mt-6 text-base leading-8 text-white/65 md:text-lg">
             My work spans frontend development, mobile applications,
@@ -846,7 +840,7 @@ export default function Home() {
         <div className="relative aspect-[16/9]">
 
           <Image
-            src="/images/projects/mealgo-mckp.png"
+            src="/images/projects/mealcourt-mckp.png"
             alt="A food delivery platform"
             fill
             sizes="(max-width: 768px) 100vw, 90vw"
@@ -866,10 +860,10 @@ export default function Home() {
           </p>
 
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">
-            Mealgo
+            Mealcourt
           </h3>
 
-          <a href="https://mealgo.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
+          <a href="https://mealcourt.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
             View project <span aria-hidden="true" className="ml-2">-&gt;</span>
           </a>
         </div>
