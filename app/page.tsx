@@ -215,8 +215,7 @@ export default function Home() {
           <div className="max-w-xl">
 
             <p className="text-lg leading-relaxed text-black/65 md:text-xl">
-              I design, develop, Build and engineer modern web and mobile applications
-              that transform ideas into useful digital experiences.
+              I architect, build, and scale modern web and mobile applications, combining strong engineering principles, scalable architecture, and product thinking to deliver reliable software that solves real-world problems.
             </p>
 
           </div>
@@ -320,13 +319,7 @@ export default function Home() {
           <p className="mt-8 text-base leading-8 text-white/65 md:text-lg">
         </p>
 
-          <p className="mt-6 text-base leading-8 text-white/65 md:text-lg">
-            My work spans frontend development, mobile applications,
-            backend systems, APIs, databases and data analytics. I
-            combine technology and business thinking to create products
-            that are useful, reliable and easy to use.
-          </p>
-
+          
         </div>
 
       </div>
@@ -337,7 +330,7 @@ export default function Home() {
 
         <div>
           <p className="text-4xl font-semibold tracking-tight md:text-5xl">
-            10+
+            8+
           </p>
 
           <p className="mt-2 text-xs uppercase tracking-wider text-white/40">
@@ -508,11 +501,12 @@ export default function Home() {
               "Next.js",
               "Nest.js",
               "Node.js",
-              "flutter.js",
               "TypeScript",
               "PostgreSQL",
               "Railway",
               "Neon",
+               "flutter",
+                "Kubernetes",
             ].map((tech) => (
               <span
                 key={tech}
@@ -584,7 +578,6 @@ export default function Home() {
                "Next.js",
               "Nest.js",
               "Node.js",
-              "flutter.js",
               "TypeScript",
               "PostgreSQL",
               "Railway",
@@ -661,13 +654,13 @@ export default function Home() {
                "Next.js",
               "Nest.js",
               "Node.js",
-              "React Native.js",
+              "React Native",
               "TypeScript",
               "PostgreSQL",
               "Railway",
               "Neon",
               "REST API",
-              "Dashboard",
+              
             ].map((tech) => (
               <span
                 key={tech}
@@ -736,7 +729,7 @@ export default function Home() {
                "Next.js",
               "Nest.js",
               "Node.js",
-              "flutter.js",
+              "flutter",
               "TypeScript",
               "PostgreSQL",
               "Railway",
@@ -881,7 +874,7 @@ export default function Home() {
                "Next.js",
               "Nest.js",
               "Node.js",
-              "flutter.js",
+              "flutter",
               "TypeScript",
               "PostgreSQL",
               "Railway",
@@ -956,12 +949,12 @@ export default function Home() {
               "Next.js",
               "Nest.js",
               "Node.js",
-              "flutter.js",
+              "flutter",
               "TypeScript",
               "PostgreSQL",
               "Railway",
               "Neon",
-              "Dashboard",
+            
               "Wallet"
             ].map((tech) => (
               <span
@@ -1033,7 +1026,7 @@ export default function Home() {
               "Next.js",
               "Nest.js",
               "Node.js",
-              "flutter.js",
+              "flutter",
               "TypeScript",
               "PostgreSQL",
               "Railway",
@@ -1108,7 +1101,7 @@ export default function Home() {
                "Next.js",
               "Nest.js",
               "Node.js",
-              "flutter.js",
+              "flutter",
               "TypeScript",
               "PostgreSQL",
               "Railway",
