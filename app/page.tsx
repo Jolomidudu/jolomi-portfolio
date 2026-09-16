@@ -1228,7 +1228,7 @@ export default function Home() {
         <div className="relative aspect-[16/9]">
 
           <Image
-            src="/images/projects/fashion-designer.png"
+            src="/images/projects/Grandbox.png"
             alt="Fashion Designer Portfolio"
             fill
             sizes="(max-width: 768px) 100vw, 90vw"
