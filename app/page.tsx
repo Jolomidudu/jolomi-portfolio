@@ -158,7 +158,7 @@ export default function Home() {
       </nav>
 
       <div className="fixed bottom-6 right-6 z-40 flex flex-col items-center gap-2">
-        <span className="rotate-90 text-[10px] font-bold uppercase tracking-[0.12em] text-[#12211f]">
+        <span className="-translate-y-[15px] rotate-90 text-[10px] font-bold uppercase tracking-[0.12em] text-[#12211f]">
           SCROLL
         </span>
         <button
@@ -170,7 +170,7 @@ export default function Home() {
               behavior: "smooth",
             })
           }
-          className="flex h-20 w-20 animate-bounce items-center justify-center rounded-full bg-[#7f1d1d] text-xl text-white shadow-lg transition-colors hover:bg-[#541313]"
+          className="flex h-10 w-10 animate-bounce items-center justify-center rounded-full bg-[#374151] text-base text-white shadow-lg transition-colors hover:bg-[#1f2937] md:h-20 md:w-20 md:text-xl"
         >
           {atPageEnd ? "↑" : "↓"}
         </button>
@@ -257,7 +257,7 @@ export default function Home() {
               fill
               priority
               sizes="(max-width: 768px) 35vw, 38vw"
-              className="scale-[1.7] object-contain object-bottom md:scale-100"
+              className="-translate-y-[50px] scale-[1.7] object-contain object-bottom md:translate-y-0 md:scale-100"
             />
           </div>
 
