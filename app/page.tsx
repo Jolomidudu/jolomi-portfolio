@@ -158,17 +158,25 @@ export default function Home() {
           type="button"
           aria-label="Scroll to top"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="fixed bottom-6 right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-[#12211f] text-xl text-[#78d8ca] shadow-lg transition-all hover:-translate-y-1 hover:bg-[#00A9A5] hover:text-white"
+          className="fixed bottom-6 right-20 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-[#12211f] text-xl text-[#78d8ca] shadow-lg transition-all hover:-translate-y-1 hover:bg-[#00A9A5] hover:text-white"
         >
           ↑
         </button>
       )}
 
+      <a
+        href="#work"
+        aria-label="Scroll down to recent work"
+        className="fixed bottom-6 right-6 z-40 flex h-12 w-12 animate-bounce items-center justify-center rounded-[0.65rem] bg-[#00A9A5] text-xl text-white shadow-lg transition-colors hover:bg-[#12211f]"
+      >
+        ↓
+      </a>
+
 
       {/* =====================================================
           HERO
       ====================================================== */}
-      <section className="flex min-h-[calc(100vh-90px)] flex-col justify-center px-6 pb-16 pt-16 md:px-12 lg:px-16">
+      <section className="relative -top-10 flex min-h-[calc(100vh-90px)] flex-col justify-center px-6 pb-16 pt-16 md:-top-5 md:px-12 lg:px-16">
 
         <div className="mb-8 flex items-center gap-3 text-sm font-medium uppercase tracking-[0.2em]">
 
@@ -181,60 +189,65 @@ export default function Home() {
         </div>
 
 
-        <div className="max-w-7xl">
+        <div className="grid max-w-7xl grid-cols-[1.25fr_0.75fr] items-center gap-4 sm:gap-8 md:grid-cols-[1.1fr_0.9fr] md:gap-12">
 
-          <p className="mb-4 text-lg font-medium md:text-xl">
-            Hello, I&apos;m Oritsejolomi Dudu.
-          </p>
-
-          <h1 className="text-[16vw] font-bold leading-[0.8] tracking-[-0.07em] md:text-[13vw] lg:text-[11vw]">
-
-            <span className="block">
-              SOFTWARE
-            </span>
-
-            <span className="block">
-
-              <span className="text-[#00A9A5]">
-                ENGINEER
-              </span>
-
-              <span>
-                .
-              </span>
-
-            </span>
-
-          </h1>
-
-        </div>
-
-
-        <div className="mt-14 flex flex-col justify-between gap-8 md:flex-row md:items-end">
-
-          <div className="max-w-xl">
-
-            <p className="text-lg leading-relaxed text-black/65 md:text-xl">
-              I architect, build, and scale modern web and mobile applications, combining strong engineering principles, scalable architecture, and product thinking to deliver reliable software that solves real-world problems.
+          <div>
+            <p className="mb-4 text-sm font-medium sm:text-lg md:text-xl">
+              Hello, I&apos;m Oritsejolomi Dudu.
             </p>
 
+            <h1 className="text-[9vw] font-bold leading-[0.82] tracking-[-0.07em] sm:text-[10vw] md:text-[10vw] lg:text-[9vw]">
+              <span className="block">SOFTWARE</span>
+              <span className="block">
+                <span className="text-[#00A9A5]">ENGINEER</span>
+                <span>.</span>
+              </span>
+            </h1>
+
+            <div className="mt-10 max-w-md sm:mt-14">
+              <div className="flex gap-3">
+                <a
+                  href="https://calendly.com/jollofdudu/let-s-discuss-your-project"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex min-w-0 flex-1 items-center justify-center rounded-[0.65rem] bg-[#12211f] px-3 py-3 text-center text-[10px] font-semibold tracking-[0.08em] text-white transition-colors hover:bg-[#00A9A5] sm:text-xs"
+                >
+                  CALL ME
+                </a>
+                <a
+                  href="https://drive.google.com/uc?export=download&id=1OlSV-d0tRIhHxs8lupPQwdHQXd3lRx3T"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex min-w-0 flex-1 items-center justify-center rounded-[0.65rem] border border-[#12211f] px-3 py-3 text-center text-[10px] font-semibold tracking-[0.08em] text-[#12211f] transition-colors hover:bg-[#12211f] hover:text-white sm:text-xs"
+                >
+                  DOWNLOAD CV
+                </a>
+              </div>
+
+              <a
+                href="#work"
+                className="group mt-5 flex w-fit items-center gap-4"
+              >
+                <span className="text-xs font-semibold uppercase tracking-wider sm:text-sm">
+                  View my recent works
+                </span>
+                <span className="flex h-10 w-10 items-center justify-center rounded-[0.65rem] border border-gray-500 bg-gray-500 text-white transition-all duration-300 group-hover:bg-black">
+                  ↓
+                </span>
+              </a>
+            </div>
           </div>
 
-
-          <a
-            href="#work"
-            className="group flex w-fit items-center gap-4"
-          >
-
-            <span className="text-sm font-semibold uppercase tracking-wider">
-             My Recent Works
-            </span>
-
-            <span className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-500 bg-gray-500 text-white transition-all duration-300 group-hover:bg-black group-hover:text-white">
-              ↓
-            </span>
-
-          </a>
+          <div className="relative flex h-[min(68vw,31rem)] min-h-64 items-end justify-center">
+            <Image
+              src="/images/jolomid.png"
+              alt="Jolomi Dudu"
+              fill
+              priority
+              sizes="(max-width: 768px) 35vw, 38vw"
+              className="object-contain object-bottom"
+            />
+          </div>
 
         </div>
 
@@ -264,24 +277,6 @@ export default function Home() {
         Developer, problem solver and digital product builder.
       </p>
 
-      <div className="mt-8 flex w-full max-w-sm gap-3">
-        <a
-          href="https://calendly.com/jollofdudu/let-s-discuss-your-project"
-          target="_blank"
-          rel="noreferrer"
-          className="flex min-w-0 flex-1 items-center justify-center rounded-full bg-white px-3 py-3 text-center text-xs font-semibold tracking-[0.08em] text-gray-500 transition-colors hover:bg-gray-200"
-        >
-          CALL ME
-        </a>
-        <a
-          href="https://drive.google.com/uc?export=download&id=1OlSV-d0tRIhHxs8lupPQwdHQXd3lRx3T"
-          target="_blank"
-          rel="noreferrer"
-          className="flex min-w-0 flex-1 items-center justify-center rounded-full bg-white px-3 py-3 text-center text-xs font-semibold tracking-[0.08em] text-[#12211f] transition-colors hover:bg-gray-200"
-        >
-          DOWNLOAD CV
-        </a>
-      </div>
     </div>
 
 
@@ -309,7 +304,7 @@ export default function Home() {
         {/* Introduction */}
         <div>
 
-          <h2 className="text-4xl font-semibold leading-[1.05] tracking-[-0.04em] md:text-5xl lg:text-6xl">
+          <h2 className="text-[25px] font-semibold leading-[1.25] tracking-[-0.01em] md:text-[35px]">
 
            I’m a Full Stack Software Engineer focused on building modern, scalable, and user-centered digital solutions. I have experience developing customer-facing applications and backend systems across industries including banking, fintech, healthcare, and SaaS.
 
