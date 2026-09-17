@@ -1624,7 +1624,7 @@ export default function Home() {
             GET IN TOUCH
           </p>
 
-          <h2 className="mt-6 text-[15vw] font-bold leading-[0.8] tracking-[-0.07em] md:text-[11vw]">
+          <h2 className="mt-6 text-[25px] font-bold leading-[1.2] tracking-[-0.01em] md:text-[35px]">
             I love to hear from you. 
             <br />
             <span className="text-[#00A9A5]">
