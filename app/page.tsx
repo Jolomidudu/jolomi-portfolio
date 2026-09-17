@@ -21,12 +21,12 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-[#f5f5f0] text-[#111111]">
+    <main className="min-h-screen bg-[#f5f5f0] pt-20 text-[#111111]">
 
       {/* =====================================================
           NAVIGATION
       ====================================================== */}
-      <nav className={`sticky top-0 z-50 flex min-h-20 shrink-0 items-center justify-between bg-[#f5f5f0] px-6 py-5 transition-colors md:px-12 lg:px-16 ${menuOpen ? "bg-[#12211f] text-[#f5f5f0]" : "text-[#111111]"}`}>
+      <nav className={`fixed inset-x-0 top-0 z-50 flex min-h-20 shrink-0 items-center justify-between bg-[#f5f5f0] px-6 py-5 transition-colors md:px-12 lg:px-16 ${menuOpen ? "bg-[#12211f] text-[#f5f5f0]" : "text-[#111111]"}`}>
 
         <a
           href="#"
@@ -294,26 +294,7 @@ export default function Home() {
   id="about"
   className="border-t border-black/10 bg-[#111111] px-6 py-24 text-[#f5f5f0] md:px-12 md:py-32 lg:px-16"
 >
-  <div className="grid gap-16 lg:grid-cols-[0.7fr_1.3fr]">
-
-    {/* Section Label */}
-    <div>
-      <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#00A9A5]">
-        Get To Know Me
-      </p>
-
-      <p className="mt-6 max-w-xs text-md leading-relaxed text-white/45">
-        Developer, problem solver and digital product builder.
-      </p>
-
-    </div>
-
-
-    {/* Main Content */}
-    <div>
-
-      {/* Photo + Introduction */}
-      <div className="grid gap-10 md:grid-cols-[0.75fr_1.25fr] md:items-start">
+  <div className="grid gap-10 md:grid-cols-2 md:items-start md:gap-12">
 
         {/* Photo */}
         <div className="relative aspect-[4/5] overflow-hidden rounded-[1.5rem] bg-white/10">
@@ -323,15 +304,15 @@ export default function Home() {
             alt="Jolomi Dudu"
             fill
             priority
-            sizes="(max-width: 768px) 130vw, 35vw"
+            sizes="(max-width: 768px) 100vw, 50vw"
             className="object-cover"
           />
 
         </div>
 
 
-        {/* Introduction */}
-        <div>
+      {/* Introduction */}
+      <div>
 
           <h2 className="text-[25px] font-semibold leading-[1.25] tracking-[-0.01em] md:text-[35px]">
 
@@ -394,11 +375,8 @@ export default function Home() {
           <p className="mt-2 text-xs uppercase tracking-wider text-white/40">
             Ideas to Build
           </p>
-        </div>
-
-      </div>
-
     </div>
+
 
   </div>
 </section>
