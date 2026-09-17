@@ -21,12 +21,12 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-[#f5f5f0] pt-20 text-[#111111]">
+    <main className="min-h-screen bg-[#f5f5f0] pt-[100px] text-[#111111] md:pt-20">
 
       {/* =====================================================
           NAVIGATION
       ====================================================== */}
-      <nav className={`fixed inset-x-0 top-0 z-50 flex min-h-20 shrink-0 items-center justify-between bg-[#f5f5f0] px-6 py-5 transition-colors md:px-12 lg:px-16 ${menuOpen ? "bg-[#12211f] text-[#f5f5f0]" : "text-[#111111]"}`}>
+      <nav className={`fixed inset-x-0 top-0 z-50 flex min-h-20 shrink-0 items-center justify-between bg-[#f5f5f0] px-6 pb-5 pt-10 transition-colors md:px-12 md:py-5 lg:px-16 ${menuOpen ? "bg-[#12211f] text-[#f5f5f0]" : "text-[#111111]"}`}>
 
         <a
           href="#"
@@ -416,7 +416,7 @@ export default function Home() {
 
 
   {/* Projects */}
-  <div className="grid gap-14">
+  <div className="grid grid-cols-2 gap-6 md:gap-10 lg:gap-14">
 
     {/* =====================================================
         SPA ELARIS
@@ -521,11 +521,11 @@ export default function Home() {
 
         <div>
           <p className="text-xs font-medium uppercase tracking-[0.15em] text-black/60">
-            02 / School Management
+            02 / Web & Mobile
           </p>
 
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">
-            Kids College School Management System
+            Kids College
           </h3>
 
           <a href="https://kcbn.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
@@ -599,12 +599,11 @@ export default function Home() {
 
         <div>
           <p className="text-xs font-medium uppercase tracking-[0.15em] text-black/40">
-            03 / Dating Platform
+            03 / Web & Mobile
           </p>
 
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">
-            A dating platform connecting singles and helping them find meaningful relationships.
-          </h3>
+           Lovenorth</h3>
 
           <a href="https://lovenorth.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
             View project <span aria-hidden="true" className="ml-2"></span>
@@ -678,7 +677,7 @@ export default function Home() {
           </p>
 
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">
-            Elvara
+            Elvara Hotel
           </h3>
 
           <a href="https://elvarahotel.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
@@ -752,7 +751,7 @@ export default function Home() {
           </p>
 
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">
-            Spinettcosmetics
+            Spinett cosmetics
           </h3>
 
           <a href="https://spinettcosmetics.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
@@ -1131,7 +1130,7 @@ export default function Home() {
           </p>
 
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">
-            SkyHealth Healthcare Platform
+            SkyHealth
           </h3>
 
           <a href="https://skyhealth.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
@@ -1205,7 +1204,7 @@ export default function Home() {
           </p>
 
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">
-            Fashion Designer Portfolio
+            Grandbox
           </h3>
 
           <a href="https://grandbox.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
