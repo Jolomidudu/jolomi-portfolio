@@ -34,13 +34,18 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
 
         <div className="hidden md:block"><Link href="/services#booking" className="rounded-full border border-current px-5 py-2.5 text-sm font-medium transition-colors hover:bg-[#111111] hover:text-white">Start a project</Link></div>
 
-        <Link href="/search" aria-label="Search" className="hidden h-10 w-10 items-center justify-center rounded-full border border-current transition-colors hover:bg-[#111111] hover:text-white md:flex"><svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-none stroke-current stroke-2"><circle cx="11" cy="11" r="7" /><path d="m16.5 16.5 4 4" strokeLinecap="round" /></svg></Link>
+        <div className="hidden items-center gap-2 md:flex">
+          <Link href="/notifications" aria-label="Notifications" className="flex h-10 w-10 items-center justify-center rounded-full border border-current transition-colors hover:bg-[#111111] hover:text-white"><svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-none stroke-current stroke-2"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" strokeLinecap="round" strokeLinejoin="round" /></svg></Link>
+          <Link href="/search" aria-label="Search" className="flex h-10 w-10 items-center justify-center rounded-full border border-current transition-colors hover:bg-[#111111] hover:text-white"><svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-none stroke-current stroke-2"><circle cx="11" cy="11" r="7" /><path d="m16.5 16.5 4 4" strokeLinecap="round" /></svg></Link>
+        </div>
 
-        <button type="button" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen} aria-controls="site-mobile-navigation" onClick={() => setMenuOpen(!menuOpen)} className={`flex h-10 w-10 items-center justify-center rounded-full border md:hidden ${menuOpen ? "border-white/35" : "border-black"}`}>
-          {menuOpen ? "×" : "☰"}
-        </button>
-
-        <Link href="/search" aria-label="Search" className="flex h-10 w-10 items-center justify-center rounded-full border border-black md:hidden"><svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-none stroke-current stroke-2"><circle cx="11" cy="11" r="7" /><path d="m16.5 16.5 4 4" strokeLinecap="round" /></svg></Link>
+        <div className="flex items-center gap-1 md:hidden">
+          <Link href="/notifications" aria-label="Notifications" className="flex h-9 w-9 items-center justify-center rounded-full border border-black"><svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-none stroke-current stroke-2"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" strokeLinecap="round" strokeLinejoin="round" /></svg></Link>
+          <Link href="/search" aria-label="Search" className="flex h-9 w-9 items-center justify-center rounded-full border border-black"><svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-none stroke-current stroke-2"><circle cx="11" cy="11" r="7" /><path d="m16.5 16.5 4 4" strokeLinecap="round" /></svg></Link>
+          <button type="button" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen} aria-controls="site-mobile-navigation" onClick={() => setMenuOpen(!menuOpen)} className={`flex h-9 w-9 items-center justify-center rounded-full border ${menuOpen ? "border-white/35" : "border-black"}`}>
+            {menuOpen ? "×" : "☰"}
+          </button>
+        </div>
 
         {menuOpen && (
           <div id="site-mobile-navigation" className="fixed inset-0 z-[60] flex min-h-screen flex-col bg-[#12211f] px-6 pb-8 pt-28 text-[#f5f5f0] md:hidden">

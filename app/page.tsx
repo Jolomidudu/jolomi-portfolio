@@ -93,24 +93,33 @@ export default function Home() {
           Start a project
         </a>
 
-        <a href="/search" aria-label="Search" className="hidden h-10 w-10 items-center justify-center rounded-full border border-black transition-colors hover:bg-black hover:text-white md:flex">
-          <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-none stroke-current stroke-2"><circle cx="11" cy="11" r="7" /><path d="m16.5 16.5 4 4" strokeLinecap="round" /></svg>
-        </a>
+        <div className="hidden items-center gap-2 md:flex">
+          <a href="/notifications" aria-label="Notifications" className="flex h-10 w-10 items-center justify-center rounded-full border border-black transition-colors hover:bg-black hover:text-white">
+            <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-none stroke-current stroke-2"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" strokeLinecap="round" strokeLinejoin="round" /></svg>
+          </a>
+          <a href="/search" aria-label="Search" className="flex h-10 w-10 items-center justify-center rounded-full border border-black transition-colors hover:bg-black hover:text-white">
+            <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-none stroke-current stroke-2"><circle cx="11" cy="11" r="7" /><path d="m16.5 16.5 4 4" strokeLinecap="round" /></svg>
+          </a>
+        </div>
 
-        <button
-          className={`flex h-10 w-10 items-center justify-center rounded-full border md:hidden ${menuOpen ? "invisible" : "border-gray-500 bg-gray-500 text-white"}`}
-          type="button"
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
-          aria-expanded={menuOpen}
-          aria-controls="mobile-navigation"
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          {menuOpen ? "×" : "☰"}
-        </button>
-
-        <a href="/search" aria-label="Search" className="flex h-10 w-10 items-center justify-center rounded-full border border-gray-500 bg-gray-500 text-white md:hidden">
-          <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-none stroke-current stroke-2"><circle cx="11" cy="11" r="7" /><path d="m16.5 16.5 4 4" strokeLinecap="round" /></svg>
-        </a>
+        <div className="flex items-center gap-1 md:hidden">
+          <a href="/notifications" aria-label="Notifications" className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-500 bg-gray-500 text-white">
+            <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-none stroke-current stroke-2"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" strokeLinecap="round" strokeLinejoin="round" /></svg>
+          </a>
+          <a href="/search" aria-label="Search" className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-500 bg-gray-500 text-white">
+            <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-none stroke-current stroke-2"><circle cx="11" cy="11" r="7" /><path d="m16.5 16.5 4 4" strokeLinecap="round" /></svg>
+          </a>
+          <button
+            className={`flex h-9 w-9 items-center justify-center rounded-full border ${menuOpen ? "invisible" : "border-gray-500 bg-gray-500 text-white"}`}
+            type="button"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-navigation"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            {menuOpen ? "×" : "☰"}
+          </button>
+        </div>
 
         {menuOpen && (
           <div
