@@ -26,7 +26,7 @@ export default function Home() {
       {/* =====================================================
           NAVIGATION
       ====================================================== */}
-      <nav className={`sticky top-0 z-50 flex items-center justify-between px-6 py-5 backdrop-blur-md transition-colors md:px-12 lg:px-16 ${menuOpen ? "bg-[#12211f] text-[#f5f5f0]" : "bg-[#f5f5f0]/90 text-[#111111]"}`}>
+      <nav className={`sticky top-0 z-50 flex min-h-20 shrink-0 items-center justify-between bg-[#f5f5f0] px-6 py-5 transition-colors md:px-12 lg:px-16 ${menuOpen ? "bg-[#12211f] text-[#f5f5f0]" : "text-[#111111]"}`}>
 
         <a
           href="#"
@@ -94,10 +94,10 @@ export default function Home() {
         </a>
 
         <div className="hidden items-center gap-2 md:flex">
-          <a href="/notifications" aria-label="Notifications" className="flex h-10 w-10 items-center justify-center rounded-full border border-black transition-colors hover:bg-black hover:text-white">
+          <a href="/notifications" aria-label="Notifications" className="flex h-10 w-10 items-center justify-center rounded-full border border-[#374151] bg-[#374151] text-white transition-colors hover:bg-[#1f2937]">
             <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-none stroke-current stroke-2"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" strokeLinecap="round" strokeLinejoin="round" /></svg>
           </a>
-          <a href="/search" aria-label="Search" className="flex h-10 w-10 items-center justify-center rounded-full border border-black transition-colors hover:bg-black hover:text-white">
+          <a href="/search" aria-label="Search" className="flex h-10 w-10 items-center justify-center rounded-full border border-[#374151] bg-[#374151] text-white transition-colors hover:bg-[#1f2937]">
             <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-none stroke-current stroke-2"><circle cx="11" cy="11" r="7" /><path d="m16.5 16.5 4 4" strokeLinecap="round" /></svg>
           </a>
         </div>
@@ -110,7 +110,7 @@ export default function Home() {
             <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-none stroke-current stroke-2"><circle cx="11" cy="11" r="7" /><path d="m16.5 16.5 4 4" strokeLinecap="round" /></svg>
           </a>
           <button
-            className={`flex h-9 w-9 items-center justify-center rounded-full border ${menuOpen ? "invisible" : "border-gray-500 bg-gray-500 text-white"}`}
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-[#374151] bg-[#374151] text-white transition-colors hover:bg-[#1f2937]"
             type="button"
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
