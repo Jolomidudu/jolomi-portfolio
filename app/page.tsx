@@ -93,6 +93,10 @@ export default function Home() {
           Start a project
         </a>
 
+        <a href="/search" aria-label="Search" className="hidden h-10 w-10 items-center justify-center rounded-full border border-black transition-colors hover:bg-black hover:text-white md:flex">
+          <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-none stroke-current stroke-2"><circle cx="11" cy="11" r="7" /><path d="m16.5 16.5 4 4" strokeLinecap="round" /></svg>
+        </a>
+
         <button
           className={`flex h-10 w-10 items-center justify-center rounded-full border md:hidden ${menuOpen ? "invisible" : "border-gray-500 bg-gray-500 text-white"}`}
           type="button"
@@ -103,6 +107,10 @@ export default function Home() {
         >
           {menuOpen ? "×" : "☰"}
         </button>
+
+        <a href="/search" aria-label="Search" className="flex h-10 w-10 items-center justify-center rounded-full border border-gray-500 bg-gray-500 text-white md:hidden">
+          <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-none stroke-current stroke-2"><circle cx="11" cy="11" r="7" /><path d="m16.5 16.5 4 4" strokeLinecap="round" /></svg>
+        </a>
 
         {menuOpen && (
           <div
@@ -1396,6 +1404,34 @@ export default function Home() {
 
       </section>
 
+      {/* =====================================================
+          TESTIMONIALS
+      ====================================================== */}
+      <section className="bg-[#12211f] px-6 py-24 text-[#f5f5f0] md:px-12 md:py-32 lg:px-16">
+        <div className="flex items-end justify-between gap-8">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#78d8ca]">Client notes</p>
+            <h2 className="mt-5 max-w-xl text-5xl font-semibold leading-[0.95] tracking-[-0.05em] md:text-6xl">Good work should make people&apos;s lives easier.</h2>
+          </div>
+          <span className="hidden text-sm text-white/45 md:block">Swipe to explore</span>
+        </div>
+
+        <div className="mt-14 flex snap-x gap-5 overflow-x-auto pb-5">
+          {[
+            ["Jolomi brought structure to a complicated product and gave the team confidence to ship.", "Product lead, fintech platform"],
+            ["The work was thoughtful, practical and clear from the first conversation to launch.", "Founder, real estate company"],
+            ["We finally had a website that sounded like us and helped customers understand what we do.", "Director, creative business"],
+            ["Jolomi is the rare engineer who keeps both the user and the business in view.", "Operations lead, healthcare startup"],
+            ["Fast, dependable and generous with his thinking. I would happily work with him again.", "Founder, education platform"],
+          ].map(([quote, author]) => (
+            <figure key={author} className="min-w-[82vw] snap-start border border-white/15 p-7 sm:min-w-[55vw] md:min-w-[34vw] md:p-9">
+              <blockquote className="text-2xl font-medium leading-tight">&ldquo;{quote}&rdquo;</blockquote>
+              <figcaption className="mt-12 text-sm text-[#78d8ca]">{author}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
+
             {/* =====================================================
           EXPERIENCE
       ====================================================== */}
@@ -1717,6 +1753,9 @@ export default function Home() {
             >
               Instagram
             </a>
+
+            <a href="/faq" className="transition-opacity hover:opacity-50">FAQ</a>
+            <a href="/privacy" className="transition-opacity hover:opacity-50">Privacy</a>
 
           </div>
 

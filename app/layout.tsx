@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Raleway } from "next/font/google";
 import "./globals.css";
+import CookieBanner from "./cookie-banner";
 
 const raleway = Raleway({
   variable: "--font-raleway",
@@ -58,7 +59,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${raleway.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">{children}<CookieBanner /></body>
     </html>
   );
 }
