@@ -176,11 +176,17 @@ export default function Home() {
       {/* =====================================================
           HERO
       ====================================================== */}
-      <section className="relative -top-10 flex min-h-[calc(100vh-90px)] flex-col justify-center px-6 pb-16 pt-16 md:-top-5 md:px-12 lg:px-16">
+      <section className="relative -top-20 flex min-h-[calc(100vh-90px)] flex-col justify-center px-6 pb-16 pt-16 md:-top-5 md:px-12 lg:px-16">
 
         <div className="mb-8 flex items-center gap-3 text-sm font-medium uppercase tracking-[0.2em]">
 
-          <span className="h-2.5 w-2.5 rounded-full bg-[#00A9A5]" />
+          <span
+            aria-label="Verified"
+            title="Verified"
+            className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-[#00A9A5] text-xs font-bold leading-none text-[#00A9A5]"
+          >
+            ✓
+          </span>
 
           {/* <span>
             Available for making progress
@@ -192,7 +198,7 @@ export default function Home() {
         <div className="grid max-w-7xl grid-cols-[1.25fr_0.75fr] items-center gap-4 sm:gap-8 md:grid-cols-[1.1fr_0.9fr] md:gap-12">
 
           <div>
-            <p className="mb-4 text-sm font-medium sm:text-lg md:text-xl">
+            <p className="mb-4 text-[25px] font-medium leading-tight md:text-xl">
               Hello, I&apos;m Oritsejolomi Dudu.
             </p>
 
@@ -205,7 +211,7 @@ export default function Home() {
             </h1>
 
             <div className="mt-10 max-w-md sm:mt-14">
-              <div className="flex gap-3">
+              <div className="flex flex-col gap-3 md:flex-row">
                 <a
                   href="https://calendly.com/jollofdudu/let-s-discuss-your-project"
                   target="_blank"
@@ -238,14 +244,14 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="relative flex h-[min(68vw,31rem)] min-h-64 items-end justify-center">
+          <div className="relative flex h-[min(82vw,37rem)] min-h-80 items-end justify-center md:h-[min(68vw,31rem)] md:min-h-64">
             <Image
               src="/images/jolomid.png"
               alt="Jolomi Dudu"
               fill
               priority
               sizes="(max-width: 768px) 35vw, 38vw"
-              className="object-contain object-bottom"
+              className="scale-[1.2] object-contain object-bottom md:scale-100"
             />
           </div>
 
