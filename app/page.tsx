@@ -157,8 +157,8 @@ export default function Home() {
 
       </nav>
 
-      <div className="fixed bottom-6 right-6 z-40 flex flex-col items-center gap-2">
-        <span className="-translate-y-[15px] rotate-90 text-[10px] font-bold uppercase tracking-[0.12em] text-[#12211f]">
+      <div className="fixed bottom-6 right-6 z-40 flex flex-col items-center gap-2 md:bottom-6">
+        <span className="-translate-y-[30px] rotate-90 text-[10px] font-bold uppercase tracking-[0.12em] text-[#12211f] md:-translate-y-[15px]">
           SCROLL
         </span>
         <button
@@ -170,7 +170,7 @@ export default function Home() {
               behavior: "smooth",
             })
           }
-          className="flex h-10 w-10 animate-bounce items-center justify-center rounded-full bg-[#374151] text-base text-white shadow-lg transition-colors hover:bg-[#1f2937] md:h-20 md:w-20 md:text-xl"
+          className="-translate-y-[10px] flex h-10 w-10 animate-bounce items-center justify-center rounded-full bg-[#374151] text-base text-white shadow-lg transition-colors hover:bg-[#1f2937] md:translate-y-0 md:h-20 md:w-20 md:text-xl"
         >
           {atPageEnd ? "↑" : "↓"}
         </button>
