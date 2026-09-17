@@ -90,7 +90,7 @@ export default function Home() {
         </a>
 
         <button
-          className={`flex h-10 w-10 items-center justify-center rounded-full border md:hidden ${menuOpen ? "invisible" : "border-black text-[#111111]"}`}
+          className={`flex h-10 w-10 items-center justify-center rounded-full border md:hidden ${menuOpen ? "invisible" : "border-gray-500 bg-gray-500 text-white"}`}
           type="button"
           aria-label={menuOpen ? "Close menu" : "Open menu"}
           aria-expanded={menuOpen}
@@ -230,7 +230,7 @@ export default function Home() {
              My Recent Works
             </span>
 
-            <span className="flex h-12 w-12 items-center justify-center rounded-full border border-black transition-all duration-300 group-hover:bg-black group-hover:text-white">
+            <span className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-500 bg-gray-500 text-white transition-all duration-300 group-hover:bg-black group-hover:text-white">
               ↓
             </span>
 
@@ -263,6 +263,25 @@ export default function Home() {
       <p className="mt-6 max-w-xs text-md leading-relaxed text-white/45">
         Developer, problem solver and digital product builder.
       </p>
+
+      <div className="mt-8 flex w-full max-w-sm gap-3">
+        <a
+          href="https://calendly.com/jollofdudu/let-s-discuss-your-project"
+          target="_blank"
+          rel="noreferrer"
+          className="flex min-w-0 flex-1 items-center justify-center rounded-full bg-white px-3 py-3 text-center text-xs font-semibold tracking-[0.08em] text-gray-500 transition-colors hover:bg-gray-200"
+        >
+          CALL ME
+        </a>
+        <a
+          href="https://drive.google.com/uc?export=download&id=1OlSV-d0tRIhHxs8lupPQwdHQXd3lRx3T"
+          target="_blank"
+          rel="noreferrer"
+          className="flex min-w-0 flex-1 items-center justify-center rounded-full bg-white px-3 py-3 text-center text-xs font-semibold tracking-[0.08em] text-[#12211f] transition-colors hover:bg-gray-200"
+        >
+          DOWNLOAD CV
+        </a>
+      </div>
     </div>
 
 
@@ -276,7 +295,7 @@ export default function Home() {
         <div className="relative aspect-[4/5] overflow-hidden rounded-[1.5rem] bg-white/10">
 
           <Image
-            src="/images/jolomi.jpg"
+            src="/images/jolomi2.jpg"
             alt="Jolomi Dudu"
             fill
             priority

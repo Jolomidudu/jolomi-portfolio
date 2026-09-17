@@ -8,12 +8,12 @@ export const metadata: Metadata = {
 };
 
 const services = [
-  { id: "web", number: "01", title: "Websites & web apps", description: "Fast, conversion-focused websites and custom web apps that make your business easier to trust and easier to use.", price: "From ₦450,000", amount: 450000 },
-  { id: "mobile", number: "02", title: "Mobile app development", description: "Cross-platform mobile products for teams that need a thoughtful MVP or a reliable app their customers return to.", price: "From ₦750,000", amount: 750000 },
-  { id: "design", number: "03", title: "UI/UX design", description: "Clear user flows, wireframes and polished interfaces that turn a complicated product into a simple experience.", price: "From ₦250,000", amount: 250000 },
-  { id: "analytics", number: "04", title: "Data analytics", description: "Dashboards, reporting and analysis that help you understand what is happening and decide what to do next.", price: "From ₦200,000", amount: 200000 },
-  { id: "consultancy", number: "05", title: "Consultancy & business development", description: "Practical product, technology and growth guidance for founders and teams making important decisions.", price: "From ₦75,000 / session", amount: 75000 },
-  { id: "maintenance", number: "06", title: "Maintenance & social media", description: "Ongoing technical care, content systems and social media support that keep your digital presence active.", price: "From ₦100,000 / month", amount: 100000 },
+  { id: "web", number: "01", title: "Websites & web apps", description: "Fast, conversion-focused websites and custom web apps that make your business easier to trust and easier to use.", price: "From ₦650,000", amount: 650000 },
+  { id: "mobile", number: "02", title: "Mobile app development", description: "Cross-platform mobile products for teams that need a thoughtful MVP or a reliable app their customers return to.", price: "From ₦1,500,000", amount: 1500000 },
+  { id: "design", number: "03", title: "UI/UX design", description: "Clear user flows, wireframes and polished interfaces that turn a complicated product into a simple experience.", price: "From ₦350,000", amount: 350000 },
+  { id: "analytics", number: "04", title: "Data analytics", description: "Dashboards, reporting and analysis that help you understand what is happening and decide what to do next.", price: "From ₦400,000", amount: 400000 },
+  { id: "consultancy", number: "05", title: "Consultancy & business development", description: "Practical product, technology and growth guidance for founders and teams making important decisions.", price: "From ₦150,000 / session", amount: 150000 },
+  { id: "maintenance", number: "06", title: "Maintenance & social media", description: "Ongoing technical care, content systems and social media support that keep your digital presence active.", price: "From ₦300,000 / month", amount: 300000 },
 ];
 
 export default function ServicesPage() {
