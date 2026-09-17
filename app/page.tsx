@@ -460,7 +460,7 @@ export default function Home() {
         <div className="max-w-2xl">
 
           <p className="text-md leading-7 text-black/55 md:text-base">
-            A premium wellness and spa platform designed to showcase
+            A premium wellness & spa platform for customers to book appointments and explore services,
             treatments, services, packages and provide a polished
             digital experience for customers.
           </p>
@@ -471,12 +471,9 @@ export default function Home() {
               "Next.js",
               "Nest.js",
               "Node.js",
-              "TypeScript",
               "PostgreSQL",
-              "Railway",
-              "Neon",
                "flutter",
-                "Kubernetes",
+                "AWS",
             ].map((tech) => (
               <span
                 key={tech}
@@ -521,7 +518,7 @@ export default function Home() {
 
         <div>
           <p className="text-xs font-medium uppercase tracking-[0.15em] text-black/60">
-            02 / Web & Mobile
+            02 / Web App
           </p>
 
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">
@@ -545,15 +542,12 @@ export default function Home() {
           <div className="mt-5 flex flex-wrap gap-2">
 
             {[
-               "Next.js",
+              "Next.js",
               "Nest.js",
               "Node.js",
-              "TypeScript",
               "PostgreSQL",
-              "Railway",
-              "Neon",
-              "REST API",
-              "Dashboard",
+              
+                "AWS",
             ].map((tech) => (
               <span
                 key={tech}
@@ -599,7 +593,7 @@ export default function Home() {
 
         <div>
           <p className="text-xs font-medium uppercase tracking-[0.15em] text-black/40">
-            03 / Web & Mobile
+            03 / Web App
           </p>
 
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">
@@ -620,15 +614,12 @@ export default function Home() {
           <div className="mt-5 flex flex-wrap gap-2">
 
             {[
-               "Next.js",
+              "Next.js",
               "Nest.js",
               "Node.js",
-              "React Native",
-              "TypeScript",
               "PostgreSQL",
-              "Railway",
-              "Neon",
-              "REST API",
+               
+                "Railway",
               
             ].map((tech) => (
               <span
@@ -673,7 +664,7 @@ export default function Home() {
 
         <div>
           <p className="text-xs font-medium uppercase tracking-[0.15em] text-black/40">
-            04 / Web & Mobile
+            04 / Web App
           </p>
 
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">
@@ -695,14 +686,12 @@ export default function Home() {
           <div className="mt-5 flex flex-wrap gap-2">
 
             {[
-               "Next.js",
+              "Next.js",
               "Nest.js",
               "Node.js",
-              "flutter",
-              "TypeScript",
               "PostgreSQL",
-              "Railway",
-              "Neon",
+              
+                "AWS",
             ].map((tech) => (
               <span
                 key={tech}
@@ -840,14 +829,12 @@ export default function Home() {
           <div className="mt-5 flex flex-wrap gap-2">
 
             {[
-               "Next.js",
+              "Next.js",
               "Nest.js",
               "Node.js",
-              "flutter",
-              "TypeScript",
               "PostgreSQL",
-              "Railway",
-              "Neon",
+               "flutter",
+                "AWS",
             ].map((tech) => (
               <span
                 key={tech}
@@ -915,14 +902,12 @@ export default function Home() {
           <div className="mt-5 flex flex-wrap gap-2">
 
             {[
-              "Next.js",
+             "Next.js",
               "Nest.js",
               "Node.js",
-              "flutter",
-              "TypeScript",
               "PostgreSQL",
-              "Railway",
-              "Neon",
+               "flutter",
+                "AWS",
             
               "Wallet"
             ].map((tech) => (
@@ -968,7 +953,7 @@ export default function Home() {
 
         <div>
           <p className="text-xs font-medium uppercase tracking-[0.15em] text-black/40">
-            08 / Web & Mobile
+            08 / Mobile App
           </p>
 
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">
@@ -992,15 +977,9 @@ export default function Home() {
           <div className="mt-5 flex flex-wrap gap-2">
 
             {[
-              "Next.js",
-              "Nest.js",
-              "Node.js",
-              "flutter",
-              "TypeScript",
-              "PostgreSQL",
-              "Railway",
-              "Neon",
-              "paystack"
+             
+               "flutter",
+                "AWS",
             ].map((tech) => (
               <span
                 key={tech}
@@ -1067,15 +1046,12 @@ export default function Home() {
           <div className="mt-5 flex flex-wrap gap-2">
 
             {[
-               "Next.js",
+              "Next.js",
               "Nest.js",
               "Node.js",
-              "flutter",
-              "TypeScript",
               "PostgreSQL",
-              "Railway",
-              "Neon",
-              "paystack"
+               "flutter",
+                "AWS",
             ].map((tech) => (
               <span
                 key={tech}
@@ -1151,12 +1127,9 @@ export default function Home() {
                "Next.js",
               "Nest.js",
               "Node.js",
-              "flutter.js",
-              "TypeScript",
               "PostgreSQL",
-              "Railway",
-              "Neon",
-              "paystack"
+               "flutter",
+                "AWS",
             ].map((tech) => (
               <span
                 key={tech}
@@ -1200,7 +1173,7 @@ export default function Home() {
 
         <div>
           <p className="text-xs font-medium uppercase tracking-[0.15em] text-black/40">
-            11 / Web & Mobile
+            11 / Mobile App
           </p>
 
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">
@@ -1216,21 +1189,15 @@ export default function Home() {
         <div className="max-w-2xl">
 
           <p className="text-md leading-7 text-black/55 md:text-base">
-            A fashion designer portfolio website showcasing creative work and professional experience.
+            Granbox portfolio website showcasing creative work and professional experience.
           </p>
 
           <div className="mt-5 flex flex-wrap gap-2">
 
             {[
-               "Next.js",
-              "Nest.js",
-              "Node.js",
-              "flutter.js",
-              "TypeScript",
-              "PostgreSQL",
-              "Railway",
-              "Neon",
-              "paystack"
+               
+               "flutter",
+                "AWS",
             ].map((tech) => (
               <span
                 key={tech}
