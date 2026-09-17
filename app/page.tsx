@@ -21,12 +21,12 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-[#f5f5f0] pt-[100px] text-[#111111] md:pt-20">
+    <main className="min-h-screen bg-[#f5f5f0] pt-[110px] text-[#111111] md:pt-20">
 
       {/* =====================================================
           NAVIGATION
       ====================================================== */}
-      <nav className={`fixed inset-x-0 top-0 z-50 flex min-h-20 shrink-0 items-center justify-between bg-[#f5f5f0] px-6 pb-5 pt-10 transition-colors md:px-12 md:py-5 lg:px-16 ${menuOpen ? "bg-[#12211f] text-[#f5f5f0]" : "text-[#111111]"}`}>
+      <nav className={`fixed inset-x-0 top-0 z-50 flex min-h-20 shrink-0 items-center justify-between bg-[#f5f5f0] px-6 pb-5 pt-[50px] transition-colors md:px-12 md:py-5 lg:px-16 ${menuOpen ? "bg-[#12211f] text-[#f5f5f0]" : "text-[#111111]"}`}>
 
         <a
           href="#"
@@ -226,9 +226,11 @@ export default function Home() {
             </p>
 
             <h1 className="text-[9vw] font-bold leading-[0.82] tracking-[-0.07em] sm:text-[10vw] md:text-[10vw] lg:text-[9vw]">
-              <span className="block">SOFTWARE</span>
+                
+              <span className="block"> <span className="text-[#460809]">A</span> SOFTWARE</span>
               <span className="block">
-                <span className="text-[#00A9A5]">ENGINEER</span>
+                <span className="text-[#35530E]">ENGINEER</span>
+                
                 <span>.</span>
               </span>
             </h1>
@@ -247,7 +249,7 @@ export default function Home() {
                   href="https://drive.google.com/uc?export=download&id=1OlSV-d0tRIhHxs8lupPQwdHQXd3lRx3T"
                   target="_blank"
                   rel="noreferrer"
-                  className="flex min-w-0 flex-1 items-center justify-center rounded-[0.65rem] border border-[#12211f] px-3 py-3 text-center text-[10px] font-semibold tracking-[0.08em] text-[#12211f] transition-colors hover:bg-[#12211f] hover:text-white sm:text-xs"
+                  className="flex min-w-0 flex-1 items-center justify-center rounded-[0.65rem] border border-[#12211f] px-3 py-3 text-center text-[10px] font-bold tracking-[0.08em] text-[#12211f] transition-colors hover:bg-[#12211f] hover:text-white sm:text-sm"
                 >
                   DOWNLOAD CV
                 </a>
