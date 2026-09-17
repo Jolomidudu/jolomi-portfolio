@@ -5,10 +5,14 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [showScrollTop, setShowScrollTop] = useState(false);
+  const [atPageEnd, setAtPageEnd] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setShowScrollTop(window.scrollY > 500);
+    const handleScroll = () => {
+      setAtPageEnd(
+        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 8,
+      );
+    };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
@@ -153,24 +157,24 @@ export default function Home() {
 
       </nav>
 
-      {showScrollTop && (
+      <div className="fixed bottom-6 right-6 z-40 flex flex-col items-center gap-2">
+        <span className="rotate-90 text-[10px] font-bold uppercase tracking-[0.12em] text-[#12211f]">
+          SCROLL
+        </span>
         <button
           type="button"
-          aria-label="Scroll to top"
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="fixed bottom-6 right-20 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-[#12211f] text-xl text-[#78d8ca] shadow-lg transition-all hover:-translate-y-1 hover:bg-[#00A9A5] hover:text-white"
+          aria-label={atPageEnd ? "Scroll up" : "Scroll down"}
+          onClick={() =>
+            window.scrollTo({
+              top: atPageEnd ? 0 : document.documentElement.scrollHeight,
+              behavior: "smooth",
+            })
+          }
+          className="flex h-20 w-20 animate-bounce items-center justify-center rounded-full bg-[#7f1d1d] text-xl text-white shadow-lg transition-colors hover:bg-[#541313]"
         >
-          ↑
+          {atPageEnd ? "↑" : "↓"}
         </button>
-      )}
-
-      <a
-        href="#work"
-        aria-label="Scroll down to recent work"
-        className="fixed bottom-6 right-6 z-40 flex h-12 w-12 animate-bounce items-center justify-center rounded-[0.65rem] bg-[#00A9A5] text-xl text-white shadow-lg transition-colors hover:bg-[#12211f]"
-      >
-        ↓
-      </a>
+      </div>
 
 
       {/* =====================================================
@@ -183,9 +187,11 @@ export default function Home() {
           <span
             aria-label="Verified"
             title="Verified"
-            className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-[#00A9A5] text-xs font-bold leading-none text-[#00A9A5]"
+            className="flex h-6 w-6 items-center justify-center rounded-full bg-[#00A9A5] text-white shadow-[0_0_0_3px_rgba(0,169,165,0.18)]"
           >
-            ✓
+            <svg viewBox="0 0 16 16" aria-hidden="true" className="h-4 w-4 fill-none stroke-current stroke-2">
+              <path d="m3.5 8 3 3 6-6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
           </span>
 
           {/* <span>
@@ -198,7 +204,7 @@ export default function Home() {
         <div className="grid max-w-7xl grid-cols-[1.25fr_0.75fr] items-center gap-4 sm:gap-8 md:grid-cols-[1.1fr_0.9fr] md:gap-12">
 
           <div>
-            <p className="mb-4 text-[25px] font-medium leading-tight md:text-xl">
+            <p className="mb-4 text-[19px] font-medium leading-tight md:text-xl">
               Hello, I&apos;m Oritsejolomi Dudu.
             </p>
 
@@ -251,7 +257,7 @@ export default function Home() {
               fill
               priority
               sizes="(max-width: 768px) 35vw, 38vw"
-              className="scale-[1.2] object-contain object-bottom md:scale-100"
+              className="scale-[1.7] object-contain object-bottom md:scale-100"
             />
           </div>
 
