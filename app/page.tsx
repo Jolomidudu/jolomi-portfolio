@@ -959,7 +959,7 @@ export default function Home() {
           </p>
 
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">
-            CARECROWD
+            CareCrowd
           </h3>
 
           <a href="https://carecrowd.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
