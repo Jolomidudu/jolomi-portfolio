@@ -1373,11 +1373,11 @@ export default function Home() {
 
         <div className="mt-14 flex snap-x gap-5 overflow-x-auto pb-5">
           {[
-            ["Jolomi brought structure to a complicated product and gave the team confidence to ship.", "Product lead, fintech platform"],
-            ["The work was thoughtful, practical and clear from the first conversation to launch.", "Founder, real estate company"],
-            ["We finally had a website that sounded like us and helped customers understand what we do.", "Director, creative business"],
-            ["Jolomi is the rare engineer who keeps both the user and the business in view.", "Operations lead, healthcare startup"],
-            ["Fast, dependable and generous with his thinking. I would happily work with him again.", "Founder, education platform"],
+            ["Jolomi brought structure to a complicated product and gave the team confidence to ship.", "Mr Akinwale, Produx Investment"],
+            ["The work was thoughtful, practical and clear from the first conversation to launch.", "Mr Charles, Gentleboard Real estate"],
+            ["We finally had a website that sounded like us and helped customers understand what we do.", "Mrs Lucy, Spa"],
+            ["Jolomi is the rare engineer who keeps both the user and the business in view.", "Feranmi, Doctor"],
+            ["Fast, dependable and generous with his thinking. I would happily work with him again.", "Mr Olalere, Straitgate"],
           ].map(([quote, author]) => (
             <figure key={author} className="min-w-[82vw] snap-start border border-white/15 p-7 sm:min-w-[55vw] md:min-w-[34vw] md:p-9">
               <blockquote className="text-2xl font-medium leading-tight">&ldquo;{quote}&rdquo;</blockquote>
