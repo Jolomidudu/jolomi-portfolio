@@ -930,7 +930,7 @@ export default function Home() {
     </article>
 
     {/* =====================================================
-        HAPPYGIFT A Crowdfunding Platform
+        CARECROWD A Crowdfunding Platform
     ====================================================== */}
     <article className="group">
 
@@ -939,8 +939,8 @@ export default function Home() {
         <div className="relative aspect-[16/9]">
 
           <Image
-            src="/images/projects/happygift-mckp.png"
-            alt="HappyGift crowdfunding platform"
+            src="/images/projects/carecrowd-mckp.png"
+            alt="CARECROWD crowdfunding platform"
             fill
             sizes="(max-width: 768px) 100vw, 90vw"
             className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
@@ -959,10 +959,10 @@ export default function Home() {
           </p>
 
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">
-            HappyGift
+            CARECROWD
           </h3>
 
-          <a href="https://happygift.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
+          <a href="https://carecrowd.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
             View project <span aria-hidden="true" className="ml-2"></span>
           </a>
         </div>
