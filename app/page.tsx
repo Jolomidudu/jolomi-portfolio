@@ -201,20 +201,6 @@ export default function Home() {
 
         <div className="mb-8 flex items-center gap-3 text-sm font-medium uppercase tracking-[0.2em]">
 
-          <span
-            aria-label="Verified"
-            title="Verified"
-            className="flex h-6 w-6 items-center justify-center rounded-full bg-[#00A9A5] text-white shadow-[0_0_0_3px_rgba(0,169,165,0.18)]"
-          >
-            <svg viewBox="0 0 16 16" aria-hidden="true" className="h-4 w-4 fill-none stroke-current stroke-2">
-              <path d="m3.5 8 3 3 6-6" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </span>
-
-          {/* <span>
-            Available for making progress
-          </span> */}
-
         </div>
 
 
@@ -225,9 +211,9 @@ export default function Home() {
               Hello, I&apos;m Oritsejolomi Dudu.
             </p>
 
-            <h1 className="text-[9vw] font-bold leading-[0.82] tracking-[-0.07em] sm:text-[10vw] md:text-[10vw] lg:text-[9vw]">
+            <h1 className="text-[9vw] font-bold leading-[0.82] tracking-[-0.07em] sm:text-[10vw] md:text-[7vw] lg:text-[6.3vw]">
                 
-              <span className="block"> <span className="text-[#460809]">A</span> SOFTWARE</span>
+              <span className="block md:whitespace-nowrap"> <span className="text-[#460809]">A</span> SOFTWARE</span>
               <span className="block">
                 <span className="text-[#35530E]">ENGINEER</span>
                 
@@ -259,7 +245,7 @@ export default function Home() {
                 href="#work"
                 className="group mt-5 flex w-fit items-center gap-4"
               >
-                <span className="text-xs font-semibold uppercase tracking-wider sm:text-sm">
+                <span className="text-xs font-bold uppercase tracking-wider sm:text-sm">
                   View my recent works
                 </span>
                 <span className="flex h-10 w-10 items-center justify-center rounded-[0.65rem] border border-gray-500 bg-gray-500 text-white transition-all duration-300 group-hover:bg-black">
