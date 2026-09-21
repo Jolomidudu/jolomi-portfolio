@@ -30,9 +30,14 @@ export default function Home() {
 
         <a
           href="#"
-          className="text-xl font-bold tracking-tight"
+          className="flex items-center overflow-hidden rounded-full border border-[#12211f]/10 bg-white shadow-sm ring-1 ring-black/5"
+          aria-label="Home"
         >
-          J<span className="text-[#00A9A5]">.</span>D
+          <img
+            src="/jolo.jpg"
+            alt="Jolomi Dudu"
+            className="h-10 w-10 object-cover"
+          />
         </a>
 
         <div className="hidden items-center gap-8 text-sm font-medium md:flex">
@@ -263,7 +268,7 @@ export default function Home() {
               fill
               priority
               sizes="(max-width: 768px) 35vw, 38vw"
-              className="-translate-y-[150px] scale-[2.04] object-contain object-bottom md:translate-y-0 md:scale-100"
+              className="-translate-y-[150px] scale-[1.836] object-contain object-bottom md:translate-y-0 md:scale-100"
             />
           </div>
 
