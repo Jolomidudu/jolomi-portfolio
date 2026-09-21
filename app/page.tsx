@@ -213,9 +213,10 @@ export default function Home() {
 
             <h1 className="text-[9vw] font-bold leading-[0.82] tracking-[-0.07em] sm:text-[10vw] md:text-[7vw] lg:text-[6.3vw]">
                 
-              <span className="block md:whitespace-nowrap"> <span className="text-[#460809]">A</span> SOFTWARE</span>
+              <span className="block md:whitespace-nowrap"> <span className="text-[#5e5e55]">A</span> SOFTWARE</span>
               <span className="block">
                 <span className="text-[#35530E]">ENGINEER</span>
+                
                 
                 <span>.</span>
               </span>
