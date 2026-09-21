@@ -26,7 +26,13 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
   return (
     <div className="min-h-screen">
       <header className={`sticky top-0 z-50 flex min-h-20 shrink-0 items-center justify-between bg-[#f5f5f0] px-6 pb-5 pt-[50px] transition-colors md:px-12 md:py-5 lg:px-16 ${menuOpen ? "bg-[#12211f] text-[#f5f5f0]" : "text-[#111111]"}`}>
-        <Link href="/" className="text-xl font-bold tracking-tight">J<span className="text-[#00A9A5]">.</span>D</Link>
+        <Link href="/" className="flex items-center overflow-hidden rounded-full border border-[#12211f]/10 bg-white shadow-sm ring-1 ring-black/5" aria-label="Home">
+          <img
+            src="/jolo.jpg"
+            alt="Jolomi Dudu"
+            className="h-10 w-10 object-cover"
+          />
+        </Link>
 
         <nav className="hidden items-center gap-8 text-sm font-medium md:flex" aria-label="Main navigation">
           {links.map(([label, href]) => <Link key={href} href={href} className="transition-opacity hover:opacity-50">{label}</Link>)}

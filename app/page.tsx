@@ -263,7 +263,7 @@ export default function Home() {
               fill
               priority
               sizes="(max-width: 768px) 35vw, 38vw"
-              className="-translate-y-[50px] scale-[1.7] object-contain object-bottom md:translate-y-0 md:scale-100"
+              className="-translate-y-[150px] scale-[2.04] object-contain object-bottom md:translate-y-0 md:scale-100"
             />
           </div>
 
