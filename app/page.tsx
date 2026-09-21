@@ -108,12 +108,6 @@ export default function Home() {
         </div>
 
         <div className="flex items-center gap-1 md:hidden">
-          <a href="/notifications" aria-label="Notifications" className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-500 bg-gray-500 text-white">
-            <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-none stroke-current stroke-2"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" strokeLinecap="round" strokeLinejoin="round" /></svg>
-          </a>
-          <a href="/search" aria-label="Search" className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-500 bg-gray-500 text-white">
-            <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-none stroke-current stroke-2"><circle cx="11" cy="11" r="7" /><path d="m16.5 16.5 4 4" strokeLinecap="round" /></svg>
-          </a>
           <button
             className="flex h-9 w-9 items-center justify-center rounded-full border border-[#374151] bg-[#374151] text-white transition-colors hover:bg-[#1f2937]"
             type="button"
@@ -260,11 +254,11 @@ export default function Home() {
 
               <a
                 href="#work"
-                className="group mt-[15px] flex w-fit items-center pl-[12px] md:mt-5"
+                className="group mt-[15px] flex w-fit items-center pl-[7px] md:mt-5"
               >
                 <span className="flex items-center justify-between gap-3 rounded-[6px] border border-black/10 bg-[#f7f0e7] px-3 py-2 text-xs font-bold uppercase tracking-wider shadow-sm sm:text-sm">
                   <span>View Projects</span>
-                  <span className="flex h-7 w-7 items-center justify-center rounded-[4px] border border-black/10 bg-white/70 text-[10px] text-[#12211f] transition-all duration-300 group-hover:bg-black group-hover:text-white">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full border border-black/10 bg-white/70 text-[10px] text-[#12211f] transition-all duration-300 group-hover:bg-black group-hover:text-white">
                     ↓
                   </span>
                 </span>
