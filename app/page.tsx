@@ -1605,7 +1605,7 @@ export default function Home() {
       ====================================================== */}
       <section
         id="contact"
-        className="bg-[#f5f5f0] px-6 py-28 md:px-12 md:py-40 lg:px-16"
+        className="bg-[#f5f5f0] px-6 py-16 md:px-12 md:py-24 lg:px-16"
       >
 
         <div className="max-w-6xl">
@@ -1615,29 +1615,21 @@ export default function Home() {
           </p>
 
           <h2 className="mt-6 text-[25px] font-bold leading-[1.2] tracking-[-0.01em] md:text-[35px]">
-            I love to hear from you. 
-            <br />
-            <span className="text-[#00A9A5]">
-             Whether you have a question or want to collaborate, shoot me a message.
+            I love to hear from you.
+            <span className="hidden text-[#00A9A5] md:inline">
+              <br />
+              Whether you have a question or want to collaborate, shoot me a message.
             </span>
           </h2>
 
         </div>
 
 
-        <div className="mt-16 flex flex-col justify-between gap-10 border-t border-black/15 pt-8 md:flex-row md:items-end">
-
-          <div>
-
-           
-          </div>
-
-
+        <div className="mt-8 border-t border-black/15 pt-2">
           <a
             href="mailto:jollofdudu@gmail.com"
-            className="group flex items-center gap-5"
+            className="group inline-flex items-center gap-5"
           >
-
             <span className="text-lg font-semibold">
               jollofdudu@gmail.com
             </span>
@@ -1645,9 +1637,7 @@ export default function Home() {
             <span className="flex h-14 w-14 items-center justify-center rounded-full border border-black transition-all group-hover:bg-black group-hover:text-white">
               ↗
             </span>
-
           </a>
-
         </div>
 
       </section>
@@ -1673,32 +1663,45 @@ export default function Home() {
           </div>
 
 
-          <div className="flex flex-wrap gap-6 text-sm">
-
+          <div className="flex flex-wrap items-center gap-4 text-sm">
             <a
               href="https://www.linkedin.com/in/jolomid"
-              className="transition-opacity hover:opacity-50"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="LinkedIn"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-black/15 bg-white text-black transition-opacity hover:opacity-50"
             >
-              LinkedIn
+              <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-current">
+                <path d="M6.94 8.5A1.56 1.56 0 1 1 6.94 5.4a1.56 1.56 0 0 1 0 3.1ZM5.5 9.78h2.9V18H5.5V9.78Zm5.1 0h2.77v1.13h.04c.39-.74 1.34-1.52 2.76-1.52 2.95 0 3.5 1.94 3.5 4.46V18h-2.9v-16.8h-2.9v7.53c0 1.3-.02 2.97-1.8 2.97-1.81 0-2.09-1.41-2.09-2.86V9.78h-2.9Z" />
+              </svg>
             </a>
 
             <a
               href="https://github.com/jolomidudu"
-              className="transition-opacity hover:opacity-50"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="GitHub"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-black/15 bg-white text-black transition-opacity hover:opacity-50"
             >
-              GitHub
+              <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-current">
+                <path d="M12 2A10 10 0 0 0 8.84 21.5c.5.1.68-.22.68-.48v-1.7c-2.77.6-3.35-1.16-3.35-1.16-.46-1.15-1.11-1.46-1.11-1.46-.9-.63.07-.62.07-.62 1 .07 1.52 1.04 1.52 1.04.89 1.54 2.35 1.1 2.92.84.09-.66.35-1.1.63-1.35-2.22-.25-4.56-1.11-4.56-4.95 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.3.1-2.7 0 0 .84-.27 2.75 1.02A9.5 9.5 0 0 1 12 6.84a9.5 9.5 0 0 1 2.5.33c1.9-1.3 2.74-1.02 2.74-1.02.55 1.4.2 2.45.1 2.7.64.7 1.03 1.59 1.03 2.68 0 3.84-2.35 4.7-4.58 4.94.36.31.68.92.68 1.85v2.75c0 .26.18.59.69.48A10 10 0 0 0 12 2Z" />
+              </svg>
             </a>
 
             <a
               href="https://www.instagram.com/jollof_tech"
-              className="transition-opacity hover:opacity-50"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Instagram"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-black/15 bg-white text-black transition-opacity hover:opacity-50"
             >
-              Instagram
+              <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-current">
+                <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7Zm5 3.5A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 0 1 12 7.5Zm0 2A2.5 2.5 0 1 0 14.5 12 2.5 2.5 0 0 0 12 9.5Zm5-3.25a1.25 1.25 0 1 1-1.25 1.25A1.25 1.25 0 0 1 17 6.25Z" />
+              </svg>
             </a>
 
             <a href="/faq" className="transition-opacity hover:opacity-50">FAQ</a>
             <a href="/privacy" className="transition-opacity hover:opacity-50">Privacy</a>
-
           </div>
 
         </div>
@@ -1710,9 +1713,7 @@ export default function Home() {
             © {new Date().getFullYear()} Jolomi Dudu. All rights reserved.
           </p>
 
-          <p>
-            Built By Oritsejolomi
-          </p>
+         
 
         </div>
 
