@@ -228,6 +228,17 @@ export default function Home() {
             </h1>
 
             <div className="mt-10 max-w-md sm:mt-14">
+              <div className="mb-4 flex items-center gap-3 md:hidden">
+                <div className="flex h-16 w-16 flex-col items-center justify-center rounded-full border border-[#12211f]/15 bg-white text-center shadow-sm">
+                  <span className="text-[10px] font-black leading-none text-[#12211f]">8YRS+</span>
+                  <span className="mt-1 text-[7px] font-medium uppercase tracking-[0.12em] text-[#12211f]/70">Experience</span>
+                </div>
+                <div className="flex h-16 w-16 flex-col items-center justify-center rounded-full border border-[#12211f]/15 bg-white text-center shadow-sm">
+                  <span className="text-[10px] font-black leading-none text-[#12211f]">65+</span>
+                  <span className="mt-1 text-[7px] font-medium uppercase tracking-[0.12em] text-[#12211f]/70">Projects</span>
+                </div>
+              </div>
+
               <div className="flex flex-col gap-3 md:flex-row">
                 <a
                   href="https://calendly.com/jollofdudu/let-s-discuss-your-project"
@@ -249,13 +260,13 @@ export default function Home() {
 
               <a
                 href="#work"
-                className="group mt-5 flex w-fit items-center gap-4"
+                className="group mt-[15px] flex w-fit items-center pl-[12px] md:mt-5"
               >
-                <span className="text-xs font-bold uppercase tracking-wider sm:text-sm">
-                  View my recent works
-                </span>
-                <span className="flex h-10 w-10 items-center justify-center rounded-[0.65rem] border border-gray-500 bg-gray-500 text-white transition-all duration-300 group-hover:bg-black">
-                  ↓
+                <span className="flex items-center justify-between gap-3 rounded-[6px] border border-black/10 bg-[#f7f0e7] px-3 py-2 text-xs font-bold uppercase tracking-wider shadow-sm sm:text-sm">
+                  <span>View Projects</span>
+                  <span className="flex h-7 w-7 items-center justify-center rounded-[4px] border border-black/10 bg-white/70 text-[10px] text-[#12211f] transition-all duration-300 group-hover:bg-black group-hover:text-white">
+                    ↓
+                  </span>
                 </span>
               </a>
             </div>
@@ -268,7 +279,7 @@ export default function Home() {
               fill
               priority
               sizes="(max-width: 768px) 35vw, 38vw"
-              className="-translate-y-[150px] scale-[1.836] object-contain object-bottom md:translate-y-0 md:scale-100"
+              className="-translate-y-[150px] scale-[1.725] object-contain object-bottom md:translate-y-0 md:scale-100"
             />
           </div>
 
