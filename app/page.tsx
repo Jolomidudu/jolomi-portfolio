@@ -258,7 +258,7 @@ export default function Home() {
 
           <div className="relative flex h-[min(82vw,37rem)] min-h-80 items-end justify-center md:h-[min(68vw,31rem)] md:min-h-64">
             <Image
-              src="/images/jolomid.png"
+              src="/joly.png"
               alt="Jolomi Dudu"
               fill
               priority
