@@ -1615,10 +1615,10 @@ export default function Home() {
           </p>
 
           <h2 className="mt-6 text-[25px] font-bold leading-[1.2] tracking-[-0.01em] md:text-[35px]">
-            I love to hear from you.
-            <span className="hidden text-[#00A9A5] md:inline">
-              <br />
-              Whether you have a question or want to collaborate, shoot me a message.
+            I love to hear from you. 
+            <br />
+            <span className="text-[#00A9A5]">
+             Whether you have a question or want to collaborate, shoot me a message.
             </span>
           </h2>
 
