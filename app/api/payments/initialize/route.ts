@@ -1,13 +1,5 @@
 import { NextResponse } from "next/server";
-
-const services = {
-  web: { title: "Websites & web apps", amount: 450000 },
-  mobile: { title: "Mobile app development", amount: 750000 },
-  design: { title: "UI/UX design", amount: 250000 },
-  analytics: { title: "Data analytics", amount: 200000 },
-  consultancy: { title: "Consultancy & business development", amount: 75000 },
-  maintenance: { title: "Maintenance & social media", amount: 100000 },
-} as const;
+import { services } from "../../../services/service-data";
 
 function appUrl() {
   return process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
@@ -15,13 +7,32 @@ function appUrl() {
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const service = services[body.serviceId as keyof typeof services];
+    const payload: unknown = await request.json();
+    if (!payload || typeof payload !== "object") {
+      return NextResponse.json({ error: "Please provide valid payment details." }, { status: 400 });
+    }
+
+    const body = payload as Record<string, unknown>;
+    const paymentType = body.paymentType;
+    const serviceId = typeof body.serviceId === "string" ? body.serviceId : "";
+    const service = services.find((item) => item.id === serviceId);
     const email = typeof body.email === "string" ? body.email.trim() : "";
     const name = typeof body.name === "string" ? body.name.trim() : "";
+    let amount: number;
+    let serviceName: string;
 
-    if (!service || !email || !name) {
-      return NextResponse.json({ error: "Please provide a valid service, name and email." }, { status: 400 });
+    if (paymentType === "deposit" && service) {
+      amount = Math.round(service.amount * 0.25);
+      serviceName = service.title;
+    } else if (paymentType === "custom" && typeof body.customAmount === "number" && Number.isSafeInteger(body.customAmount) && body.customAmount >= 100 && body.customAmount <= Math.floor(Number.MAX_SAFE_INTEGER / 100)) {
+      amount = body.customAmount;
+      serviceName = "Custom amount";
+    } else {
+      return NextResponse.json({ error: "Choose a service deposit or enter a valid amount of at least ₦100." }, { status: 400 });
+    }
+
+    if (!email || !name) {
+      return NextResponse.json({ error: "Please provide a valid name and email." }, { status: 400 });
     }
 
     if (!email.includes("@")) {
@@ -43,10 +54,10 @@ export async function POST(request: Request) {
       },
       body: JSON.stringify({
         email,
-        amount: service.amount * 100,
+        amount: amount * 100,
         reference,
         callback_url: callbackUrl,
-        metadata: { customer_name: name, service: service.title },
+        metadata: { customer_name: name, service: serviceName, payment_type: paymentType },
       }),
     });
     const data = await response.json();
