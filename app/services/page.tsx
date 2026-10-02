@@ -21,21 +21,15 @@ export default function ServicesPage() {
     <SiteChrome>
       <main className="min-h-screen bg-[#f5f5f0] text-[#111111]">
 
-      <section className="px-6 pb-24 pt-20 md:px-12 md:pb-32 md:pt-28 lg:px-16">
-        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#00A9A5]">Services & pricing</p>
-        <div className="mt-6 grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
-          <h1 className="max-w-5xl text-6xl font-semibold leading-[0.9] tracking-[-0.06em] md:text-8xl">Useful digital work, priced with clarity.</h1>
-          <p className="max-w-md text-lg leading-8 text-black/60">Choose a starting point below. Every project begins with a short discovery call, a written scope and a payment plan that makes sense for the work.</p>
-        </div>
-      </section>
-
-      <section className="bg-[#111111] px-6 py-20 text-[#f5f5f0] md:px-12 md:py-28 lg:px-16">
-        <div className="divide-y divide-white/15 border-y border-white/15">
+      <section className="px-5 pb-16 pt-10 md:px-12 md:pb-24 md:pt-14 lg:px-16">
+        <p className="mb-6 text-sm font-semibold uppercase tracking-[0.2em] text-[#00A9A5]">Services & pricing</p>
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
           {services.map((service) => (
-            <article key={service.number} className="grid gap-6 py-8 md:grid-cols-[80px_1fr_190px] md:items-start md:py-10">
-              <span className="text-sm text-white/35">{service.number}</span>
-              <div><h2 className="text-3xl font-semibold tracking-tight md:text-5xl">{service.title}</h2><p className="mt-4 max-w-2xl leading-7 text-white/55">{service.description}</p></div>
-              <p className="text-sm font-semibold text-[#5ed4c7] md:text-right">{service.price}</p>
+            <article key={service.number} className="flex min-h-52 flex-col border border-black/10 bg-white/70 p-4 sm:min-h-60 sm:p-6">
+              <span className="text-xs font-medium text-black/40">{service.number}</span>
+              <h2 className="mt-4 text-lg font-semibold leading-tight tracking-tight sm:text-2xl">{service.title}</h2>
+              <p className="mt-3 text-sm leading-5 text-black/60 sm:leading-6">{service.description}</p>
+              <p className="mt-auto pt-5 text-sm font-semibold text-[#008c87] sm:text-base">{service.price}</p>
             </article>
           ))}
         </div>
