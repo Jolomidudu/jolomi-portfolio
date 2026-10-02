@@ -233,31 +233,45 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="flex flex-col gap-3 md:flex-row">
+              <div className="flex flex-row gap-2">
                 <a
                   href="https://calendly.com/jollofdudu/let-s-discuss-your-project"
                   target="_blank"
                   rel="noreferrer"
-                  className="flex min-w-0 flex-1 items-center justify-center rounded-[0.65rem] bg-[#12211f] px-3 py-3 text-center text-[10px] font-semibold tracking-[0.08em] text-white transition-colors hover:bg-[#00A9A5] sm:text-xs"
+                  aria-label="Call me"
+                  title="Call me"
+                  className="flex min-w-0 flex-1 items-center justify-center gap-2 rounded-[0.65rem] bg-[#12211f] px-2 py-3 text-center text-white transition-colors hover:bg-[#00A9A5]"
                 >
-                  CALL ME
+                  <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5 fill-none stroke-current stroke-[1.8]">
+                    <path d="M7.2 3.8h2.5l1.2 4.1-1.8 1.5a14.1 14.1 0 0 0 5.5 5.5l1.5-1.8 4.1 1.2v2.5a2 2 0 0 1-2.2 2A15.9 15.9 0 0 1 5.2 6a2 2 0 0 1 2-2.2Z" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  <span className="text-xs font-semibold">Me</span>
                 </a>
                 <a
                   href="https://drive.google.com/uc?export=download&id=1OlSV-d0tRIhHxs8lupPQwdHQXd3lRx3T"
                   target="_blank"
                   rel="noreferrer"
-                  className="flex min-w-0 flex-1 items-center justify-center rounded-[0.65rem] border border-[#12211f] px-3 py-3 text-center text-[10px] font-bold tracking-[0.08em] text-[#12211f] transition-colors hover:bg-[#12211f] hover:text-white sm:text-sm"
+                  aria-label="Download CV"
+                  title="Download CV"
+                  className="flex min-w-0 flex-1 items-center justify-center gap-2 rounded-[0.65rem] border border-[#12211f] px-2 py-3 text-center text-xs font-bold text-[#12211f] transition-colors hover:bg-[#12211f] hover:text-white"
                 >
-                  DOWNLOAD CV
+                  <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 shrink-0 fill-none stroke-current stroke-[1.8]">
+                    <path d="M12 3v11m0 0 4-4m-4 4-4-4M5 16v4h14v-4" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  <span>CV</span>
                 </a>
               </div>
 
               <a
                 href="#work"
-                className="group mt-[15px] flex w-fit items-center pl-[7px] md:mt-5"
+                aria-label="View projects"
+                className="group mt-[25px] flex w-fit items-center pl-[7px] md:mt-[30px]"
               >
                 <span className="flex items-center justify-between gap-3 rounded-[6px] border border-black/10 bg-[#f7f0e7] px-3 py-2 text-xs font-bold uppercase tracking-wider shadow-sm sm:text-sm">
-                  <span>View Projects</span>
+                  <span className="flex items-center gap-2">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-none stroke-current stroke-[1.8]"><path d="M2.5 12s3.4-6 9.5-6 9.5 6 9.5 6-3.4 6-9.5 6-9.5-6-9.5-6Z" strokeLinecap="round" strokeLinejoin="round" /><circle cx="12" cy="12" r="2.5" /></svg>
+                    Projects
+                  </span>
                   <span className="flex h-8 w-8 items-center justify-center rounded-full border border-black/10 bg-white/70 text-[10px] text-[#12211f] transition-all duration-300 group-hover:bg-black group-hover:text-white">
                     ↓
                   </span>

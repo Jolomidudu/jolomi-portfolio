@@ -1,8 +1,12 @@
 import { NextResponse } from "next/server";
 
-function redirect(request: Request, result: "success" | "failed") {
-  const url = new URL("/services", request.url);
-  url.searchParams.set("payment", result);
+function redirect(request: Request, result: "success" | "failed", reference?: string) {
+  const url = new URL(result === "success" ? "/payment/success" : "/services", request.url);
+  if (result === "success" && reference) {
+    url.searchParams.set("reference", reference);
+  } else if (result === "failed") {
+    url.searchParams.set("payment", result);
+  }
   return NextResponse.redirect(url);
 }
 
@@ -16,5 +20,6 @@ export async function GET(request: Request) {
       cache: "no-store",
   });
   const data = await response.json();
-  return redirect(request, response.ok && data.data?.status === "success" ? "success" : "failed");
+  const verified = response.ok && data.data?.status === "success";
+  return redirect(request, verified ? "success" : "failed", verified ? reference : undefined);
 }
