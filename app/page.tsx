@@ -42,17 +42,17 @@ export default function Home() {
 
         <div className="hidden items-center gap-8 text-sm font-medium md:flex">
           <a
-            href="#work"
+            href="#projects"
             className="transition-opacity hover:opacity-50"
           >
-            WORK
+            Projects
           </a>
 
           <a
-            href="#about"
+            href="/about"
             className="transition-opacity hover:opacity-50"
           >
-            ABOUT
+            ABOUT ME
           </a>
 
           <a
@@ -66,14 +66,14 @@ export default function Home() {
             href="/learn"
             className="transition-opacity hover:opacity-50"
           >
-            LEARN
+            LEARN A SKILL
           </a>
 
           <a
             href="/blog"
             className="transition-opacity hover:opacity-50"
           >
-            JOURNAL
+            MY JOURNAL
           </a>
 
           <a
@@ -136,16 +136,16 @@ export default function Home() {
 
             <div className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#78d8ca]">
               <span className="h-2 w-2 rounded-full bg-[#78d8ca]" />
-              <span>Menu / Available for work</span>
+              <span>Menu / Available for Hire</span>
             </div>
 
             <div className="flex flex-1 flex-col">
               {[
-                ["WORK", "#work"],
-                ["ABOUT", "#about"],
+                ["PROJECTS", "#projects"],
+                ["ABOUT ME", "/about"],
                 ["SERVICES", "/services"],
-                ["LEARN", "/learn"],
-                ["JOURNAL", "/blog"],
+                ["LEARN NEW", "/learn"],
+                ["BLOG", "/blog"],
                 ["EXPERIENCE", "#experience"],
                 ["CONTACT", "#contact"],
               ].map(([label, href]) => (
@@ -156,7 +156,7 @@ export default function Home() {
                   onClick={() => setMenuOpen(false)}
                 >
                   <span className="flex items-center gap-4">
-                    <span className="text-xs font-normal text-white/35">0{["WORK", "ABOUT", "SERVICES", "LEARN", "JOURNAL", "EXPERIENCE", "CONTACT"].indexOf(label) + 1}</span>
+                    <span className="text-xs font-normal text-white/35">0{["PROJECTS", "ABOUT ME", "SERVICES", "LEARN NEW", "BLOG", "EXPERIENCE", "CONTACT"].indexOf(label) + 1}</span>
                     <span className="text-3xl font-semibold tracking-[-0.04em]">{label}</span>
                   </span>
                   <span className="text-xl text-white/35 transition-transform group-hover:translate-x-1 group-hover:text-[#78d8ca]">↗</span>
@@ -263,7 +263,7 @@ export default function Home() {
               </div>
 
               <a
-                href="#work"
+                href="#project"
                 aria-label="View projects"
                 className="group mt-[25px] flex w-fit items-center pl-[7px] md:mt-[30px]"
               >
@@ -300,104 +300,6 @@ export default function Home() {
 
 
       
-     {/* =====================================================
-    ABOUT
-====================================================== */}
-<section
-  id="about"
-  className="border-t border-black/10 bg-[#111111] px-6 py-24 text-[#f5f5f0] md:px-12 md:py-32 lg:px-16"
->
-  <div className="grid gap-10 md:grid-cols-2 md:items-start md:gap-12">
-
-        {/* Photo */}
-        <div className="relative aspect-[4/5] overflow-hidden rounded-[1.5rem] bg-white/10">
-
-          <Image
-            src="/images/jolomi2.jpg"
-            alt="Jolomi Dudu"
-            fill
-            priority
-            sizes="(max-width: 768px) 100vw, 50vw"
-            className="object-cover"
-          />
-
-        </div>
-
-
-      {/* Introduction */}
-      <div>
-
-          <h2 className="text-[25px] font-semibold leading-[1.25] tracking-[-0.01em] md:text-[35px]">
-
-           I’m a Software Engineer focused on building modern, scalable, and user-centered digital solutions. I have experience developing customer-facing applications and backend systems across industries including real estate, fmcg, fintech, banking, healthcare, hospitality and  SaaS.
-
-           
-
-          </h2>
-
-          <p className="mt-8 text-base leading-8 text-white/65 md:text-lg">
-        </p>
-
-          
-        </div>
-
-      </div>
-
-
-      {/* Statistics */}
-      <div className="mt-20 grid grid-cols-2 border-t border-white/15 pt-8 md:grid-cols-4">
-
-        <div>
-          <p className="text-4xl font-semibold tracking-tight md:text-5xl">
-            8+
-          </p>
-
-          <p className="mt-2 text-xs uppercase tracking-wider text-white/40">
-            Years Experience
-          </p>
-        </div>
-
-
-        <div>
-          <p className="text-4xl font-semibold tracking-tight md:text-5xl">
-           65+
-          </p>
-
-          <p className="mt-2 text-xs uppercase tracking-wider text-white/40">
-            Projects
-          </p>
-        </div>
-
-
-        <div className="mt-8 md:mt-0">
-          <p className="text-4xl font-semibold tracking-tight md:text-5xl">
-            6+
-          </p>
-
-          <p className="mt-2 text-xs uppercase tracking-wider text-white/40">
-            Core Disciplines
-          </p>
-        </div>
-
-
-        <div className="mt-8 md:mt-0">
-          <p className="text-4xl font-semibold tracking-tight md:text-5xl">
-            ∞
-          </p>
-
-          <p className="mt-2 text-xs uppercase tracking-wider text-white/40">
-            Ideas to Build
-          </p>
-    </div>
-
-
-  </div>
-</section>
-
-
-      
-
-
       {/* =====================================================
           FEATURED WORK
       ====================================================== */}
@@ -405,19 +307,19 @@ export default function Home() {
     PROJECTS
 ====================================================== */}
 <section
-  id="work"
+  id="projects"
   className="bg-[#f5f5f0] px-6 py-24 md:px-12 md:py-32 lg:px-16"
 >
   <div className="mb-16 grid gap-8 md:grid-cols-[1fr_0.45fr] md:items-end">
 
     <div>
       <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#00A9A5]">
-        Selected Work
+        Deliveries
       </p>
 
-      <h2 className="mt-5 text-5xl font-semibold tracking-[-0.05em] md:text-6xl lg:text-7xl">
-        Projects I&apos;ve built.
-      </h2>
+      <h3 className="mt-5 text-5xl font-semibold tracking-[-0.05em] md:text-6xl lg:text-7xl">
+        Featured Projects
+      </h3>
     </div>
 
     <p className="max-w-sm text-sm leading-6 text-black/50 md:justify-self-end">

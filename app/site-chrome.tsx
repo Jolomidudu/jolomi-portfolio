@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 
 const links = [
   ["HOME", "/"],
+  ["ABOUT", "/about"],
   ["SERVICES", "/services"],
   ["LEARN", "/learn"],
   ["JOURNAL", "/blog"],
@@ -40,14 +41,10 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
 
         <div className="hidden md:block"><Link href="/services#booking" className="rounded-full border border-current px-5 py-2.5 text-sm font-medium transition-colors hover:bg-[#111111] hover:text-white">Start a project</Link></div>
 
-        <div className="hidden items-center gap-2 md:flex">
-          <Link href="/notifications" aria-label="Notifications" className="flex h-10 w-10 items-center justify-center rounded-full border border-[#374151] bg-[#374151] text-white transition-colors hover:bg-[#1f2937]"><svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-none stroke-current stroke-2"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" strokeLinecap="round" strokeLinejoin="round" /></svg></Link>
-          <Link href="/search" aria-label="Search" className="flex h-10 w-10 items-center justify-center rounded-full border border-[#374151] bg-[#374151] text-white transition-colors hover:bg-[#1f2937]"><svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-none stroke-current stroke-2"><circle cx="11" cy="11" r="7" /><path d="m16.5 16.5 4 4" strokeLinecap="round" /></svg></Link>
-        </div>
+        
 
         <div className="flex items-center gap-1 md:hidden">
-          <Link href="/notifications" aria-label="Notifications" className="flex h-9 w-9 items-center justify-center rounded-full border border-[#374151] bg-[#374151] text-white"><svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-none stroke-current stroke-2"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" strokeLinecap="round" strokeLinejoin="round" /></svg></Link>
-          <Link href="/search" aria-label="Search" className="flex h-9 w-9 items-center justify-center rounded-full border border-[#374151] bg-[#374151] text-white"><svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-none stroke-current stroke-2"><circle cx="11" cy="11" r="7" /><path d="m16.5 16.5 4 4" strokeLinecap="round" /></svg></Link>
+          
           <button type="button" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen} aria-controls="site-mobile-navigation" onClick={() => setMenuOpen(!menuOpen)} className="flex h-9 w-9 items-center justify-center rounded-full border border-[#374151] bg-[#374151] text-white">
             {menuOpen ? "×" : "☰"}
           </button>
@@ -65,7 +62,7 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
         )}
       </header>
 
-      {pathname !== "/" && <Link href="/" className="fixed bottom-6 left-6 z-40 rounded-full border border-black/20 bg-[#f5f5f0]/90 px-4 py-3 text-xs font-semibold uppercase tracking-[0.12em] text-black backdrop-blur-md transition-transform hover:-translate-x-1">← Back home</Link>}
+      {pathname !== "/" && <Link href="/" className="fixed bottom-6 left-6 z-40 rounded-full border border-black/20 bg-[#f5f5f0]/90 px-4 py-3 text-xs font-semibold uppercase tracking-[0.12em] text-black backdrop-blur-md transition-transform hover:-translate-x-1">← Back</Link>}
       {showScrollTop && <button type="button" aria-label="Scroll to top" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="fixed bottom-6 right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-[#12211f] text-xl text-[#78d8ca] shadow-lg transition-all hover:-translate-y-1 hover:bg-[#00A9A5] hover:text-white">↑</button>}
 
       {children}
