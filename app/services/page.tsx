@@ -35,6 +35,8 @@ export default function ServicesPage() {
         </div>
       </section>
 
+      
+
       <section id="booking" className="px-6 py-24 md:px-12 md:py-32 lg:px-16">
         <div className="grid gap-12 lg:grid-cols-[1fr_0.8fr]">
           <div><p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#00A9A5]">Start here</p><h2 className="mt-5 max-w-2xl text-5xl font-semibold leading-[0.95] tracking-[-0.05em] md:text-7xl">Let&apos;s scope the right next move.</h2></div>
