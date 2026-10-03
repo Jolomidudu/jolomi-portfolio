@@ -18,6 +18,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Enter your portal email and password." }, { status: 400 });
   }
 
+  if (!process.env.RAILWAY_API_URL || !process.env.RAILWAY_INTERNAL_API_KEY) {
+    return NextResponse.json(
+      { error: "Portal connection is not configured. Check RAILWAY_API_URL and RAILWAY_INTERNAL_API_KEY." },
+      { status: 503 },
+    );
+  }
+
   try {
     const railwayResponse = await callRailway("/api/auth/login", {
       method: "POST",

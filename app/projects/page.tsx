@@ -10,6 +10,26 @@ export const metadata: Metadata = {
 
 const projects = [
   {
+    name: "Festyvibe",
+    category: "Web & Mobile",
+    image: "/images/projects/festyvibe.jpg",
+    alt: "Festyvibe Event Website",
+    href: "https://festyvibe.vercel.app",
+    description:
+      "A premium event platform for customers to explore events, book tickets and discover experiences through a polished digital experience.",
+    stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "Flutter"],
+  },
+  {
+    name: "BudgetAll",
+    category: "Web & Mobile",
+    image: "/images/projects/budgetall.jpg",
+    alt: "BudgetAll Financial Platform",
+    href: "https://budgetall.vercel.app",
+    description:
+      "A financial budgeting platform designed to help users manage their finances, track expenses and achieve financial goals through a seamless digital experience.",
+    stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "Flutter"],
+  },
+  {
     name: "Spa Elaris",
     category: "Web & Mobile",
     image: "/images/projects/spaelaris1-mckp.jpg",

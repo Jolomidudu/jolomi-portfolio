@@ -29,4 +29,6 @@ In Vercel **Project Settings → Environment Variables**, add:
 
 Redeploy the Vercel app after saving the variables. The private portal is at `/portal` on the Vercel site.
 
+For local development, add the same two server-only variables to the repository root `.env.local` and restart `npm run dev`. Do not prefix either variable with `NEXT_PUBLIC_` or commit `.env.local`.
+
 Remove any old `RESEND_API_KEY` and `RESEND_FROM_EMAIL` variables from Vercel; the app no longer sends enquiries by email. EmailJS was not added to the app. The shared Railway key and admin credentials must never use `NEXT_PUBLIC_` variable names.
