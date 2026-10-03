@@ -440,14 +440,14 @@ export default function Home() {
       Expertise
     </p>
 
-    <h2 className="mt-5 max-w-5xl text-5xl font-semibold leading-[0.95] tracking-[-0.05em] md:text-7xl lg:text-8xl">
+    <h2 className="mt-5 max-w-5xl text-1xl font-semibold leading-[0.95] tracking-[-0.05em] md:text-6xl lg:text-5xl">
       Technology,
       <span className="text-[#00A9A5]">
         {" "}engineered and led.
       </span>
     </h2>
 
-    <p className="mt-8 max-w-3xl text-lg leading-8 text-white/45 md:text-xl">
+    <p className="mt-8 max-w-3xl text-lg leading-8 text-white/85 md:text-xl">
       From leading technology teams and shaping ICT strategy to engineering
       scalable software and digital platforms, I work across both the
       technical and organizational layers of modern technology.
@@ -463,7 +463,7 @@ export default function Home() {
       </span>
 
       <div>
-        <h3 className="text-3xl font-semibold tracking-tight transition-colors group-hover:text-[#00A9A5] md:text-5xl">
+        <h3 className="text-2xl font-semibold tracking-tight transition-colors group-hover:text-[#00A9A5] md:text-5xl">
           Technology Leadership & ICT Management
         </h3>
 
@@ -484,7 +484,7 @@ export default function Home() {
       </span>
 
       <div>
-        <h3 className="text-3xl font-semibold tracking-tight transition-colors group-hover:text-[#00A9A5] md:text-5xl">
+        <h3 className="text-2xl font-semibold tracking-tight transition-colors group-hover:text-[#00A9A5] md:text-5xl">
           Technology Strategy & Digital Transformation
         </h3>
 
@@ -505,7 +505,7 @@ export default function Home() {
       </span>
 
       <div>
-        <h3 className="text-3xl font-semibold tracking-tight transition-colors group-hover:text-[#00A9A5] md:text-5xl">
+        <h3 className="text-2xl font-semibold tracking-tight transition-colors group-hover:text-[#00A9A5] md:text-5xl">
           Software Engineering & Architecture
         </h3>
 
@@ -526,7 +526,7 @@ export default function Home() {
       </span>
 
       <div>
-        <h3 className="text-3xl font-semibold tracking-tight transition-colors group-hover:text-[#00A9A5] md:text-5xl">
+        <h3 className="text-2xl font-semibold tracking-tight transition-colors group-hover:text-[#00A9A5] md:text-5xl">
           IT Infrastructure, Cloud & Security
         </h3>
 
@@ -547,7 +547,7 @@ export default function Home() {
       </span>
 
       <div>
-        <h3 className="text-3xl font-semibold tracking-tight transition-colors group-hover:text-[#00A9A5] md:text-5xl">
+        <h3 className="text-2xl font-semibold tracking-tight transition-colors group-hover:text-[#00A9A5] md:text-5xl">
           Technical Leadership & Delivery
         </h3>
 
@@ -568,7 +568,7 @@ export default function Home() {
       </span>
 
       <div>
-        <h3 className="text-3xl font-semibold tracking-tight transition-colors group-hover:text-[#00A9A5] md:text-5xl">
+        <h3 className="text-2xl font-semibold tracking-tight transition-colors group-hover:text-[#00A9A5] md:text-5xl">
           Technology Consulting & Advisory
         </h3>
 
@@ -592,7 +592,7 @@ export default function Home() {
         <div className="flex items-end justify-between gap-8">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#78d8ca]">Client notes</p>
-            <h2 className="mt-5 max-w-xl text-4xl font-semibold leading-[0.95] tracking-[-0.05em] md:text-6xl">Good work should make people&apos;s lives easier.</h2>
+            <h2 className="mt-5 max-w-xl text-2xl font-semibold leading-[0.95] tracking-[-0.05em] md:text-6xl">Good work should make people&apos;s lives easier.</h2>
           </div>
           <span className="hidden text-sm text-white/45 md:block">Swipe to explore</span>
         </div>
@@ -606,7 +606,7 @@ export default function Home() {
             ["Fast, dependable and generous with his thinking. I would happily work with him again.", "Mr Olalere, Straitgate"],
           ].map(([quote, author]) => (
             <figure key={author} className="min-w-[82vw] snap-start border border-white/15 p-7 sm:min-w-[55vw] md:min-w-[34vw] md:p-9">
-              <blockquote className="text-2xl font-medium leading-tight">&ldquo;{quote}&rdquo;</blockquote>
+              <blockquote className="text-1xl font-medium leading-tight">&ldquo;{quote}&rdquo;</blockquote>
               <figcaption className="mt-12 text-sm text-[#78d8ca]">{author}</figcaption>
             </figure>
           ))}
@@ -671,7 +671,7 @@ export default function Home() {
               J<span className="text-[#00A9A5]">.</span>D
             </p>
 
-            <p className="mt-2 text-sm text-black/40">
+            <p className="mt-2 text-sm text-red/80">
               Technology Consultant
             </p>
 
@@ -722,7 +722,7 @@ export default function Home() {
         </div>
 
 
-        <div className="mt-10 flex flex-col justify-between gap-3 border-t border-black/10 pt-5 text-xs text-black/40 md:flex-row">
+        <div className="mt-10 flex flex-col justify-between gap-3 border-t border-black/10 pt-5 text-xs text-green/80 md:flex-row">
 
           <p>
             © {new Date().getFullYear()} Jolomi Dudu. All rights reserved.
