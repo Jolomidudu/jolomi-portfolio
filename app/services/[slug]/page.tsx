@@ -2,18 +2,18 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import SiteChrome from "../../site-chrome";
-import { services } from "../service-data";
+import { projectServices } from "../../projects/project-services";
 
 type ServicePageProps = {
   params: Promise<{ slug: string }>;
 };
 
 function findService(slug: string) {
-  return services.find((service) => service.slug === slug);
+  return projectServices.find((service) => service.slug === slug);
 }
 
 export function generateStaticParams() {
-  return services.map((service) => ({ slug: service.slug }));
+  return projectServices.map((service) => ({ slug: service.slug }));
 }
 
 export async function generateMetadata({ params }: ServicePageProps): Promise<Metadata> {
@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: ServicePageProps): Promise<Me
   if (!service) notFound();
 
   return {
-    title: `${service.title} | Jolomi Dudu`,
+    title: `${service.name} | Jolomi Dudu`,
     description: service.description,
   };
 }
@@ -41,9 +41,18 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
           <Link href="/services" className="text-sm font-medium text-black/55 transition-colors hover:text-[#008c87]">← All services</Link>
           <div className="mt-12 max-w-4xl">
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#00A9A5]">Service {service.number}</p>
-            <h1 className="mt-5 text-5xl font-semibold leading-[0.95] tracking-[-0.05em] md:text-7xl">{service.title}</h1>
+            <h1 className="mt-5 text-5xl font-semibold leading-[0.95] tracking-[-0.05em] md:text-7xl">{service.name}</h1>
             <p className="mt-7 max-w-2xl text-lg leading-8 text-black/60">{service.description}</p>
-            <p className="mt-8 text-lg font-semibold text-[#008c87]">{service.price}</p>
+            <dl className="mt-8 grid max-w-2xl gap-4 sm:grid-cols-2">
+              <div className="border-l-2 border-[#00A9A5] pl-4">
+                <dt className="text-sm font-medium text-black/50">Nigeria</dt>
+                <dd className="mt-1 text-lg font-semibold text-[#008c87]">{service.nigeria}</dd>
+              </div>
+              <div className="border-l-2 border-[#00A9A5] pl-4">
+                <dt className="text-sm font-medium text-black/50">International</dt>
+                <dd className="mt-1 text-lg font-semibold text-[#008c87]">{service.international}</dd>
+              </div>
+            </dl>
           </div>
         </section>
 

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { services } from "../../../services/service-data";
+import { projectServices } from "../../../projects/project-services";
 
 function appUrl() {
   return process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
@@ -15,15 +15,15 @@ export async function POST(request: Request) {
     const body = payload as Record<string, unknown>;
     const paymentType = body.paymentType;
     const serviceId = typeof body.serviceId === "string" ? body.serviceId : "";
-    const service = services.find((item) => item.id === serviceId);
+    const service = projectServices.find((item) => item.slug === serviceId);
     const email = typeof body.email === "string" ? body.email.trim() : "";
     const name = typeof body.name === "string" ? body.name.trim() : "";
     let amount: number;
     let serviceName: string;
 
     if (paymentType === "deposit" && service) {
-      amount = Math.round(service.amount * 0.25);
-      serviceName = service.title;
+      amount = Math.round(service.startingAmount * 0.25);
+      serviceName = service.name;
     } else if (paymentType === "custom" && typeof body.customAmount === "number" && Number.isSafeInteger(body.customAmount) && body.customAmount >= 100 && body.customAmount <= Math.floor(Number.MAX_SAFE_INTEGER / 100)) {
       amount = body.customAmount;
       serviceName = "Custom amount";

@@ -5,7 +5,7 @@ import { useEffect, useState, type FormEvent } from "react";
 type Service = {
   id: string;
   title: string;
-  amount: number;
+  startingAmount: number;
 };
 
 export default function PaymentForm({ services }: { services: Service[] }) {
@@ -35,7 +35,7 @@ export default function PaymentForm({ services }: { services: Service[] }) {
   }, [open]);
 
   const selectedService = services.find((service) => service.id === serviceId);
-  const depositAmount = selectedService ? Math.round(selectedService.amount * 0.25) : 0;
+  const depositAmount = selectedService ? Math.round(selectedService.startingAmount * 0.25) : 0;
   const customAmountValue = Number(customAmount);
   const customAmountIsValid = Number.isSafeInteger(customAmountValue) && customAmountValue >= 100;
   const paymentAmount = paymentType === "deposit" ? depositAmount : customAmountIsValid ? customAmountValue : 0;
@@ -113,7 +113,7 @@ export default function PaymentForm({ services }: { services: Service[] }) {
                       ))}
                     </select>
                   </label>
-                  <p className="pb-3 text-sm text-black/60">25% deposit: <strong className="text-[#008c87]">₦{depositAmount.toLocaleString()}</strong></p>
+                  <p className="pb-3 text-sm text-black/60">25% of Nigeria starting price: <strong className="text-[#008c87]">₦{depositAmount.toLocaleString()}</strong></p>
                 </div>
               ) : (
                 <label className="mt-5 block text-sm font-medium">

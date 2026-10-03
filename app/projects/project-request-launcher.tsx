@@ -444,7 +444,7 @@ export default function ProjectRequestLauncher() {
               Project Confirmed
             </h2>
             <p className="mt-2 text-sm leading-6 text-black/60">
-              Your project request has been saved. You can expect a call soon.
+              Your project request has been saved. I will have a look at your request within 24hrs, send a detail quote and schedule a call to discuss the details and commencement steps.
             </p>
             <button
               type="button"
