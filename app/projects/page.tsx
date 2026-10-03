@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import SiteChrome from "../site-chrome";
 import ProjectRequestLauncher from "./project-request-launcher";
+import ProjectGallery from "./project-gallery";
 
 export const metadata: Metadata = {
   title: "Projects | Jolomi Dudu",
@@ -17,7 +17,7 @@ const projects = [
     href: "https://spaelaris.vercel.app",
     description:
       "A premium wellness & spa platform for customers to book appointments and explore services, treatments and packages through a polished digital experience.",
-    stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "Flutter", "AWS"],
+    stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "Flutter"],
   },
   {
     name: "Kids College",
@@ -27,7 +27,7 @@ const projects = [
     href: "https://kcbn.vercel.app",
     description:
       "A comprehensive school management system connecting administrators, teachers, students and parents through a centralized digital platform.",
-    stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "AWS"],
+    stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL"],
   },
   {
     name: "Lovenorth",
@@ -47,7 +47,7 @@ const projects = [
     href: "https://elvarahotel.vercel.app",
     description:
       "A hotel booking platform designed to help users discover, book and manage hotel stays through a seamless digital experience.",
-    stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "AWS"],
+    stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL"],
   },
   {
     name: "Spinett Cosmetics",
@@ -67,7 +67,7 @@ const projects = [
     href: "https://mealcourt.vercel.app",
     description:
       "A food delivery platform that connects users with local restaurants and enables seamless ordering and tracking.",
-    stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "Flutter", "AWS"],
+    stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "Flutter"],
   },
   {
     name: "Misan Logistics",
@@ -77,7 +77,7 @@ const projects = [
     href: "https://misanlogistics.vercel.app",
     description:
       "A logistics platform designed to help users discover, book and manage logistics services through a seamless digital experience.",
-    stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "Flutter", "AWS", "Wallet"],
+    stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "Flutter", "Wallet"],
   },
   {
     name: "CareCrowd",
@@ -87,7 +87,7 @@ const projects = [
     href: "https://carecrowd.vercel.app",
     description:
       "A crowdfunding and digital community platform designed to help people raise funds, support causes and connect with communities.",
-    stacks: ["Flutter", "AWS"],
+    stacks: ["Flutter"],
   },
   {
     name: "Routyride",
@@ -97,7 +97,7 @@ const projects = [
     href: "https://routyride.vercel.app",
     description:
       "A car ride hailing platform designed to help people find rides, connect with drivers and enjoy seamless travel experiences.",
-    stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "Flutter", "AWS"],
+    stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "Flutter"],
   },
   {
     name: "SkyHealth",
@@ -107,7 +107,7 @@ const projects = [
     href: "https://skyhealth.vercel.app",
     description:
       "A healthcare platform designed to help users access medical services, connect with healthcare providers and manage their health records through a seamless digital experience.",
-    stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "Flutter", "AWS"],
+    stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "Flutter"],
   },
   {
     name: "Grandbox",
@@ -117,7 +117,7 @@ const projects = [
     href: "https://grandbox.vercel.app",
     description:
       "Granbox portfolio website showcasing creative work and professional experience.",
-    stacks: ["Flutter", "AWS"],
+    stacks: ["Flutter"],
   },
 ] as const;
 
@@ -131,55 +131,7 @@ export default function ProjectsPage() {
           </p>
         </section>
 
-        <section className="px-6 pb-24 md:px-12 md:pb-32 lg:px-16">
-          <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-4">
-            {projects.map((project) => (
-              <article key={project.name} className="group overflow-hidden rounded-[1.5rem] border border-black/10 bg-white shadow-sm transition-transform duration-300 hover:-translate-y-1 hover:shadow-md">
-                <div className="overflow-hidden">
-                  <div className="relative aspect-[16/10]">
-                    <Image
-                      src={project.image}
-                      alt={project.alt}
-                      fill
-                      sizes="(max-width: 768px) 50vw, 25vw"
-                      className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-4 p-4">
-                  <div className="flex items-center justify-between gap-3">
-                    <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-black/45">
-                      {project.category}
-                    </p>
-                    <a
-                      href={project.href}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={`View ${project.name}`}
-                      className="flex h-9 w-9 items-center justify-center rounded-full border border-black/10 bg-[#f5f5f0] text-base text-[#111111] transition-colors hover:bg-[#111111] hover:text-white"
-                    >
-                      ↗
-                    </a>
-                  </div>
-
-                  <div>
-                    <h2 className="text-xl font-semibold tracking-tight">{project.name}</h2>
-                    <p className="mt-3 text-sm leading-6 text-black/60">{project.description}</p>
-                  </div>
-
-                  <div className="flex flex-wrap gap-2">
-                    {project.stacks.map((stack) => (
-                      <span key={`${project.name}-${stack}`} className="rounded-full border border-black/10 bg-[#f5f5f0] px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.08em] text-black/65">
-                        {stack}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
+        <ProjectGallery projects={projects} />
         <ProjectRequestLauncher />
       </main>
     </SiteChrome>
