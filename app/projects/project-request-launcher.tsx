@@ -1,19 +1,7 @@
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
-
-const services = [
-  "Branding",
-  "Logo",
-  "Web App",
-  "Mobile App",
-  "Product Design",
-  "Data Analytics",
-  "IT Coaching",
-  "Gadget Repair",
-  "Strategic Planning",
-  "Project Management",
-] as const;
+import { projectServices } from "./project-services";
 
 const countryCodes = [
   ["Nigeria", "+234"],
@@ -64,12 +52,14 @@ function localDateString(date: Date) {
 export default function ProjectRequestLauncher() {
   const [formOpen, setFormOpen] = useState(false);
   const [confirmationOpen, setConfirmationOpen] = useState(false);
+  const [serviceListOpen, setServiceListOpen] = useState(false);
   const [step, setStep] = useState(1);
   const [request, setRequest] = useState<ProjectRequest>(initialRequest);
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const minimumStartDate = localDateString(new Date());
   const modalOpen = formOpen || confirmationOpen;
+  const selectedService = projectServices.find(({ name }) => name === request.service);
 
   useEffect(() => {
     if (!modalOpen) return;
@@ -176,7 +166,7 @@ export default function ProjectRequestLauncher() {
             role="dialog"
             aria-modal="true"
             aria-labelledby="project-request-title"
-            className="w-full max-w-2xl overflow-y-auto rounded-t-xl border border-black/10 bg-[#f5f5f0] px-5 pb-6 pt-5 shadow-2xl sm:max-h-[90vh] sm:rounded-xl sm:px-8 sm:pb-8"
+            className="max-h-[90dvh] w-full max-w-2xl overflow-y-auto overscroll-contain rounded-t-xl border border-black/10 bg-[#f5f5f0] px-5 pb-6 pt-5 shadow-2xl sm:max-h-[90vh] sm:rounded-xl sm:px-8 sm:pb-8"
           >
             <header className="flex items-start justify-between gap-4">
               <div>
@@ -210,18 +200,64 @@ export default function ProjectRequestLauncher() {
             <form className="mt-6" onSubmit={submitRequest}>
               {step === 1 && (
                 <div className="space-y-4">
-                  <label className={labelClassName}>
-                    Service
-                    <select
-                      required
-                      value={request.service}
-                      onChange={(event) => updateRequest("service", event.target.value)}
-                      className={fieldClassName}
+                  <div>
+                    <span id="service-label" className={labelClassName}>Service</span>
+                    <button
+                      type="button"
+                      aria-haspopup="listbox"
+                      aria-expanded={serviceListOpen}
+                      aria-labelledby="service-label"
+                      aria-controls="project-service-options"
+                      onClick={() => setServiceListOpen((isOpen) => !isOpen)}
+                      className={`${fieldClassName} flex items-center justify-between gap-4 text-left`}
                     >
-                      <option value="" disabled>Select a service</option>
-                      {services.map((service) => <option key={service}>{service}</option>)}
-                    </select>
-                  </label>
+                      <span className="min-w-0">
+                        <span className="block text-sm font-semibold text-[#111111]">
+                          {selectedService?.name ?? "Choose a service"}
+                        </span>
+                        {selectedService && (
+                          <span className="mt-1 flex flex-col gap-0.5 text-xs font-normal text-black/55 sm:flex-row sm:gap-4">
+                            <span>Nigeria: {selectedService.nigeria}</span>
+                            <span>International: {selectedService.international}</span>
+                          </span>
+                        )}
+                      </span>
+                      <span aria-hidden="true" className="shrink-0 text-base text-black/45">
+                        {serviceListOpen ? "−" : "+"}
+                      </span>
+                    </button>
+
+                    {serviceListOpen && (
+                      <div
+                        id="project-service-options"
+                        role="listbox"
+                        aria-labelledby="service-label"
+                        className="mt-2 max-h-64 space-y-1 overflow-y-auto rounded-md border border-black/10 bg-white p-2 shadow-sm"
+                      >
+                        {projectServices.map((service) => (
+                          <button
+                            key={service.name}
+                            type="button"
+                            role="option"
+                            aria-selected={request.service === service.name}
+                            onClick={() => {
+                              updateRequest("service", service.name);
+                              setServiceListOpen(false);
+                            }}
+                            className={`w-full rounded-md px-3 py-2.5 text-left transition-colors ${request.service === service.name ? "bg-[#00A9A5]/10" : "hover:bg-[#f5f5f0]"}`}
+                          >
+                            <span className="block text-sm font-semibold text-[#111111]">
+                              {service.name}
+                            </span>
+                            <span className="mt-1 flex flex-col gap-0.5 text-xs text-black/55 sm:flex-row sm:gap-4">
+                              <span>Nigeria: {service.nigeria}</span>
+                              <span>International: {service.international}</span>
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
 
                   <label className={labelClassName}>
                     Project description
@@ -324,6 +360,12 @@ export default function ProjectRequestLauncher() {
                   <div>
                     <dt className="font-semibold text-black/50">Service</dt>
                     <dd className="mt-1">{request.service}</dd>
+                    {selectedService && (
+                      <dd className="mt-1 flex flex-col gap-0.5 text-black/55 sm:flex-row sm:gap-4">
+                        <span>Nigeria: {selectedService.nigeria}</span>
+                        <span>International: {selectedService.international}</span>
+                      </dd>
+                    )}
                   </div>
                   <div>
                     <dt className="font-semibold text-black/50">Project description</dt>
@@ -402,7 +444,7 @@ export default function ProjectRequestLauncher() {
               Project Confirmed
             </h2>
             <p className="mt-2 text-sm leading-6 text-black/60">
-              Your project details have been sent. You can expect a call soon.
+              Your project request has been saved. You can expect a call soon.
             </p>
             <button
               type="button"
