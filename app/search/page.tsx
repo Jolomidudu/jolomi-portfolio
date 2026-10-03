@@ -9,11 +9,11 @@ const searchablePages = [
   { title: "Contact Jolomi", description: "Send a message, ask a question or start a project conversation.", href: "/#contact" },
   { title: "Learn with Jolomi", description: "Practical tutoring for websites, graphic design and mobile apps.", href: "/learn" },
   { title: "Journal", description: "Read notes and ideas about technology, products and digital work.", href: "/blog" },
-  { title: "Work", description: "Browse selected projects and digital products.", href: "/#work" },
-  { title: "Experience", description: "See where Jolomi has made an impact.", href: "/#experience" },
+  { title: "Projects", description: "Browse selected projects and digital products.", href: "/projects" },
+  { title: "Experience", description: "See where Jolomi has made an impact.", href: "/experience" },
   { title: "Frequently asked questions", description: "Find quick answers about services, payments and working together.", href: "/faq" },
   { title: "Privacy policy", description: "Read how this website handles personal information.", href: "/privacy" },
-];
+] as const;
 
 export default function SearchPage() {
   const [query, setQuery] = useState("");

@@ -7,6 +7,8 @@ import { usePathname } from "next/navigation";
 const links = [
   ["HOME", "/"],
   ["ABOUT", "/about"],
+  ["PROJECTS", "/projects"],
+  ["EXPERIENCE", "/experience"],
   ["SERVICES", "/services"],
   ["LEARN", "/learn"],
   ["JOURNAL", "/blog"],
@@ -53,7 +55,7 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
         {menuOpen && (
           <div id="site-mobile-navigation" className="fixed inset-0 z-[60] flex min-h-screen flex-col bg-[#12211f] px-6 pb-8 pt-28 text-[#f5f5f0] md:hidden">
             <button type="button" aria-label="Close menu" onClick={() => setMenuOpen(false)} className="absolute right-6 top-5 flex h-10 w-10 items-center justify-center rounded-full border border-white/35 text-2xl font-light text-[#f5f5f0]">×</button>
-            <div className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#78d8ca]"><span className="h-2 w-2 rounded-full bg-[#78d8ca]" /> Menu / Available for work</div>
+            <div className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#78d8ca]"><span className="h-2 w-2 rounded-full bg-[#78d8ca]" /> Menu / Available for Hire</div>
             <nav className="flex flex-1 flex-col" aria-label="Mobile navigation">
               {links.map(([label, href], index) => <Link key={href} href={href} onClick={() => setMenuOpen(false)} className="group flex items-center justify-between border-b border-white/15 py-4 first:border-t hover:text-[#78d8ca]"><span className="flex items-center gap-4"><span className="text-xs text-white/35">0{index + 1}</span><span className="text-3xl font-semibold tracking-[-0.04em]">{label}</span></span><span className="text-xl text-white/35">↗</span></Link>)}
             </nav>

@@ -24,3 +24,25 @@ body {
   color: var(--foreground);
   font-family: var(--font-raleway), sans-serif;
 }
+
+@keyframes hero-title-enter {
+  from {
+    opacity: 0;
+    transform: translateY(0.18em);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-title-enter {
+  animation: hero-title-enter 500ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-title-enter {
+    animation: none;
+  }
+}

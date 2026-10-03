@@ -3,9 +3,44 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+const homepageProjects = [
+  {
+    name: "Spa Elaris",
+    image: "/images/projects/spaelaris1-mckp.jpg",
+    alt: "Spa Elaris wellness website",
+    href: "https://spaelaris.vercel.app",
+  },
+  {
+    name: "Kids College",
+    image: "/images/projects/kidscollege-mckp.png",
+    alt: "School management platform dashboard",
+    href: "https://kcbn.vercel.app",
+  },
+  {
+    name: "Lovenorth",
+    image: "/images/projects/lovenorth-mckp.png",
+    alt: "Lovenorth dating platform",
+    href: "https://lovenorth.vercel.app",
+  },
+  {
+    name: "Elvara Hotel",
+    image: "/images/projects/elvarahotel-mckp.jpg",
+    alt: "A hotel booking platform",
+    href: "https://elvarahotel.vercel.app",
+  },
+] as const;
+
+const heroTitles = [
+  "A TECHNOLOGY LEADER.",
+  "A SOFTWARE ENGINEER.",
+  "A TECHNOLOGY CONSULTANT.",
+  "A DIGITAL TRANSFORMATION LEADER.",
+] as const;
+
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [atPageEnd, setAtPageEnd] = useState(false);
+  const [activeTitle, setActiveTitle] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,6 +53,16 @@ export default function Home() {
     handleScroll();
 
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const titleInterval = window.setInterval(() => {
+      setActiveTitle((currentTitle) => (currentTitle + 1) % heroTitles.length);
+    }, 4500);
+
+    return () => window.clearInterval(titleInterval);
   }, []);
 
   return (
@@ -77,11 +122,11 @@ export default function Home() {
           </a>
 
           <a
-  href="#experience"
-  className="transition-opacity hover:opacity-50"
->
-  EXPERIENCE
-</a>
+            href="/experience"
+            className="transition-opacity hover:opacity-50"
+          >
+            EXPERIENCE
+          </a>
 
           <a
             href="#contact"
@@ -98,14 +143,7 @@ export default function Home() {
           Start a project
         </a>
 
-        <div className="hidden items-center gap-2 md:flex">
-          <a href="/notifications" aria-label="Notifications" className="flex h-10 w-10 items-center justify-center rounded-full border border-[#374151] bg-[#374151] text-white transition-colors hover:bg-[#1f2937]">
-            <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-none stroke-current stroke-2"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" strokeLinecap="round" strokeLinejoin="round" /></svg>
-          </a>
-          <a href="/search" aria-label="Search" className="flex h-10 w-10 items-center justify-center rounded-full border border-[#374151] bg-[#374151] text-white transition-colors hover:bg-[#1f2937]">
-            <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-none stroke-current stroke-2"><circle cx="11" cy="11" r="7" /><path d="m16.5 16.5 4 4" strokeLinecap="round" /></svg>
-          </a>
-        </div>
+       
 
         <div className="flex items-center gap-1 md:hidden">
           <button
@@ -146,7 +184,7 @@ export default function Home() {
                 ["SERVICES", "/services"],
                 ["LEARN NEW", "/learn"],
                 ["BLOG", "/blog"],
-                ["EXPERIENCE", "#experience"],
+                ["EXPERIENCE", "/experience"],
                 ["CONTACT", "#contact"],
               ].map(([label, href]) => (
                 <a
@@ -196,40 +234,59 @@ export default function Home() {
       {/* =====================================================
           HERO
       ====================================================== */}
-      <section className="relative -top-20 flex min-h-[calc(100vh-90px)] flex-col justify-center px-6 pb-16 pt-16 md:-top-5 md:px-12 lg:px-16">
+      <section
+        className="relative -top-20 flex min-h-[calc(100vh-90px)] flex-col justify-center px-6 pb-16 pt-16 text-white md:-top-5 md:px-12 lg:px-16 md:min-h-[calc(100vh-90px)] sm:min-h-[calc(100vh-90px)]"
+        style={{
+          backgroundImage:
+            "linear-gradient(135deg, rgba(17, 17, 17, 0.62), rgba(17, 17, 17, 0.38)), url('/suit.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          minHeight: "calc(100vh - 90px + 100px)",
+        }}
+      >
 
         <div className="mb-8 flex items-center gap-3 text-sm font-medium uppercase tracking-[0.2em]">
 
         </div>
 
 
-        <div className="grid max-w-7xl grid-cols-[1.25fr_0.75fr] items-center gap-4 sm:gap-8 md:grid-cols-[1.1fr_0.9fr] md:gap-12">
+        <div className="grid max-w-7xl grid-cols-1 items-center gap-4 sm:gap-8 md:grid-cols-[1.1fr_0.9fr] md:gap-12">
 
           <div>
             <p className="mb-4 text-[19px] font-medium leading-tight md:text-xl">
               Hello, I&apos;m Oritsejolomi Dudu.
             </p>
 
-            <h1 className="text-[9vw] font-bold leading-[0.82] tracking-[-0.07em] sm:text-[10vw] md:text-[7vw] lg:text-[6.3vw]">
-                
-              <span className="block md:whitespace-nowrap"> <span className="text-[#5e5e55]">A</span> SOFTWARE</span>
-              <span className="block">
-                <span className="text-[#35530E]">ENGINEER</span>
-                
-                
-                <span>.</span>
+            <h1 aria-live="off" className="min-h-[2.46em] text-[9vw] font-bold leading-[0.82] tracking-[-0.07em] sm:text-[10vw] md:text-[7vw] lg:text-[6.3vw]">
+              <span key={activeTitle} className="hero-title-enter block break-words">
+                {heroTitles[activeTitle]}
               </span>
             </h1>
 
+            <div className="mt-5 flex items-center gap-2" aria-label="Choose a hero title">
+              {heroTitles.map((title, index) => (
+                <button
+                  key={title}
+                  type="button"
+                  aria-label={`Show title ${index + 1}: ${title}`}
+                  aria-current={activeTitle === index ? "true" : undefined}
+                  onClick={() => setActiveTitle(index)}
+                  className="flex h-6 w-8 items-center justify-center"
+                >
+                  <span className={`h-0.5 w-6 rounded-full transition-colors ${activeTitle === index ? "bg-white" : "bg-white/40 hover:bg-white/75"}`} />
+                </button>
+              ))}
+            </div>
+
             <div className="mt-10 max-w-md sm:mt-14">
               <div className="mb-4 flex items-center gap-3 md:hidden">
-                <div className="flex h-16 w-16 flex-col items-center justify-center rounded-full border border-[#12211f]/15 bg-white text-center shadow-sm">
-                  <span className="text-[10px] font-black leading-none text-[#12211f]">8YRS+</span>
-                  <span className="mt-1 text-[7px] font-medium uppercase tracking-[0.12em] text-[#12211f]/70">Experience</span>
+                <div className="flex h-16 w-16 flex-col items-center justify-center rounded-full border border-white/30 bg-white/80 text-center shadow-sm backdrop-blur-sm">
+                  <span className="text-[0.68rem] font-black leading-none text-[#12211f]">10YRS+</span>
+                  <span className="mt-1 text-[0.42rem] font-medium uppercase tracking-[0.12em] text-[#12211f]/70">Experience</span>
                 </div>
-                <div className="flex h-16 w-16 flex-col items-center justify-center rounded-full border border-[#12211f]/15 bg-white text-center shadow-sm">
-                  <span className="text-[10px] font-black leading-none text-[#12211f]">65+</span>
-                  <span className="mt-1 text-[7px] font-medium uppercase tracking-[0.12em] text-[#12211f]/70">Projects</span>
+                <div className="flex h-16 w-16 flex-col items-center justify-center rounded-full border border-white/30 bg-white/80 text-center shadow-sm backdrop-blur-sm">
+                  <span className="text-[0.74rem] font-black leading-none text-[#12211f]">145+</span>
+                  <span className="mt-1 text-[0.42rem] font-medium uppercase tracking-[0.12em] text-[#12211f]/70">Projects</span>
                 </div>
               </div>
 
@@ -240,12 +297,12 @@ export default function Home() {
                   rel="noreferrer"
                   aria-label="Call me"
                   title="Call me"
-                  className="flex min-w-0 flex-1 items-center justify-center gap-2 rounded-[0.65rem] bg-[#12211f] px-2 py-3 text-center text-white transition-colors hover:bg-[#00A9A5]"
+                  className="flex min-w-0 flex-1 items-center justify-center gap-2 rounded-[0.65rem] border border-white/30 bg-white/70 px-2 py-3 text-center text-[#5f5f5f] backdrop-blur-sm transition-all hover:bg-white/80 hover:text-[#3a3a3a]"
                 >
-                  <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5 fill-none stroke-current stroke-[1.8]">
+                  <svg viewBox="0 0 24 24" aria-hidden="true" className="h-[1.25rem] w-[1.25rem] fill-none stroke-current stroke-[1.8] md:h-[1.5rem] md:w-[1.5rem]">
                     <path d="M7.2 3.8h2.5l1.2 4.1-1.8 1.5a14.1 14.1 0 0 0 5.5 5.5l1.5-1.8 4.1 1.2v2.5a2 2 0 0 1-2.2 2A15.9 15.9 0 0 1 5.2 6a2 2 0 0 1 2-2.2Z" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
-                  <span className="text-xs font-semibold">Me</span>
+                  <span className="text-[0.875rem] font-semibold md:text-[1.05rem]">Me</span>
                 </a>
                 <a
                   href="https://drive.google.com/uc?export=download&id=1OlSV-d0tRIhHxs8lupPQwdHQXd3lRx3T"
@@ -253,26 +310,26 @@ export default function Home() {
                   rel="noreferrer"
                   aria-label="Download CV"
                   title="Download CV"
-                  className="flex min-w-0 flex-1 items-center justify-center gap-2 rounded-[0.65rem] border border-[#12211f] px-2 py-3 text-center text-xs font-bold text-[#12211f] transition-colors hover:bg-[#12211f] hover:text-white"
+                  className="flex min-w-0 flex-1 items-center justify-center gap-2 rounded-[0.65rem] border border-white/30 bg-white/70 px-2 py-3 text-center text-[#5f5f5f] backdrop-blur-sm transition-all hover:bg-white/80 hover:text-[#3a3a3a]"
                 >
-                  <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 shrink-0 fill-none stroke-current stroke-[1.8]">
+                  <svg viewBox="0 0 24 24" aria-hidden="true" className="h-[1.125rem] w-[1.125rem] shrink-0 fill-none stroke-current stroke-[1.8] md:h-[1.4rem] md:w-[1.4rem]">
                     <path d="M12 3v11m0 0 4-4m-4 4-4-4M5 16v4h14v-4" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
-                  <span>CV</span>
+                  <span className="text-[0.875rem] font-bold md:text-[1.05rem]">CV</span>
                 </a>
               </div>
 
               <a
                 href="#project"
                 aria-label="View projects"
-                className="group mt-[25px] flex w-fit items-center pl-[7px] md:mt-[30px]"
+                className="group -translate-x-[10px] mt-[25px] flex w-fit items-center pl-[7px] md:mt-[30px]"
               >
-                <span className="flex items-center justify-between gap-3 rounded-[6px] border border-black/10 bg-[#f7f0e7] px-3 py-2 text-xs font-bold uppercase tracking-wider shadow-sm sm:text-sm">
+                <span className="flex items-center justify-between gap-3 rounded-[6px] border border-white/30 bg-white/70 px-3 py-2 text-xs font-bold uppercase tracking-wider text-[#5f5f5f] shadow-sm backdrop-blur-sm transition-all hover:bg-white/80 hover:text-[#3a3a3a] sm:text-sm">
                   <span className="flex items-center gap-2">
                     <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-none stroke-current stroke-[1.8]"><path d="M2.5 12s3.4-6 9.5-6 9.5 6 9.5 6-3.4 6-9.5 6-9.5-6-9.5-6Z" strokeLinecap="round" strokeLinejoin="round" /><circle cx="12" cy="12" r="2.5" /></svg>
                     Projects
                   </span>
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full border border-black/10 bg-white/70 text-[10px] text-[#12211f] transition-all duration-300 group-hover:bg-black group-hover:text-white">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/30 bg-white/60 text-[10px] text-[#5f5f5f] transition-all duration-300 group-hover:bg-white/80 group-hover:text-[#3a3a3a]">
                     ↓
                   </span>
                 </span>
@@ -280,16 +337,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="relative flex h-[min(82vw,37rem)] min-h-80 items-end justify-center md:h-[min(68vw,31rem)] md:min-h-64">
-            <Image
-              src="/joly.png"
-              alt="Jolomi Dudu"
-              fill
-              priority
-              sizes="(max-width: 768px) 35vw, 38vw"
-              className="-translate-y-[150px] scale-[1.725] object-contain object-bottom md:translate-y-0 md:scale-100"
-            />
-          </div>
+          
 
         </div>
 
@@ -330,947 +378,225 @@ export default function Home() {
   </div>
 
 
-  {/* Projects */}
-  <div className="grid grid-cols-2 gap-6 md:gap-10 lg:gap-14">
-
-    {/* =====================================================
-        SPA ELARIS
-    ====================================================== */}
-    <article className="group">
-
-      <div className="overflow-hidden rounded-[1.5rem] bg-[#ded5c7]">
-
-        <div className="relative aspect-[16/9]">
-
-          <Image
-            src="/images/projects/spaelaris1-mckp.jpg"
-            alt="Spa Elaris wellness website"
-            fill
-            sizes="(max-width: 768px) 100vw, 90vw"
-            className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-          />
-
+<div className="grid grid-cols-2 gap-6 md:grid-cols-4">
+    {homepageProjects.map((project) => (
+      <article key={project.name} className="group overflow-hidden rounded-[1.5rem] border border-black/10 bg-white shadow-sm transition-transform duration-300 hover:-translate-y-1 hover:shadow-md">
+        <div className="overflow-hidden">
+          <div className="relative aspect-[16/10]">
+            <Image
+              src={project.image}
+              alt={project.alt}
+              fill
+              sizes="(max-width: 768px) 100vw, 25vw"
+              className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+            />
+          </div>
         </div>
 
-      </div>
-
-
-      <div className="mt-6 grid gap-5 md:grid-cols-[0.7fr_1.3fr]">
-
-        <div>
-          <p className="text-xs font-medium uppercase tracking-[0.15em] text-black/60">
-            01 / Web & Mobile
-          </p>
-
-          <h3 className="mt-2 text-2xl font-semibold tracking-tight">
-            Spa Elaris
-          </h3>
-
-          <a href="https://spaelaris.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
-            View project <span aria-hidden="true" className="ml-2"></span>
-          </a>
-        </div>
-
-
-        <div className="max-w-2xl">
-
-          <p className="text-md leading-7 text-black/55 md:text-base">
-            A premium wellness & spa platform for customers to book appointments and explore services,
-            treatments, services, packages and provide a polished
-            digital experience for customers.
-          </p>
-
-          <div className="mt-5 flex flex-wrap gap-2">
-
-            {[
-              "Next.js",
-              "Nest.js",
-              "Node.js",
-              "PostgreSQL",
-               "flutter",
-                "AWS",
-            ].map((tech) => (
-              <span
-                key={tech}
-                className="rounded-full border border-black/15 px-3 py-1.5 text-xs"
-              >
-                {tech}
-              </span>
-            ))}
-
+        <div className="flex items-center justify-between gap-3 px-4 py-4">
+          <div>
+            <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-black/45">
+              Featured
+            </p>
+            <h3 className="mt-2 text-xl font-semibold tracking-tight text-[#111111]">
+              {project.name}
+            </h3>
           </div>
 
-        </div>
-
-      </div>
-
-    </article>
-
-
-     {/* =====================================================
-        Kids College School Management
-    ====================================================== */}
-    <article className="group">
-
-      <div className="overflow-hidden rounded-[1.5rem] bg-[#111111]">
-
-        <div className="relative aspect-[16/9]">
-
-          <Image
-            src="/images/projects/kidscollege-mckp.png"
-            alt="School management platform dashboard"
-            fill
-            sizes="(max-width: 768px) 100vw, 90vw"
-            className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-          />
-
-        </div>
-
-      </div>
-
-
-      <div className="mt-6 grid gap-5 md:grid-cols-[0.7fr_1.3fr]">
-
-        <div>
-          <p className="text-xs font-medium uppercase tracking-[0.15em] text-black/60">
-            02 / Web App
-          </p>
-
-          <h3 className="mt-2 text-2xl font-semibold tracking-tight">
-            Kids College
-          </h3>
-
-          <a href="https://kcbn.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
-            View project <span aria-hidden="true" className="ml-2"></span>
+          <a
+            href={project.href}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={`View ${project.name}`}
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-[#f5f5f0] text-lg text-[#111111] transition-colors hover:bg-[#111111] hover:text-white"
+          >
+            ↗
           </a>
         </div>
-
-
-        <div className="max-w-2xl">
-
-          <p className="text-md leading-7 text-black/55 md:text-base">
-            A comprehensive school management system connecting
-            administrators, teachers, students and parents through
-            a centralized digital platform.
-          </p>
-
-          <div className="mt-5 flex flex-wrap gap-2">
-
-            {[
-              "Next.js",
-              "Nest.js",
-              "Node.js",
-              "PostgreSQL",
-              
-                "AWS",
-            ].map((tech) => (
-              <span
-                key={tech}
-                className="rounded-full border border-black/15 px-3 py-1.5 text-xs"
-              >
-                {tech}
-              </span>
-            ))}
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </article>
-
-
-    
-     {/* =====================================================
-        Dating Platform
-    ====================================================== */}
-    <article className="group">
-
-      <div className="overflow-hidden rounded-[1.5rem] bg-[#111111]">
-
-        <div className="relative aspect-[16/9]">
-
-          <Image
-            src="/images/projects/lovenorth-mckp.png"
-            alt="School management platform dashboard"
-            fill
-            sizes="(max-width: 768px) 100vw, 90vw"
-            className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-          />
-
-        </div>
-
-      </div>
-
-
-      <div className="mt-6 grid gap-5 md:grid-cols-[0.7fr_1.3fr]">
-
-        <div>
-          <p className="text-xs font-medium uppercase tracking-[0.15em] text-black/40">
-            03 / Web App
-          </p>
-
-          <h3 className="mt-2 text-2xl font-semibold tracking-tight">
-           Lovenorth</h3>
-
-          <a href="https://lovenorth.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
-            View project <span aria-hidden="true" className="ml-2"></span>
-          </a>
-        </div>
-
-
-        <div className="max-w-2xl">
-
-          <p className="text-md leading-7 text-black/55 md:text-base">
-            A comprehensive dating platform connecting singles and helping them find meaningful relationships.
-          </p>
-
-          <div className="mt-5 flex flex-wrap gap-2">
-
-            {[
-              "Next.js",
-              "Nest.js",
-              "Node.js",
-              "PostgreSQL",
-               
-                "Railway",
-              
-            ].map((tech) => (
-              <span
-                key={tech}
-                className="rounded-full border border-black/15 px-3 py-1.5 text-xs"
-              >
-                {tech}
-              </span>
-            ))}
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </article>
-
-     {/* =====================================================
-        A Hotel Booking Platform
-    ====================================================== */}
-    <article className="group">
-
-      <div className="overflow-hidden rounded-[1.5rem] bg-[#111111]">
-
-        <div className="relative aspect-[16/9]">
-
-          <Image
-            src="/images/projects/elvarahotel-mckp.jpg"
-            alt="A hotel booking platform"
-            fill
-            sizes="(max-width: 768px) 100vw, 90vw"
-            className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-          />
-
-        </div>
-
-      </div>
-
-
-      <div className="mt-6 grid gap-5 md:grid-cols-[0.7fr_1.3fr]">
-
-        <div>
-          <p className="text-xs font-medium uppercase tracking-[0.15em] text-black/40">
-            04 / Web App
-          </p>
-
-          <h3 className="mt-2 text-2xl font-semibold tracking-tight">
-            Elvara Hotel
-          </h3>
-
-          <a href="https://elvarahotel.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
-            View project <span aria-hidden="true" className="ml-2"></span>
-          </a>
-        </div>
-
-
-        <div className="max-w-2xl">
-
-          <p className="text-md leading-7 text-black/55 md:text-base">
-            A hotel booking platform designed to help users discover, book and manage hotel stays through a seamless digital experience.
-          </p>
-
-          <div className="mt-5 flex flex-wrap gap-2">
-
-            {[
-              "Next.js",
-              "Nest.js",
-              "Node.js",
-              "PostgreSQL",
-              
-                "AWS",
-            ].map((tech) => (
-              <span
-                key={tech}
-                className="rounded-full border border-black/15 px-3 py-1.5 text-xs"
-              >
-                {tech}
-              </span>
-            ))}
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </article>
-
-
-     {/* =====================================================
-        A Cosmetics E-commerce Platform
-    ====================================================== */}
-    <article className="group">
-
-      <div className="overflow-hidden rounded-[1.5rem] bg-[#111111]">
-
-        <div className="relative aspect-[16/9]">
-
-          <Image
-            src="/images/projects/spinettcosmetics-mckp.png"
-            alt="A cosmetics e-commerce platform"
-            fill
-            sizes="(max-width: 768px) 100vw, 90vw"
-            className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-          />
-
-        </div>
-
-      </div>
-
-
-      <div className="mt-6 grid gap-5 md:grid-cols-[0.7fr_1.3fr]">
-
-        <div>
-          <p className="text-xs font-medium uppercase tracking-[0.15em] text-black/40">
-            05 / Web & Mobile
-          </p>
-
-          <h3 className="mt-2 text-2xl font-semibold tracking-tight">
-            Spinett cosmetics
-          </h3>
-
-          <a href="https://spinettcosmetics.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
-            View project <span aria-hidden="true" className="ml-2"></span>
-          </a>
-        </div>
-
-
-        <div className="max-w-2xl">
-
-          <p className="text-md leading-7 text-black/55 md:text-base">
-            A cosmetics e-commerce platform that allows users to browse and purchase beauty products from various brands.
-          </p>
-
-          <div className="mt-5 flex flex-wrap gap-2">
-
-            {[
-              "Next.js",
-              "Nest.js",
-              "Node.js",
-              "PostgreSQL",
-              "REST API",
-            ].map((tech) => (
-              <span
-                key={tech}
-                className="rounded-full border border-black/15 px-3 py-1.5 text-xs"
-              >
-                {tech}
-              </span>
-            ))}
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </article>
-
-
-    {/* =====================================================
-        Food Delivery Platform
-    ====================================================== */}
-    <article className="group">
-
-      <div className="overflow-hidden rounded-[1.5rem] bg-[#111111]">
-
-        <div className="relative aspect-[16/9]">
-
-          <Image
-            src="/images/projects/mealcourt.jpg"
-            alt="A food delivery platform"
-            fill
-            sizes="(max-width: 768px) 100vw, 90vw"
-            className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-          />
-
-        </div>
-
-      </div>
-
-
-      <div className="mt-6 grid gap-5 md:grid-cols-[0.7fr_1.3fr]">
-
-        <div>
-          <p className="text-xs font-medium uppercase tracking-[0.15em] text-black/40">
-            06 / Web & Mobile
-          </p>
-
-          <h3 className="mt-2 text-2xl font-semibold tracking-tight">
-            Mealcourt
-          </h3>
-
-          <a href="https://mealcourt.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
-            View project <span aria-hidden="true" className="ml-2"></span>
-          </a>
-        </div>
-
-
-        <div className="max-w-2xl">
-
-          <p className="text-md leading-7 text-black/55 md:text-base">
-            A food delivery platform that connects users with local restaurants and enables seamless ordering and tracking.
-          </p>
-
-          <div className="mt-5 flex flex-wrap gap-2">
-
-            {[
-              "Next.js",
-              "Nest.js",
-              "Node.js",
-              "PostgreSQL",
-               "flutter",
-                "AWS",
-            ].map((tech) => (
-              <span
-                key={tech}
-                className="rounded-full border border-black/15 px-3 py-1.5 text-xs"
-              >
-                {tech}
-              </span>
-            ))}
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </article>
-
-
-
-    {/* =====================================================
-        A Logistics Platform
-    ====================================================== */}
-    <article className="group">
-
-      <div className="overflow-hidden rounded-[1.5rem] bg-[#111111]">
-
-        <div className="relative aspect-[16/9]">
-
-          <Image
-            src="/images/projects/misanlogistics-mckp.png"
-            alt="A logistics platform"
-            fill
-            sizes="(max-width: 768px) 100vw, 90vw"
-            className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-          />
-
-        </div>
-
-      </div>
-
-
-      <div className="mt-6 grid gap-5 md:grid-cols-[0.7fr_1.3fr]">
-
-        <div>
-          <p className="text-xs font-medium uppercase tracking-[0.15em] text-black/40">
-            07 / Web & Mobile
-          </p>
-
-          <h3 className="mt-2 text-2xl font-semibold tracking-tight">
-            Misan Logistics
-          </h3>
-
-          <a href="https://misanlogistics.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
-            View project <span aria-hidden="true" className="ml-2"></span>
-          </a>
-        </div>
-
-
-        <div className="max-w-2xl">
-
-          <p className="text-md leading-7 text-black/55 md:text-base">
-            A logistics platform designed to help users discover, book and manage logistics services through a seamless digital experience.
-          </p>
-
-          <div className="mt-5 flex flex-wrap gap-2">
-
-            {[
-             "Next.js",
-              "Nest.js",
-              "Node.js",
-              "PostgreSQL",
-               "flutter",
-                "AWS",
-            
-              "Wallet"
-            ].map((tech) => (
-              <span
-                key={tech}
-                className="rounded-full border border-black/15 px-3 py-1.5 text-xs"
-              >
-                {tech}
-              </span>
-            ))}
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </article>
-
-    {/* =====================================================
-        CARECROWD A Crowdfunding Platform
-    ====================================================== */}
-    <article className="group">
-
-      <div className="overflow-hidden rounded-[1.5rem] bg-[#111111]">
-
-        <div className="relative aspect-[16/9]">
-
-          <Image
-            src="/images/projects/carecrowd-mckp.png"
-            alt="CARECROWD crowdfunding platform"
-            fill
-            sizes="(max-width: 768px) 100vw, 90vw"
-            className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-          />
-
-        </div>
-
-      </div>
-
-
-      <div className="mt-6 grid gap-5 md:grid-cols-[0.7fr_1.3fr]">
-
-        <div>
-          <p className="text-xs font-medium uppercase tracking-[0.15em] text-black/40">
-            08 / Mobile App
-          </p>
-
-          <h3 className="mt-2 text-2xl font-semibold tracking-tight">
-            CareCrowd
-          </h3>
-
-          <a href="https://carecrowd.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
-            View project <span aria-hidden="true" className="ml-2"></span>
-          </a>
-        </div>
-
-
-        <div className="max-w-2xl">
-
-          <p className="text-md leading-7 text-black/55 md:text-base">
-            A crowdfunding and digital community platform designed
-            to help people raise funds, support causes and connect
-            with communities.
-          </p>
-
-          <div className="mt-5 flex flex-wrap gap-2">
-
-            {[
-             
-               "flutter",
-                "AWS",
-            ].map((tech) => (
-              <span
-                key={tech}
-                className="rounded-full border border-black/15 px-3 py-1.5 text-xs"
-              >
-                {tech}
-              </span>
-            ))}
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </article>
-
-     {/* =====================================================
-        Car Ride Sharing Platform
-    ====================================================== */}
-    <article className="group">
-
-      <div className="overflow-hidden rounded-[1.5rem] bg-[#111111]">
-
-        <div className="relative aspect-[16/9]">
-
-          <Image
-            src="/images/projects/routyride.jpg"
-            alt="Car ride sharing platform"
-            fill
-            sizes="(max-width: 768px) 100vw, 90vw"
-            className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-          />
-
-        </div>
-
-      </div>
-
-
-      <div className="mt-6 grid gap-5 md:grid-cols-[0.7fr_1.3fr]">
-
-        <div>
-          <p className="text-xs font-medium uppercase tracking-[0.15em] text-black/40">
-            09 / Web & Mobile
-          </p>
-
-          <h3 className="mt-2 text-2xl font-semibold tracking-tight">
-            Routyride
-          </h3>
-
-          <a href="https://routyride.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
-            View project <span aria-hidden="true" className="ml-2"></span>
-          </a>
-        </div>
-
-
-        <div className="max-w-2xl">
-
-          <p className="text-md leading-7 text-black/55 md:text-base">
-            A car ride hailing platform designed
-            to help people find rides, connect with drivers and enjoy seamless travel experiences.
-          </p>
-
-          <div className="mt-5 flex flex-wrap gap-2">
-
-            {[
-              "Next.js",
-              "Nest.js",
-              "Node.js",
-              "PostgreSQL",
-               "flutter",
-                "AWS",
-            ].map((tech) => (
-              <span
-                key={tech}
-                className="rounded-full border border-black/15 px-3 py-1.5 text-xs"
-              >
-                {tech}
-              </span>
-            ))}
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </article>
-
-
-    
-
-
-   
-
-
-    {/* =====================================================
-        HEALTHCARE PLATFORM
-    ====================================================== */}
-    <article className="group">
-
-      <div className="overflow-hidden rounded-[1.5rem] bg-[#dfe7df]">
-
-        <div className="relative aspect-[16/9]">
-
-          <Image
-            src="/images/projects/skyhealth-mckp.jpg"
-            alt="SkyHealth Healthcare Platform"
-            fill
-            sizes="(max-width: 768px) 100vw, 90vw"
-            className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-          />
-
-        </div>
-
-      </div>
-
-
-      <div className="mt-6 grid gap-5 md:grid-cols-[0.7fr_1.3fr]">
-
-        <div>
-          <p className="text-xs font-medium uppercase tracking-[0.15em] text-black/40">
-            10 / Web & Mobile
-          </p>
-
-          <h3 className="mt-2 text-2xl font-semibold tracking-tight">
-            SkyHealth
-          </h3>
-
-          <a href="https://skyhealth.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
-            View project <span aria-hidden="true" className="ml-2"></span>
-          </a>
-        </div>
-
-
-        <div className="max-w-2xl">
-
-          <p className="text-md leading-7 text-black/55 md:text-base">
-            A healthcare platform designed to help users access medical services, connect with healthcare providers and manage their health records through a seamless digital experience.
-          </p>
-
-          <div className="mt-5 flex flex-wrap gap-2">
-
-            {[
-               "Next.js",
-              "Nest.js",
-              "Node.js",
-              "PostgreSQL",
-               "flutter",
-                "AWS",
-            ].map((tech) => (
-              <span
-                key={tech}
-                className="rounded-full border border-black/15 px-3 py-1.5 text-xs"
-              >
-                {tech}
-              </span>
-            ))}
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </article>
-
-     {/* =====================================================
-       FASHION DESIGNER PORTFOLIO
-    ====================================================== */}
-    <article className="group">
-
-      <div className="overflow-hidden rounded-[1.5rem] bg-[#dfe7df]">
-
-        <div className="relative aspect-[16/9]">
-
-          <Image
-            src="/images/projects/Grandbox.png"
-            alt="Fashion Designer Portfolio"
-            fill
-            sizes="(max-width: 768px) 100vw, 90vw"
-            className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-          />
-
-        </div>
-
-      </div>
-
-
-      <div className="mt-6 grid gap-5 md:grid-cols-[0.7fr_1.3fr]">
-
-        <div>
-          <p className="text-xs font-medium uppercase tracking-[0.15em] text-black/40">
-            11 / Mobile App
-          </p>
-
-          <h3 className="mt-2 text-2xl font-semibold tracking-tight">
-            Grandbox
-          </h3>
-
-          <a href="https://grandbox.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center border-b border-black pb-1 text-sm font-semibold transition-colors hover:border-[#00A9A5] hover:text-[#00A9A5]">
-            View project <span aria-hidden="true" className="ml-2"></span>
-          </a>
-        </div>
-
-
-        <div className="max-w-2xl">
-
-          <p className="text-md leading-7 text-black/55 md:text-base">
-            Granbox portfolio website showcasing creative work and professional experience.
-          </p>
-
-          <div className="mt-5 flex flex-wrap gap-2">
-
-            {[
-               
-               "flutter",
-                "AWS",
-            ].map((tech) => (
-              <span
-                key={tech}
-                className="rounded-full border border-black/15 px-3 py-1.5 text-xs"
-              >
-                {tech}
-              </span>
-            ))}
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </article>
-
+      </article>
+    ))}
   </div>
 
+  <div className="mt-10 flex justify-center">
+    <a
+      href="/projects"
+      className="inline-flex items-center justify-center rounded-full border border-black bg-transparent px-6 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-[#111111] transition-colors hover:bg-[#111111] hover:text-white"
+    >
+      See More
+    </a>
+  </div>
 </section>
 
 
       {/* =====================================================
-          SERVICES
+          EXPERTISE
       ====================================================== */}
+      
       <section
-        id="services"
-        className="bg-[#111111] px-6 py-24 text-[#f5f5f0] md:px-12 md:py-32 lg:px-16"
-      >
+  id="services"
+  className="bg-[#111111] px-6 py-24 text-[#f5f5f0] md:px-12 md:py-32 lg:px-16"
+>
+  <div className="mb-20">
+    <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#00A9A5]">
+      Expertise
+    </p>
 
-        <div className="mb-20">
+    <h2 className="mt-5 max-w-5xl text-5xl font-semibold leading-[0.95] tracking-[-0.05em] md:text-7xl lg:text-8xl">
+      Technology,
+      <span className="text-[#00A9A5]">
+        {" "}engineered and led.
+      </span>
+    </h2>
 
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#00A9A5]">
-            Expertise
-          </p>
+    <p className="mt-8 max-w-3xl text-lg leading-8 text-white/45 md:text-xl">
+      From leading technology teams and shaping ICT strategy to engineering
+      scalable software and digital platforms, I work across both the
+      technical and organizational layers of modern technology.
+    </p>
+  </div>
 
-          <h2 className="mt-5 max-w-5xl text-5xl font-semibold leading-[0.95] tracking-[-0.05em] md:text-7xl lg:text-8xl">
-            What I bring
-            <span className="text-[#00A9A5]">
-              {" "}to the table.
-            </span>
-          </h2>
+  <div className="divide-y divide-white/10 border-y border-white/10">
 
-        </div>
+    {/* Expertise 01 */}
+    <div className="group grid gap-6 py-10 md:grid-cols-[100px_1fr_100px] md:items-center">
+      <span className="text-sm text-white/30">
+        01
+      </span>
 
+      <div>
+        <h3 className="text-3xl font-semibold tracking-tight transition-colors group-hover:text-[#00A9A5] md:text-5xl">
+          Technology Leadership & ICT Management
+        </h3>
 
-        <div className="divide-y divide-white/10 border-y border-white/10">
+        <p className="mt-4 max-w-3xl text-base leading-7 text-white/45">
+          Leading technology functions, teams and initiatives across IT
+          operations, software, infrastructure, governance and digital
+          transformation.
+        </p>
+      </div>
 
-          {/* Service 01 */}
-          <div className="group grid gap-6 py-10 md:grid-cols-[100px_1fr_100px] md:items-center">
+      <span className="text-right text-3xl text-white/20 transition-all group-hover:translate-x-2 group-hover:text-[#00A9A5]">
+        ↗
+      </span>
+    </div>
 
-            <span className="text-sm text-white/30">
-              01
-            </span>
+    {/* Expertise 02 */}
+    <div className="group grid gap-6 py-10 md:grid-cols-[100px_1fr_100px] md:items-center">
+      <span className="text-sm text-white/30">
+        02
+      </span>
 
-            <div>
+      <div>
+        <h3 className="text-3xl font-semibold tracking-tight transition-colors group-hover:text-[#00A9A5] md:text-5xl">
+          Technology Strategy & Digital Transformation
+        </h3>
 
-              <h3 className="text-3xl font-semibold tracking-tight transition-colors group-hover:text-[#00A9A5] md:text-5xl">
-                Web Development
-              </h3>
+        <p className="mt-4 max-w-3xl text-base leading-7 text-white/45">
+          Aligning technology strategy, innovation and digital initiatives
+          with organizational objectives, operational needs and long-term
+          business growth.
+        </p>
+      </div>
 
-              <p className="mt-4 max-w-2xl text-base leading-7 text-white/45">
-                Modern, responsive websites and web applications
-                designed around performance, usability and business goals.
-              </p>
+      <span className="text-right text-3xl text-white/20 transition-all group-hover:translate-x-2 group-hover:text-[#00A9A5]">
+        ↗
+      </span>
+    </div>
 
-            </div>
+    {/* Expertise 03 */}
+    <div className="group grid gap-6 py-10 md:grid-cols-[100px_1fr_100px] md:items-center">
+      <span className="text-sm text-white/30">
+        03
+      </span>
 
-            <span className="text-right text-3xl text-white/20 transition-all group-hover:translate-x-2 group-hover:text-[#00A9A5]">
-              ↗
-            </span>
+      <div>
+        <h3 className="text-3xl font-semibold tracking-tight transition-colors group-hover:text-[#00A9A5] md:text-5xl">
+          Software Engineering & Architecture
+        </h3>
 
-          </div>
+        <p className="mt-4 max-w-3xl text-base leading-7 text-white/45">
+          Designing and engineering scalable software systems, digital
+          products and technology platforms from architecture through
+          implementation and deployment.
+        </p>
+      </div>
 
+      <span className="text-right text-3xl text-white/20 transition-all group-hover:translate-x-2 group-hover:text-[#00A9A5]">
+        ↗
+      </span>
+    </div>
 
-          {/* Service 02 */}
-          <div className="group grid gap-6 py-10 md:grid-cols-[100px_1fr_100px] md:items-center">
+    {/* Expertise 04 */}
+    <div className="group grid gap-6 py-10 md:grid-cols-[100px_1fr_100px] md:items-center">
+      <span className="text-sm text-white/30">
+        04
+      </span>
 
-            <span className="text-sm text-white/30">
-              02
-            </span>
+      <div>
+        <h3 className="text-3xl font-semibold tracking-tight transition-colors group-hover:text-[#00A9A5] md:text-5xl">
+          IT Infrastructure, Cloud & Security
+        </h3>
 
-            <div>
+        <p className="mt-4 max-w-3xl text-base leading-7 text-white/45">
+          Overseeing the technology foundations, infrastructure and security
+          practices that keep organizations connected, secure, resilient
+          and operational.
+        </p>
+      </div>
 
-              <h3 className="text-3xl font-semibold tracking-tight transition-colors group-hover:text-[#00A9A5] md:text-5xl">
-                Mobile App Development
-              </h3>
+      <span className="text-right text-3xl text-white/20 transition-all group-hover:translate-x-2 group-hover:text-[#00A9A5]">
+        ↗
+      </span>
+    </div>
 
-              <p className="mt-4 max-w-2xl text-base leading-7 text-white/45">
-                Cross-platform mobile applications with intuitive
-                interfaces and scalable architectures.
-              </p>
+    {/* Expertise 05 */}
+    <div className="group grid gap-6 py-10 md:grid-cols-[100px_1fr_100px] md:items-center">
+      <span className="text-sm text-white/30">
+        05
+      </span>
 
-            </div>
+      <div>
+        <h3 className="text-3xl font-semibold tracking-tight transition-colors group-hover:text-[#00A9A5] md:text-5xl">
+          Technical Leadership & Delivery
+        </h3>
 
-            <span className="text-right text-3xl text-white/20 transition-all group-hover:translate-x-2 group-hover:text-[#00A9A5]">
-              ↗
-            </span>
+        <p className="mt-4 max-w-3xl text-base leading-7 text-white/45">
+          Leading cross-functional teams and technology initiatives from
+          strategy and planning through implementation, delivery and
+          continuous improvement.
+        </p>
+      </div>
 
-          </div>
+      <span className="text-right text-3xl text-white/20 transition-all group-hover:translate-x-2 group-hover:text-[#00A9A5]">
+        ↗
+      </span>
+    </div>
 
+    {/* Expertise 06 */}
+    <div className="group grid gap-6 py-10 md:grid-cols-[100px_1fr_100px] md:items-center">
+      <span className="text-sm text-white/30">
+        06
+      </span>
 
-          {/* Service 03 */}
-          <div className="group grid gap-6 py-10 md:grid-cols-[100px_1fr_100px] md:items-center">
+      <div>
+        <h3 className="text-3xl font-semibold tracking-tight transition-colors group-hover:text-[#00A9A5] md:text-5xl">
+          Technology Consulting & Advisory
+        </h3>
 
-            <span className="text-sm text-white/30">
-              03
-            </span>
+        <p className="mt-4 max-w-3xl text-base leading-7 text-white/45">
+          Helping organizations evaluate technology, solve complex problems
+          and make informed decisions around systems, architecture,
+          platforms and digital initiatives.
+        </p>
+      </div>
 
-            <div>
+      <span className="text-right text-3xl text-white/20 transition-all group-hover:translate-x-2 group-hover:text-[#00A9A5]">
+        ↗
+      </span>
+    </div>
 
-              <h3 className="text-3xl font-semibold tracking-tight transition-colors group-hover:text-[#00A9A5] md:text-5xl">
-                Backend & APIs
-              </h3>
-
-              <p className="mt-4 max-w-2xl text-base leading-7 text-white/45">
-                Secure backend systems, databases, APIs and integrations
-                that power reliable digital products.
-              </p>
-
-            </div>
-
-            <span className="text-right text-3xl text-white/20 transition-all group-hover:translate-x-2 group-hover:text-[#00A9A5]">
-              ↗
-            </span>
-
-          </div>
-
-
-          {/* Service 04 */}
-          <div className="group grid gap-6 py-10 md:grid-cols-[100px_1fr_100px] md:items-center">
-
-            <span className="text-sm text-white/30">
-              04
-            </span>
-
-            <div>
-
-              <h3 className="text-3xl font-semibold tracking-tight transition-colors group-hover:text-[#00A9A5] md:text-5xl">
-                Data Analytics
-              </h3>
-
-              <p className="mt-4 max-w-2xl text-base leading-7 text-white/45">
-                Data cleaning, analysis, visualization and reporting
-                that turn raw information into useful insights.
-              </p>
-
-            </div>
-
-            <span className="text-right text-3xl text-white/20 transition-all group-hover:translate-x-2 group-hover:text-[#00A9A5]">
-              ↗
-            </span>
-
-          </div>
-
-        </div>
-
-      </section>
+  </div>
+</section>
 
       {/* =====================================================
           TESTIMONIALS
@@ -1299,232 +625,6 @@ export default function Home() {
           ))}
         </div>
       </section>
-
-            {/* =====================================================
-          EXPERIENCE
-      ====================================================== */}
-      <section
-        id="experience"
-        className="bg-[#f5f5f0] px-6 py-24 md:px-12 md:py-32 lg:px-16"
-      >
-        <div className="grid gap-16 lg:grid-cols-[0.7fr_1.3fr]">
-
-          {/* Section Heading */}
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#00A9A5]">
-              Experience
-            </p>
-
-            <h2 className="mt-6 max-w-md text-5xl font-semibold leading-[0.95] tracking-[-0.05em] md:text-6xl">
-              Where I&apos;ve made an impact.
-            </h2>
-          </div>
-
-
-          {/* Experience List */}
-          <div className="border-t border-black/15">
-
-            {/* Experience 01 */}
-            <div className="grid gap-6 border-b border-black/15 py-10 md:grid-cols-[150px_1fr_120px]">
-
-              <div>
-                <p className="text-sm text-black/40">
-                 02/2022 - Present
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-2xl font-semibold tracking-tight">
-                  Grenstack 
-                </h3>
-
-                <p className="mt-1 text-sm text-[#00A9A5]">
-                  Founder / Senior Software Engineer
-                </p>
-
-                <p className="mt-5 max-w-xl text-base leading-7 text-black/55">
-                  Lead a 6-person software engineering team in the design, development 
-                  and delivery of scalable digital products and custom software 
-                  olutions for businesses across real estate, fintech, e-commerce, 
-                  healthcare, events and other industries. 
-                </p>
-
-                
-
-                
-              </div>
-
-              <div className="text-sm text-black/40 md:text-right">
-                Lagos, Nigeria
-              </div>
-
-            </div>
-
-
-            {/* Experience 02 */}
-            <div className="grid gap-6 border-b border-black/15 py-10 md:grid-cols-[150px_1fr_120px]">
-
-              <div>
-                <p className="text-sm text-black/40">
-                 04/2025 - 03/2026
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-2xl font-semibold tracking-tight">
-                  Greyfundr
-                </h3>
-
-                <p className="mt-1 text-sm text-[#00A9A5]">
-                  Software Developer
-                </p>
-
-               
-
-                <p className="mt-5 max-w-xl text-base leading-7 text-black/55">
-                  Designed, developed and maintained backend services powering crowdfunding campaigns, split-bill payments, user onboarding, event experiences and customer-facing workflows across multiple production applications.  
-                </p>
-
-                
-              </div>
-
-              <div className="text-sm text-black/40 md:text-right">
-                Lagos, Nigeria
-              </div>
-
-            </div>
-
-
-            {/* Experience 03 */}
-            <div className="grid gap-6 border-b border-black/15 py-10 md:grid-cols-[150px_1fr_120px]">
-
-              <div>
-                <p className="text-sm text-black/40">
-                  05/2022 - 04/2025
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-2xl font-semibold tracking-tight">
-                  Gentleboard
-                </h3>
-
-                <p className="mt-1 text-sm text-[#00A9A5]">
-                  Software Developer
-                </p>
-
-                <p className="mt-5 max-w-xl text-base leading-7 text-black/55">
-                  Designed and implemented scalable REST APIs powering property listings, property search, customer inquiries, shortlet bookings and internal operational workflows.
-                </p>
-
-                
-              </div>
-
-              <div className="text-sm text-black/40 md:text-right">
-                Lagos,Nigeria
-              </div>
-
-            </div>
-
-
-            {/* Experience 04 */}
-            <div className="grid gap-6 py-10 md:grid-cols-[150px_1fr_120px]">
-
-              <div>
-                <p className="text-sm text-black/40">
-                  02/2022 - 10/2026
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-2xl font-semibold tracking-tight">
-                  Business & App Developer
-                </h3>
-
-                <p className="mt-1 text-sm text-[#00A9A5]">
-                  ifitech & Associates Ltd
-                </p>
-
-                <p className="mt-5 max-w-xl text-base leading-7 text-black/55">
-                  Collaborated closely with management, design and business teams to translate real estate requirements into intuitive digital experiences and customer-focused features. 
-                </p>
-
-               
-              </div>
-
-              <div className="text-sm text-black/40 md:text-right">
-                Lagos, Nigeria
-              </div>
-
-            </div>
-
-             {/* Experience 05 */}
-            <div className="grid gap-6 py-10 md:grid-cols-[150px_1fr_120px]">
-
-              <div>
-                <p className="text-sm text-black/40">
-                  07/2021 - 11/2023
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-2xl font-semibold tracking-tight">
-                  Website Application Developer
-                </h3>
-
-                <p className="mt-1 text-sm text-[#00A9A5]">
-                  Spinettcosmetics
-                </p>
-
-                <p className="mt-5 max-w-xl text-base leading-7 text-black/55">
-                  Refactored existing applications into modular, maintainable architectures, reducing code complexity by approximately 35% and making future product and feature updates more efficient. 
-                </p>
-
-                
-              </div>
-
-              <div className="text-sm text-black/40 md:text-right">
-                Nigeria
-              </div>
-
-            </div>
-
-             {/* Experience 05 */}
-            <div className="grid gap-6 py-10 md:grid-cols-[150px_1fr_120px]">
-
-              <div>
-                <p className="text-sm text-black/40">
-                  07/2021 - 11/2023
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-2xl font-semibold tracking-tight">
-                 Social Media Manager
-                </h3>
-
-                <p className="mt-1 text-sm text-[#00A9A5]">
-                  Leros Comfort Foundation
-                </p>
-
-                <p className="mt-5 max-w-xl text-base leading-7 text-black/55">
-                  Managed the organization’s social media presence and digital communications, creating awareness around girl-child empowerment, human rights, education and humanitarian initiatives. 
-                </p>
-
-                
-              </div>
-
-              <div className="text-sm text-black/40 md:text-right">
-                Lagos, Nigeria
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-
 
       {/* =====================================================
           CONTACT
