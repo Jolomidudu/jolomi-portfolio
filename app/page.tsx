@@ -3,6 +3,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import ProjectRequestLauncher from "./projects/project-request-launcher";
 const homepageProjects = [
   {
     name: "Spa Elaris",
@@ -136,12 +137,7 @@ export default function Home() {
           </a>
         </div>
 
-        <a
-          href="/services#booking"
-          className="hidden rounded-full border border-black px-5 py-2.5 text-sm font-medium transition-all hover:bg-black hover:text-white md:block"
-        >
-          Start a project
-        </a>
+        <ProjectRequestLauncher variant="header" />
 
        
 
@@ -183,9 +179,9 @@ export default function Home() {
                 ["WHO I AM", "/about"],
                 ["SERVICES", "/services"],
                 ["GET TO LEARN", "/learn"],
-                ["BLOG", "/blog"],
+                ["MY BLOG", "/blog"],
                 ["EXPERIENCE", "/experience"],
-                ["CONTACT", "#contact"],
+                ["GET IN TOUCH", "#contact"],
               ].map(([label, href]) => (
                 <a
                   key={label}
@@ -258,7 +254,7 @@ export default function Home() {
               <span className="block">Oritsejolomi Dudu</span>
             </p>
 
-            <h1 aria-live="off" className="min-h-[2.46em] text-[9vw] font-bold leading-[0.82] tracking-[-0.07em] sm:text-[10vw] md:text-[7vw] lg:text-[6.3vw]">
+            <h1 aria-live="off" className="min-h-[2.46em] text-[9vw] font-bold leading-[0.82] tracking-[-0.07em] sm:text-[10vw] md:text-[4.9vw] lg:text-[4.41vw]">
               <span key={activeTitle} className="hero-title-enter block whitespace-pre-line break-words">
                 {heroTitles[activeTitle]}
               </span>
@@ -292,13 +288,14 @@ export default function Home() {
               </div>
 
               <div className="flex flex-row gap-2">
+                
                 <a
                   href="https://calendly.com/jollofdudu/let-s-discuss-your-project"
                   target="_blank"
                   rel="noreferrer"
                   aria-label="Call me"
                   title="Call me"
-                  className="flex min-w-0 flex-1 items-center justify-center gap-2 rounded-[0.65rem] border border-white/30 bg-white/70 px-2 py-3 text-center text-[#5f5f5f] backdrop-blur-sm transition-all hover:bg-white/80 hover:text-[#3a3a3a]"
+                  className="flex min-w-0 flex-1 items-center justify-center gap-2 rounded-[0.65rem] border border-white/30 bg-white/70 px-2 py-3 text-center text-[#111111] backdrop-blur-sm transition-all hover:bg-white/80 hover:text-[#3a3a3a]"
                 >
                   <svg viewBox="0 0 24 24" aria-hidden="true" className="h-[1.25rem] w-[1.25rem] fill-none stroke-current stroke-[1.8] md:h-[1.5rem] md:w-[1.5rem]">
                     <path d="M7.2 3.8h2.5l1.2 4.1-1.8 1.5a14.1 14.1 0 0 0 5.5 5.5l1.5-1.8 4.1 1.2v2.5a2 2 0 0 1-2.2 2A15.9 15.9 0 0 1 5.2 6a2 2 0 0 1 2-2.2Z" strokeLinecap="round" strokeLinejoin="round" />
@@ -311,7 +308,7 @@ export default function Home() {
                   rel="noreferrer"
                   aria-label="Download CV"
                   title="Download CV"
-                  className="flex min-w-0 flex-1 items-center justify-center gap-2 rounded-[0.65rem] border border-white/30 bg-white/70 px-2 py-3 text-center text-[#5f5f5f] backdrop-blur-sm transition-all hover:bg-white/80 hover:text-[#3a3a3a]"
+                  className="flex min-w-0 flex-1 items-center justify-center gap-2 rounded-[0.65rem] border border-white/30 bg-white/70 px-2 py-3 text-center text-[#111111] backdrop-blur-sm transition-all hover:bg-white/80 hover:text-[#3a3a3a]"
                 >
                   <svg viewBox="0 0 24 24" aria-hidden="true" className="h-[1.125rem] w-[1.125rem] shrink-0 fill-none stroke-current stroke-[1.8] md:h-[1.4rem] md:w-[1.4rem]">
                     <path d="M12 3v11m0 0 4-4m-4 4-4-4M5 16v4h14v-4" strokeLinecap="round" strokeLinejoin="round" />
@@ -325,12 +322,12 @@ export default function Home() {
                 aria-label="View projects"
                 className="group -translate-x-[10px] mt-[25px] flex w-fit items-center pl-[7px] md:mt-[30px]"
               >
-                <span className="flex items-center justify-between gap-3 rounded-[6px] border border-white/30 bg-white/70 px-3 py-2 text-xs font-bold uppercase tracking-wider text-[#5f5f5f] shadow-sm backdrop-blur-sm transition-all hover:bg-white/80 hover:text-[#3a3a3a] sm:text-sm">
+                <span className="flex items-center justify-between gap-3 rounded-[6px] border border-white/30 bg-white/70 px-3 py-2 text-xs font-bold uppercase tracking-wider text-[#111111] shadow-sm backdrop-blur-sm transition-all hover:bg-white/80 hover:text-[#3a3a3a] sm:text-sm">
                   <span className="flex items-center gap-2">
                     <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-none stroke-current stroke-[1.8]"><path d="M2.5 12s3.4-6 9.5-6 9.5 6 9.5 6-3.4 6-9.5 6-9.5-6-9.5-6Z" strokeLinecap="round" strokeLinejoin="round" /><circle cx="12" cy="12" r="2.5" /></svg>
                     Projects
                   </span>
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/30 bg-white/60 text-[10px] text-[#5f5f5f] transition-all duration-300 group-hover:bg-white/80 group-hover:text-[#3a3a3a]">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/30 bg-white/60 text-[10px] text-[#111111] transition-all duration-300 group-hover:bg-white/80 group-hover:text-[#3a3a3a]">
                     ↓
                   </span>
                 </span>

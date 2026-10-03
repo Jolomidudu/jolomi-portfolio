@@ -49,7 +49,13 @@ function localDateString(date: Date) {
   return `${year}-${month}-${day}`;
 }
 
-export default function ProjectRequestLauncher() {
+type ProjectRequestLauncherProps = {
+  variant?: "floating" | "header";
+};
+
+export default function ProjectRequestLauncher({
+  variant = "floating",
+}: ProjectRequestLauncherProps) {
   const [formOpen, setFormOpen] = useState(false);
   const [confirmationOpen, setConfirmationOpen] = useState(false);
   const [serviceListOpen, setServiceListOpen] = useState(false);
@@ -150,9 +156,11 @@ export default function ProjectRequestLauncher() {
         aria-label="Start a project"
         title="Start a project"
         onClick={() => setFormOpen(true)}
-        className="fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[#343434] text-sm font-bold text-white shadow-lg transition-transform hover:scale-105 hover:bg-[#008e8a] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#00A9A5]"
+        className={variant === "header"
+          ? "hidden rounded-full bg-[#343434] px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#1f2937] md:block"
+          : "fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[#343434] text-sm font-bold text-white shadow-lg transition-transform hover:scale-105 hover:bg-[#008e8a] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#00A9A5]"}
       >
-        Start
+        {variant === "header" ? "Start a project" : "Start"}
       </button>
 
       {formOpen && (
