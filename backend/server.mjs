@@ -1,4 +1,5 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
+import { readFile } from "node:fs/promises";
 import express from "express";
 import { neon } from "@neondatabase/serverless";
 
@@ -23,6 +24,19 @@ const validServices = new Set([
   "Technical Due Diligence / IT Audit",
 ]);
 const validCountryCodes = new Set(["+234", "+233", "+254", "+27", "+44", "+1", "+61", "+91"]);
+const validBlogCategories = new Set([
+  "Technology",
+  "Business",
+  "Finance",
+  "Lifestyle",
+  "Data Analytics",
+  "Cloud & DevOps",
+  "Cybersecurity",
+  "Digital Marketing",
+  "Business Development",
+  "Product Design",
+  "Other",
+]);
 const loginAttempts = new Map();
 let sql;
 
@@ -126,6 +140,39 @@ function readProjectRequest(body) {
   return enquiry;
 }
 
+function readBlogPost(body) {
+  if (!body || typeof body !== "object" || Array.isArray(body)) return null;
+
+  const value = (field, maxLength) =>
+    typeof body[field] === "string" ? body[field].trim().slice(0, maxLength) : "";
+  const post = {
+    title: value("title", 180),
+    slug: value("slug", 120).toLowerCase(),
+    category: value("category", 60),
+    description: value("description", 500),
+    content: value("content", 50000),
+    status: value("status", 20),
+  };
+
+  if (
+    !post.title
+    || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(post.slug)
+    || !validBlogCategories.has(post.category)
+    || !post.description
+    || !post.content
+    || !["draft", "published"].includes(post.status)
+  ) {
+    return null;
+  }
+
+  return post;
+}
+
+const blogPostFields = `
+  id, slug, category, title, description, content, status,
+  created_at AS "createdAt", updated_at AS "updatedAt"
+`;
+
 app.get("/health", (_request, response) => response.json({ status: "ok" }));
 
 app.use("/api", requireInternalKey);
@@ -226,6 +273,107 @@ app.get("/api/enquiries/:id", requireAdmin, async (request, response) => {
   }
 });
 
+app.get("/api/blog", async (_request, response) => {
+  try {
+    const posts = await sql`
+      SELECT ${sql.unsafe(blogPostFields)}
+      FROM blog_posts
+      WHERE status = 'published'
+      ORDER BY updated_at DESC
+    `;
+    return response.json({ posts });
+  } catch (error) {
+    console.error("Failed to load published blog posts:", error);
+    return response.status(500).json({ error: "Unable to load blog posts." });
+  }
+});
+
+app.get("/api/blog/:slug", async (request, response) => {
+  try {
+    const [post] = await sql`
+      SELECT ${sql.unsafe(blogPostFields)}
+      FROM blog_posts
+      WHERE slug = ${request.params.slug} AND status = 'published'
+      LIMIT 1
+    `;
+    if (!post) return response.status(404).json({ error: "Blog post not found." });
+    return response.json({ post });
+  } catch (error) {
+    console.error("Failed to load blog post:", error);
+    return response.status(500).json({ error: "Unable to load this blog post." });
+  }
+});
+
+app.get("/api/admin/blog", requireAdmin, async (_request, response) => {
+  try {
+    const posts = await sql`
+      SELECT ${sql.unsafe(blogPostFields)}
+      FROM blog_posts
+      ORDER BY updated_at DESC
+    `;
+    return response.json({ posts });
+  } catch (error) {
+    console.error("Failed to load admin blog posts:", error);
+    return response.status(500).json({ error: "Unable to load blog posts." });
+  }
+});
+
+app.post("/api/admin/blog", requireAdmin, async (request, response) => {
+  const post = readBlogPost(request.body);
+  if (!post) return response.status(400).json({ error: "Check the blog post fields and try again." });
+
+  try {
+    const [created] = await sql`
+      INSERT INTO blog_posts (slug, category, title, description, content, status)
+      VALUES (${post.slug}, ${post.category}, ${post.title}, ${post.description}, ${post.content}, ${post.status})
+      RETURNING ${sql.unsafe(blogPostFields)}
+    `;
+    return response.status(201).json({ post: created });
+  } catch (error) {
+    if (error?.code === "23505") return response.status(409).json({ error: "That blog URL is already in use." });
+    console.error("Failed to create blog post:", error);
+    return response.status(500).json({ error: "Unable to save this blog post." });
+  }
+});
+
+app.patch("/api/admin/blog/:id", requireAdmin, async (request, response) => {
+  if (!/^\d+$/.test(request.params.id)) return response.status(400).json({ error: "Invalid blog post ID." });
+  const post = readBlogPost(request.body);
+  if (!post) return response.status(400).json({ error: "Check the blog post fields and try again." });
+
+  try {
+    const [updated] = await sql`
+      UPDATE blog_posts
+      SET slug = ${post.slug}, category = ${post.category}, title = ${post.title},
+          description = ${post.description}, content = ${post.content},
+          status = ${post.status}, updated_at = NOW()
+      WHERE id = ${request.params.id}
+      RETURNING ${sql.unsafe(blogPostFields)}
+    `;
+    if (!updated) return response.status(404).json({ error: "Blog post not found." });
+    return response.json({ post: updated });
+  } catch (error) {
+    if (error?.code === "23505") return response.status(409).json({ error: "That blog URL is already in use." });
+    console.error("Failed to update blog post:", error);
+    return response.status(500).json({ error: "Unable to update this blog post." });
+  }
+});
+
+app.delete("/api/admin/blog/:id", requireAdmin, async (request, response) => {
+  if (!/^\d+$/.test(request.params.id)) return response.status(400).json({ error: "Invalid blog post ID." });
+
+  try {
+    const [deleted] = await sql`
+      DELETE FROM blog_posts WHERE id = ${request.params.id} RETURNING id
+    `;
+    if (!deleted) return response.status(404).json({ error: "Blog post not found." });
+    return response.json({ deleted: true });
+  } catch (error) {
+    console.error("Failed to delete blog post:", error);
+    return response.status(500).json({ error: "Unable to delete this blog post." });
+  }
+});
+
 async function start() {
   const requiredVariables = ["DATABASE_URL", "RAILWAY_INTERNAL_API_KEY", "PORTAL_ADMIN_EMAIL", "PORTAL_ADMIN_PASSWORD", "PORTAL_SESSION_SECRET"];
   const missingVariables = requiredVariables.filter((name) => !process.env[name]);
@@ -247,6 +395,31 @@ async function start() {
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
   `;
+  await sql`
+    CREATE TABLE IF NOT EXISTS blog_posts (
+      id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+      slug TEXT NOT NULL UNIQUE,
+      category TEXT NOT NULL,
+      title TEXT NOT NULL,
+      description TEXT NOT NULL,
+      content TEXT NOT NULL,
+      status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'published')),
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+
+  const blogSeed = JSON.parse(await readFile(new URL("./blog-seed.json", import.meta.url), "utf8"));
+  for (const post of blogSeed) {
+    await sql`
+      INSERT INTO blog_posts (slug, category, title, description, content, status)
+      VALUES (
+        ${post.slug}, ${post.category}, ${post.title}, ${post.description},
+        ${post.content.join("\n\n")}, 'published'
+      )
+      ON CONFLICT (slug) DO NOTHING
+    `;
+  }
 
   app.listen(port, "0.0.0.0", () => {
     console.log(`Portal API listening on port ${port}`);

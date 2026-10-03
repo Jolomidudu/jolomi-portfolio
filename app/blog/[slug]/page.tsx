@@ -2,23 +2,21 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import SiteChrome from "../../site-chrome";
-import { posts } from "../posts";
+import { getPublishedPost, seededPosts } from "../posts";
+
+export const dynamic = "force-dynamic";
 
 type BlogPostPageProps = {
   params: Promise<{ slug: string }>;
 };
 
-function findPost(slug: string) {
-  return posts.find((post) => post.slug === slug);
-}
-
 export function generateStaticParams() {
-  return posts.map((post) => ({ slug: post.slug }));
+  return seededPosts.map((post) => ({ slug: post.slug }));
 }
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = findPost(slug);
+  const post = await getPublishedPost(slug);
 
   if (!post) notFound();
 
@@ -30,7 +28,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
-  const post = findPost(slug);
+  const post = await getPublishedPost(slug);
 
   if (!post) notFound();
 

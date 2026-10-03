@@ -2,6 +2,7 @@
 
 import { useEffect, useState, type FormEvent } from "react";
 import Link from "next/link";
+import BlogManager from "./blog-manager";
 
 type Enquiry = {
   id: string;
@@ -37,6 +38,7 @@ export default function EnquiryPortal() {
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [refreshVersion, setRefreshVersion] = useState(0);
+  const [activeSection, setActiveSection] = useState<"enquiries" | "blog">("enquiries");
 
   useEffect(() => {
     let active = true;
@@ -107,6 +109,7 @@ export default function EnquiryPortal() {
     setSelectedId(null);
     setPassword("");
     setErrorMessage("");
+    setActiveSection("enquiries");
   }
 
   if (isCheckingSession && !signedIn) {
@@ -170,16 +173,36 @@ export default function EnquiryPortal() {
       <header className="flex flex-wrap items-center justify-between gap-4 border-b border-black/10 bg-white px-5 py-4 sm:px-8">
         <div>
           <Link href="/" className="text-xs font-semibold uppercase tracking-[0.15em] text-[#008e8a]">Jolomi Dudu</Link>
-          <h1 className="mt-1 text-xl font-semibold">Project enquiries</h1>
+          <h1 className="mt-1 text-xl font-semibold">{activeSection === "enquiries" ? "Project enquiries" : "Journal posts"}</h1>
         </div>
-        <div className="flex items-center gap-2">
+        <nav aria-label="Portal sections" className="flex items-center gap-1 border-b border-black/10">
           <button
             type="button"
-            onClick={() => setRefreshVersion((version) => version + 1)}
-            className="rounded-md border border-black/15 px-3 py-2 text-sm font-medium transition-colors hover:bg-black/5"
+            onClick={() => setActiveSection("enquiries")}
+            aria-pressed={activeSection === "enquiries"}
+            className={`border-b-2 px-3 py-2 text-sm font-medium ${activeSection === "enquiries" ? "border-[#00A9A5] text-[#007d79]" : "border-transparent text-black/50 hover:text-black"}`}
           >
-            Refresh
+            Enquiries
           </button>
+          <button
+            type="button"
+            onClick={() => setActiveSection("blog")}
+            aria-pressed={activeSection === "blog"}
+            className={`border-b-2 px-3 py-2 text-sm font-medium ${activeSection === "blog" ? "border-[#00A9A5] text-[#007d79]" : "border-transparent text-black/50 hover:text-black"}`}
+          >
+            Blog
+          </button>
+        </nav>
+        <div className="flex items-center gap-2">
+          {activeSection === "enquiries" && (
+            <button
+              type="button"
+              onClick={() => setRefreshVersion((version) => version + 1)}
+              className="rounded-md border border-black/15 px-3 py-2 text-sm font-medium transition-colors hover:bg-black/5"
+            >
+              Refresh
+            </button>
+          )}
           <button
             type="button"
             onClick={signOut}
@@ -190,6 +213,7 @@ export default function EnquiryPortal() {
         </div>
       </header>
 
+      {activeSection === "blog" ? <BlogManager /> : (
       <div className="grid min-h-[calc(100vh-73px)] lg:grid-cols-[minmax(300px,0.8fr)_minmax(0,1.5fr)]">
         <section className="border-b border-black/10 bg-white lg:border-b-0 lg:border-r">
           <div className="border-b border-black/10 p-4 sm:p-5">
@@ -275,6 +299,7 @@ export default function EnquiryPortal() {
           )}
         </section>
       </div>
+      )}
     </main>
   );
 }

@@ -1,14 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import SiteChrome from "../site-chrome";
-import { posts } from "./posts";
+import { getPublishedPosts } from "./posts";
 
 export const metadata: Metadata = {
   title: "Journal | Jolomi Dudu",
   description: "Notes on business, technology, lifestyle and finance from Jolomi Dudu.",
 };
 
-export default function BlogPage() {
+export const dynamic = "force-dynamic";
+
+export default async function BlogPage() {
+  const posts = await getPublishedPosts();
+
   return (
     <SiteChrome>
       <main className="min-h-screen bg-[#f5f5f0] text-[#111111]">
