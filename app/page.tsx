@@ -31,10 +31,10 @@ const homepageProjects = [
 ] as const;
 
 const heroTitles = [
-  "A TECHNOLOGY LEADER.",
-  "A SOFTWARE ENGINEER.",
-  "A TECHNOLOGY CONSULTANT.",
-  "A DIGITAL TRANSFORMATION LEADER.",
+  "A\nTECHNOLOGY LEADER.",
+  "A\nSOFTWARE ENGINEER.",
+  "A\nTECHNOLOGY CONSULTANT.",
+  "A\nDIGITAL TRANSFORMATION LEADER.",
 ] as const;
 
 export default function Home() {
@@ -87,17 +87,17 @@ export default function Home() {
 
         <div className="hidden items-center gap-8 text-sm font-medium md:flex">
           <a
-            href="#projects"
+            href="/projects"
             className="transition-opacity hover:opacity-50"
           >
-            Projects
+            PROJECTS
           </a>
 
           <a
             href="/about"
             className="transition-opacity hover:opacity-50"
           >
-            ABOUT ME
+            WHO I AM
           </a>
 
           <a
@@ -179,10 +179,10 @@ export default function Home() {
 
             <div className="flex flex-1 flex-col">
               {[
-                ["PROJECTS", "#projects"],
-                ["ABOUT ME", "/about"],
+                ["PROJECTS", "/projects"],
+                ["WHO I AM", "/about"],
                 ["SERVICES", "/services"],
-                ["LEARN NEW", "/learn"],
+                ["GET TO LEARN", "/learn"],
                 ["BLOG", "/blog"],
                 ["EXPERIENCE", "/experience"],
                 ["CONTACT", "#contact"],
@@ -195,7 +195,7 @@ export default function Home() {
                 >
                   <span className="flex items-center gap-4">
                     <span className="text-xs font-normal text-white/35">0{["PROJECTS", "ABOUT ME", "SERVICES", "LEARN NEW", "BLOG", "EXPERIENCE", "CONTACT"].indexOf(label) + 1}</span>
-                    <span className="text-3xl font-semibold tracking-[-0.04em]">{label}</span>
+                    <span className="text-[1.3125rem] font-semibold tracking-[-0.04em]">{label}</span>
                   </span>
                   <span className="text-xl text-white/35 transition-transform group-hover:translate-x-1 group-hover:text-[#78d8ca]">↗</span>
                 </a>
@@ -254,11 +254,12 @@ export default function Home() {
 
           <div>
             <p className="mb-4 text-[19px] font-medium leading-tight md:text-xl">
-              Hello, I&apos;m Oritsejolomi Dudu.
+              <span className="block">Hello, I am</span>
+              <span className="block">Oritsejolomi Dudu</span>
             </p>
 
             <h1 aria-live="off" className="min-h-[2.46em] text-[9vw] font-bold leading-[0.82] tracking-[-0.07em] sm:text-[10vw] md:text-[7vw] lg:text-[6.3vw]">
-              <span key={activeTitle} className="hero-title-enter block break-words">
+              <span key={activeTitle} className="hero-title-enter block whitespace-pre-line break-words">
                 {heroTitles[activeTitle]}
               </span>
             </h1>
@@ -365,7 +366,7 @@ export default function Home() {
         Deliveries
       </p>
 
-      <h3 className="mt-5 text-5xl font-semibold tracking-[-0.05em] md:text-6xl lg:text-7xl">
+      <h3 className="mt-5 text-[1.8rem] font-semibold tracking-[-0.05em] md:text-[2.25rem] lg:text-[2.7rem]">
         Featured Projects
       </h3>
     </div>
@@ -418,9 +419,10 @@ export default function Home() {
   </div>
 
   <div className="mt-10 flex justify-center">
+    
     <a
       href="/projects"
-      className="inline-flex items-center justify-center rounded-full border border-black bg-transparent px-6 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-[#111111] transition-colors hover:bg-[#111111] hover:text-white"
+      className="inline-flex items-center justify-center rounded-full border border-black bg-[#343434] px-6 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-[#ffffff] transition-colors hover:bg-[#111111] hover:text-white"
     >
       See More
     </a>
@@ -434,7 +436,7 @@ export default function Home() {
       
       <section
   id="services"
-  className="bg-[#111111] px-6 py-24 text-[#f5f5f0] md:px-12 md:py-32 lg:px-16"
+  className="bg-[#343434] px-6 py-24 text-[#f5f5f0] md:px-12 md:py-32 lg:px-16"
 >
   <div className="mb-20">
     <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#00A9A5]">
@@ -475,9 +477,7 @@ export default function Home() {
         </p>
       </div>
 
-      <span className="text-right text-3xl text-white/20 transition-all group-hover:translate-x-2 group-hover:text-[#00A9A5]">
-        ↗
-      </span>
+      
     </div>
 
     {/* Expertise 02 */}
@@ -498,9 +498,7 @@ export default function Home() {
         </p>
       </div>
 
-      <span className="text-right text-3xl text-white/20 transition-all group-hover:translate-x-2 group-hover:text-[#00A9A5]">
-        ↗
-      </span>
+      
     </div>
 
     {/* Expertise 03 */}
@@ -521,9 +519,7 @@ export default function Home() {
         </p>
       </div>
 
-      <span className="text-right text-3xl text-white/20 transition-all group-hover:translate-x-2 group-hover:text-[#00A9A5]">
-        ↗
-      </span>
+      
     </div>
 
     {/* Expertise 04 */}
@@ -544,9 +540,7 @@ export default function Home() {
         </p>
       </div>
 
-      <span className="text-right text-3xl text-white/20 transition-all group-hover:translate-x-2 group-hover:text-[#00A9A5]">
-        ↗
-      </span>
+      
     </div>
 
     {/* Expertise 05 */}
@@ -567,9 +561,7 @@ export default function Home() {
         </p>
       </div>
 
-      <span className="text-right text-3xl text-white/20 transition-all group-hover:translate-x-2 group-hover:text-[#00A9A5]">
-        ↗
-      </span>
+     
     </div>
 
     {/* Expertise 06 */}
@@ -590,9 +582,7 @@ export default function Home() {
         </p>
       </div>
 
-      <span className="text-right text-3xl text-white/20 transition-all group-hover:translate-x-2 group-hover:text-[#00A9A5]">
-        ↗
-      </span>
+     
     </div>
 
   </div>
@@ -605,7 +595,7 @@ export default function Home() {
         <div className="flex items-end justify-between gap-8">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#78d8ca]">Client notes</p>
-            <h2 className="mt-5 max-w-xl text-5xl font-semibold leading-[0.95] tracking-[-0.05em] md:text-6xl">Good work should make people&apos;s lives easier.</h2>
+            <h2 className="mt-5 max-w-xl text-4xl font-semibold leading-[0.95] tracking-[-0.05em] md:text-6xl">Good work should make people&apos;s lives easier.</h2>
           </div>
           <span className="hidden text-sm text-white/45 md:block">Swipe to explore</span>
         </div>
@@ -660,7 +650,7 @@ export default function Home() {
               jollofdudu@gmail.com
             </span>
 
-            <span className="flex h-14 w-14 items-center justify-center rounded-full border border-black transition-all group-hover:bg-black group-hover:text-white">
+            <span className="flex h-14 w-14 items-center justify-center rounded-full bg-[#343434] text-white transition-all group-hover:bg-black group-hover:text-white">
               ↗
             </span>
           </a>
@@ -683,7 +673,7 @@ export default function Home() {
             </p>
 
             <p className="mt-2 text-sm text-black/40">
-              Software Engineer · Web & Mobile Developer
+              Technology Consultant
             </p>
 
           </div>

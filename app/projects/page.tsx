@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import SiteChrome from "../site-chrome";
+import ProjectRequestLauncher from "./project-request-launcher";
 
 export const metadata: Metadata = {
   title: "Projects | Jolomi Dudu",
@@ -127,16 +127,8 @@ export default function ProjectsPage() {
       <main className="bg-[#f5f5f0] text-[#111111]">
         <section className="px-6 pb-12 pt-12 md:px-12 md:pb-20 md:pt-16 lg:px-16">
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#00A9A5]">
-            Portfolio
+            My Projects
           </p>
-          <div className="mt-6 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-            <h1 className="max-w-4xl text-5xl font-semibold leading-[0.95] tracking-[-0.05em] md:text-6xl lg:text-7xl">
-              Selected work across digital products and platforms.
-            </h1>
-            <Link href="/services#booking" className="inline-flex items-center justify-center rounded-full border border-black px-5 py-3 text-sm font-semibold transition-colors hover:bg-black hover:text-white">
-              Start a project
-            </Link>
-          </div>
         </section>
 
         <section className="px-6 pb-24 md:px-12 md:pb-32 lg:px-16">
@@ -188,6 +180,7 @@ export default function ProjectsPage() {
             ))}
           </div>
         </section>
+        <ProjectRequestLauncher />
       </main>
     </SiteChrome>
   );
