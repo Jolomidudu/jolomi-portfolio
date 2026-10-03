@@ -19,18 +19,7 @@ export default buildConfig({
     },
   },
   editor: lexicalEditor(),
-  collections: [
-    ...collections,
-    Admins,
-    BlogPosts,
-    Services,
-    Projects,
-    Experiences,
-    TutoringOffers,
-    Testimonials,
-    Media,
-    SiteSettings,
-  ],
+  collections,
   globals: [SiteSettings],
   db: postgresAdapter({
     pool: {
@@ -59,7 +48,6 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, "payload-types.ts"),
   },
-  sharp: true,
   localization: {
     defaultLocale: "en",
     fallback: true,
