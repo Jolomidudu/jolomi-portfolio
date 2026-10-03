@@ -22,11 +22,11 @@ export default function ServicesPage() {
             <article key={service.id} className="flex min-h-48 flex-col border border-white/10 bg-[#343434] p-4 sm:min-h-52 sm:p-6">
               <span className="text-xs font-medium text-white/50">{service.number}</span>
               <h2 className="mt-4 text-lg font-bold leading-tight tracking-tight text-white sm:text-2xl">{service.name}</h2>
-              <div className="mt-3 text-sm font-semibold text-[#E8DCC8] sm:text-base">
+              <div className="mt-3 text-md font-semibold text-[#E8DCC8] sm:text-base">
                 <ServicePrice nigeria={service.nigeria} international={service.international} />
               </div>
               <Link href={`/services/${service.slug}`} className="mt-auto inline-flex w-fit items-center gap-2 bg-white px-3 py-2 text-xs font-semibold text-[#343434] transition-colors hover:bg-[#E8DCC8] sm:text-sm">
-                View service <span aria-hidden="true">↗</span>
+                VIEW IN <span aria-hidden="true">↗</span>
               </Link>
             </article>
           ))}

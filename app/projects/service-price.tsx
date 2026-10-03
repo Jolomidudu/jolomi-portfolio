@@ -12,5 +12,5 @@ export default function ServicePrice({ nigeria, international, className = "" }:
   const { currency } = useCurrency();
   const price = currency === "NGN" ? nigeria : international;
 
-  return <span className={className}>Starting at {price}</span>;
+  return <span className={className}>Starting At {price}</span>;
 }
