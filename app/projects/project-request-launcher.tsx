@@ -2,6 +2,7 @@
 
 import { useEffect, useState, type FormEvent } from "react";
 import { projectServices } from "./project-services";
+import { useCurrency } from "../currency-provider";
 
 const countryCodes = [
   ["Nigeria", "+234"],
@@ -63,9 +64,11 @@ export default function ProjectRequestLauncher({
   const [request, setRequest] = useState<ProjectRequest>(initialRequest);
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { currency } = useCurrency();
   const minimumStartDate = localDateString(new Date());
   const modalOpen = formOpen || confirmationOpen;
   const selectedService = projectServices.find(({ name }) => name === request.service);
+  const selectedServicePrice = currency === "NGN" ? selectedService?.nigeria : selectedService?.international;
 
   useEffect(() => {
     if (!modalOpen) return;
@@ -223,10 +226,9 @@ export default function ProjectRequestLauncher({
                         <span className="block text-sm font-semibold text-[#111111]">
                           {selectedService?.name ?? "Choose a service"}
                         </span>
-                        {selectedService && (
-                          <span className="mt-1 flex flex-col gap-0.5 text-xs font-normal text-black/55 sm:flex-row sm:gap-4">
-                            <span>Nigeria: {selectedService.nigeria}</span>
-                            <span>International: {selectedService.international}</span>
+                        {selectedServicePrice && (
+                          <span className="mt-1 block text-xs font-normal text-black/55">
+                            Starting at {selectedServicePrice}
                           </span>
                         )}
                       </span>
@@ -257,9 +259,8 @@ export default function ProjectRequestLauncher({
                             <span className="block text-sm font-semibold text-[#111111]">
                               {service.name}
                             </span>
-                            <span className="mt-1 flex flex-col gap-0.5 text-xs text-black/55 sm:flex-row sm:gap-4">
-                              <span>Nigeria: {service.nigeria}</span>
-                              <span>International: {service.international}</span>
+                            <span className="mt-1 block text-xs text-black/55">
+                              Starting at {currency === "NGN" ? service.nigeria : service.international}
                             </span>
                           </button>
                         ))}
@@ -368,10 +369,9 @@ export default function ProjectRequestLauncher({
                   <div>
                     <dt className="font-semibold text-black/50">Service</dt>
                     <dd className="mt-1">{request.service}</dd>
-                    {selectedService && (
-                      <dd className="mt-1 flex flex-col gap-0.5 text-black/55 sm:flex-row sm:gap-4">
-                        <span>Nigeria: {selectedService.nigeria}</span>
-                        <span>International: {selectedService.international}</span>
+                    {selectedServicePrice && (
+                      <dd className="mt-1 text-black/55">
+                        Starting at {selectedServicePrice}
                       </dd>
                     )}
                   </div>

@@ -647,7 +647,7 @@ export default function Home() {
               jollofdudu@gmail.com
             </span>
 
-            Your project request has been saved. You can expect a call soon.
+    
 
             <span className="flex h-14 w-14 items-center justify-center rounded-full bg-[#343434] text-white transition-all group-hover:bg-black group-hover:text-white">
               ↗

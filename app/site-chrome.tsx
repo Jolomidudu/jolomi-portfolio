@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import ProjectRequestLauncher from "./projects/project-request-launcher";
+import { CurrencyToggle } from "./currency-provider";
 
 const links = [
   ["HOME", "/"],
@@ -29,19 +31,22 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
   return (
     <div className="min-h-screen">
       <header className={`sticky top-0 z-50 flex min-h-20 shrink-0 items-center justify-between bg-[#f5f5f0] px-6 pb-5 pt-[50px] transition-colors md:px-12 md:py-5 lg:px-16 ${menuOpen ? "bg-[#12211f] text-[#f5f5f0]" : "text-[#111111]"}`}>
-        <Link href="/" className="flex items-center overflow-hidden rounded-full border border-[#12211f]/10 bg-white shadow-sm ring-1 ring-black/5" aria-label="Home">
-          <img
-            src="/jolo.jpg"
-            alt="Jolomi Dudu"
-            className="h-10 w-10 object-cover"
-          />
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link href="/" className="flex items-center overflow-hidden rounded-full border border-[#12211f]/10 bg-white shadow-sm ring-1 ring-black/5" aria-label="Home">
+            <img
+              src="/jolo.jpg"
+              alt="Jolomi Dudu"
+              className="h-10 w-10 object-cover"
+            />
+          </Link>
+          <CurrencyToggle />
+        </div>
 
         <nav className="hidden items-center gap-8 text-sm font-medium md:flex" aria-label="Main navigation">
           {links.map(([label, href]) => <Link key={href} href={href} className="transition-opacity hover:opacity-50">{label}</Link>)}
         </nav>
 
-        <div className="hidden md:block"><Link href="/services#booking" className="rounded-full border border-current px-5 py-2.5 text-sm font-medium transition-colors hover:bg-[#111111] hover:text-white">Start a project</Link></div>
+        <ProjectRequestLauncher variant="header" />
 
         
 
@@ -64,7 +69,7 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
         )}
       </header>
 
-      {pathname !== "/" && <Link href="/" className="fixed bottom-6 left-6 z-40 rounded-full border border-black/20 bg-[#f5f5f0]/90 px-4 py-3 text-xs font-semibold uppercase tracking-[0.12em] text-black backdrop-blur-md transition-transform hover:-translate-x-1">← Back</Link>}
+      
       {showScrollTop && <button type="button" aria-label="Scroll to top" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="fixed bottom-6 right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-[#12211f] text-xl text-[#78d8ca] shadow-lg transition-all hover:-translate-y-1 hover:bg-[#00A9A5] hover:text-white">↑</button>}
 
       {children}
