@@ -45,42 +45,57 @@ const strengths = [
 
 const education = [
   {
-    period: "YOUR YEAR",
-    title: "Bachelor's Degree in Economics",
-    institution: "YOUR UNIVERSITY",
+    period: "2012 - 2015",
+    title: "Bachelor's Degree in Information Technology",
+    institution: "Monash University, \johannesburg, South Africa",
     description:
-      "Academic background combining economic thinking, business principles, analysis and decision-making.",
+      "Academic foundation in information technology, covering software development, database management, computer systems, networking, information systems, and technology-driven problem solving.",
+  },
+  {
+    period: "2015 - 2018",
+    title: "Bachelor's Degree in Economics",
+    institution: "Benosn Idahosa University, Benin City, Nigeria",
+    description:
+      "Academic foundation in economics, covering economic theory, financial analysis, business principles, quantitative methods, research, and data-driven decision-making.",
+  },
+
+  {
+    period: "2020 - 2022",
+    title: "Master's Degree in Business Administration (MBA)",
+    institution: "Middlesex University, London, United Kingdom",
+    description:
+      "Advanced business education covering strategic management, leadership, finance, marketing, operations, entrepreneurship, and data-driven decision-making, with a focus on solving complex business challenges.",
   },
 ];
 
 const certifications = [
   {
-    year: "YOUR YEAR",
-    title: "Certification Name",
-    issuer: "Issuing Organization",
+    year: "2022",
+    title: "Comptia Security+",
+    issuer: "Comptia",
   },
   {
-    year: "YOUR YEAR",
-    title: "Certification Name",
-    issuer: "Issuing Organization",
+    year: "2016",
+    title: "Google Digital Marketing Certificate",
+    issuer: "Google",
   },
   {
-    year: "YOUR YEAR",
-    title: "Certification Name",
-    issuer: "Issuing Organization",
+    year: "2024",
+    title: "Data Analytics Certificate",
+    issuer: "Udemy",
   },
 ];
 
 const awards = [
   {
-    year: "YOUR YEAR",
-    title: "Award or Recognition",
-    organization: "Organization",
+    year: "2022",
+    title: "Google Student Ambassador",
+    organization: "Google",
   },
   {
-    year: "YOUR YEAR",
-    title: "Award or Recognition",
-    organization: "Organization",
+    year: "2017",
+    title: "Technology Leadership Award",
+    organization: "Cross Road",
   },
 ];
 
