@@ -44,6 +44,41 @@ const strengths = [
 ];
 
 const education = [
+  // {
+  //   period: "1996 - 2002",
+  //   title: "Primary School",
+  //   institution: "Corona School Gbagada, \Lagos, Nigeria",
+  //   description:
+  //     "A primary school in the hearts of gbagada lagos state",
+  // },
+  // {
+  //   period: "2002 - 2005",
+  //   title: "Primary School Leaving Certificate",
+  //   institution: "(SIS) Salvation International School, \Lagos, Nigeria",
+  //   description:
+  //     "A primary school in ikeja GRA Lagos state",
+  // },
+  // {
+  //   period: "2005 - 2006",
+  //   title: "JSC (Junior Secondary School)",
+  //   institution: "RISS (Redeemers international Secondary School) , \Asaba, Delta State, Nigeria",
+  //   description:
+  //     "A secondary school in isara remo ogun state where graduated as a social science student with honours",
+  // },
+  // {
+  //   period: "2006 - 2008",
+  //   title: "JSCE/SSC (Junior Secondary Certificate Examination)",
+  //   institution: "Graceville College, \Asaba, Delta State, Nigeria",
+  //   description:
+  //     "A secondary school in isara remo ogun state where graduated as a social science student with honours",
+  // },
+  // {
+  //   period: "2008 - 2010",
+  //   title: "SSCE (Senior Secondary Certificate Examination)",
+  //   institution: "Straitgate College, \Ogun State, Nigeria",
+  //   description:
+  //     "A secondary school in isara remo ogun state where graduated as a social science student with honours",
+  // },
   {
     period: "2012 - 2015",
     title: "Bachelor's Degree in Information Technology",
@@ -54,18 +89,18 @@ const education = [
   {
     period: "2015 - 2018",
     title: "Bachelor's Degree in Economics",
-    institution: "Benosn Idahosa University, Benin City, Nigeria",
+    institution: "Benson Idahosa University, Benin City, Nigeria",
     description:
       "Academic foundation in economics, covering economic theory, financial analysis, business principles, quantitative methods, research, and data-driven decision-making.",
   },
 
-  {
-    period: "2020 - 2022",
-    title: "Master's Degree in Business Administration (MBA)",
-    institution: "Middlesex University, London, United Kingdom",
-    description:
-      "Advanced business education covering strategic management, leadership, finance, marketing, operations, entrepreneurship, and data-driven decision-making, with a focus on solving complex business challenges.",
-  },
+  // {
+  //   period: "2020 - 2022",
+  //   title: "Master's Degree in Business Administration (MBA)",
+  //   institution: "Middlesex University, London, United Kingdom",
+  //   description:
+  //     "Advanced business education covering strategic management, leadership, finance, marketing, operations, entrepreneurship, and data-driven decision-making, with a focus on solving complex business challenges.",
+  // },
 ];
 
 const certifications = [
@@ -102,10 +137,10 @@ const awards = [
 const selectedWork = [
   {
     number: "01",
-    name: "Spa Elaris",
-    category: "Wellness · Digital platform",
+    name: "Festyvibe",
+    category: "Event · Digital platform",
     description:
-      "A spa platform for exploring treatments and booking appointments, designed to make the customer journey feel considered from the first visit.",
+      "A digital platform for organizing and managing events, designed to make the customer journey feel considered from the first visit.",
   },
   {
     number: "02",
@@ -116,10 +151,10 @@ const selectedWork = [
   },
   {
     number: "03",
-    name: "CareCrowd",
-    category: "Community · Mobile platform",
+    name: "BudgetAll",
+    category: "Finance · Mobile platform",
     description:
-      "A crowdfunding and community product that helps people raise funds, support causes and connect around shared work.",
+      "A mobile platform for managing personal finances and budgeting, designed to make financial planning accessible and engaging.",
   },
 ];
 
@@ -129,13 +164,13 @@ export default function AboutPage() {
       <main className="bg-[#f5f5f0] text-[#111111]">
         {/* HERO */}
         <section className="px-6 pb-20 pt-12 md:px-12 md:pb-28 md:pt-16 lg:px-16">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#008c87]">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#751a1a]">
             About / Jolomi Dudu
           </p>
 
           <div className="mt-8 grid gap-10 md:grid-cols-[1.15fr_0.85fr] md:items-center md:gap-16">
             <div>
-              <h1 className="max-w-4xl text-5xl font-semibold leading-[0.96] tracking-[-0.05em] sm:text-6xl lg:text-7xl">
+              <h1 className="max-w-4xl text-3xl font-semibold leading-[0.96] tracking-[-0.05em] sm:text-6xl lg:text-7xl">
                 I lead technology, build digital systems, and turn ideas into
                 reality.
               </h1>
@@ -275,7 +310,7 @@ export default function AboutPage() {
                   <article key={`${item.title}-${item.institution}`}>
                     <p className="text-xs text-black/40">{item.period}</p>
 
-                    <h3 className="mt-3 text-2xl font-semibold leading-tight">
+                    <h3 className="mt-3 text-1xl font-semibold leading-tight">
                       {item.title}
                     </h3>
 
@@ -381,15 +416,15 @@ export default function AboutPage() {
                 key={project.number}
                 className="py-6 md:px-6 md:first:pl-0 md:last:pr-0"
               >
-                <p className="text-xs text-black/40">
+                <p className="text-sm text-black/40">
                   {project.number} / {project.category}
                 </p>
 
-                <h3 className="mt-5 text-2xl font-semibold">
+                <h3 className="mt-5 text-2xl text-[brown] font-semibold">
                   {project.name}
                 </h3>
 
-                <p className="mt-3 text-sm leading-6 text-black/60">
+                <p className="mt-3 text-md leading-6 text-green/90">
                   {project.description}
                 </p>
               </article>

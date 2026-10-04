@@ -146,8 +146,8 @@ export default function ProjectsPage() {
     <SiteChrome>
       <main className="bg-[#f5f5f0] text-[#111111]">
         <section className="px-6 pb-12 pt-12 md:px-12 md:pb-20 md:pt-16 lg:px-16">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#00A9A5]">
-            My Projects
+          <p className="text-lg font-bold uppercase tracking-[0.2em] text-[#751a1a]">
+            My CATALOG
           </p>
         </section>
 
@@ -155,5 +155,7 @@ export default function ProjectsPage() {
         <ProjectRequestLauncher />
       </main>
     </SiteChrome>
+
+    
   );
 }

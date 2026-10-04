@@ -11,15 +11,15 @@ export const metadata: Metadata = {
 const experiences = [
   {
     period: "02/2022 - Present",
-    role: "Founder / Senior Software Engineer",
+    role: "Founder / Engineering Manager",
     company: "Grenstack",
     location: "Lagos, Nigeria",
     description:
-      "Lead a 6-person software engineering team responsible for the design, development, and delivery of scalable digital products and custom technology solutions across real estate, fintech, e-commerce, healthcare, events, and other industries.",
+      "Leading 10+ person engineering team responsible for the design, development, and delivery of scalable digital products and custom technology solutions across real estate, fintech, e-commerce, healthcare, events, and other industries.",
   },
   {
     period: "04/2025 - 03/2026",
-    role: "Software Developer",
+    role: "Software Engineer",
     company: "Greyfundr",
     location: "Lagos, Nigeria",
     description:
@@ -27,7 +27,7 @@ const experiences = [
   },
   {
     period: "05/2022 - 04/2025",
-    role: "Software Developer",
+    role: "Application Developer",
     company: "Gentleboard",
     location: "Lagos, Nigeria",
     description:
@@ -56,6 +56,14 @@ const experiences = [
     location: "Lagos, Nigeria",
     description:
       "Managed the organization's social media presence and digital communications, supporting awareness initiatives across education, humanitarian causes, girl-child empowerment, and human rights.",
+  },
+  {
+    period: "03/2020 - 11/2020",
+    role: "Data Analyst (NYSC)",
+    company:  "Ojodu Local Government Secretariat",
+    location: "Ogun State, Nigeria",
+    description:
+      "Analyzed and interpreted data to support decision-making and improve organizational performance.",
   },
 ] as const;
 
@@ -98,20 +106,20 @@ export default function ExperiencePage() {
       <main className="bg-[#f5f5f0] text-[#111111]">
         {/* HERO */}
         <section className="px-6 pb-16 pt-12 md:px-12 md:pb-24 md:pt-16 lg:px-16">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#00A9A5]">
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#751a1a]">
             Experience / Leadership
           </p>
 
           <div className="mt-6 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
             <div>
-              <h1 className="max-w-4xl text-5xl font-semibold leading-[0.95] tracking-[-0.05em] md:text-6xl lg:text-7xl">
+              <h1 className="max-w-4xl text-3xl font-semibold leading-[0.95] tracking-[-0.05em] md:text-6xl lg:text-7xl">
                 Where I&apos;ve led,
                 <br />
                 built, and delivered.
               </h1>
 
-              <p className="mt-7 max-w-2xl text-base leading-7 text-black/55 md:text-lg">
-                A career spanning technology leadership, software engineering,
+              <p className="mt-7 max-w-2xl text-base leading-7 text-black/75 md:text-lg">
+                A career spanning technology leadership, engineering,
                 product development, digital delivery, and technology
                 consulting.
               </p>
@@ -150,7 +158,7 @@ export default function ExperiencePage() {
                 </div>
 
                 {/* LOCATION */}
-                <div className="text-sm text-black/40 md:text-right">
+                <div className="text-sm font-medium text-[#751a1a]/90 md:text-right">
                   {item.location}
                 </div>
               </article>
@@ -219,7 +227,7 @@ export default function ExperiencePage() {
             </div>
 
             <div>
-              <h2 className="max-w-4xl text-4xl font-semibold leading-[1] tracking-[-0.04em] md:text-5xl">
+              <h2 className="max-w-4xl text-3xl font-semibold leading-[1] tracking-[-0.04em] md:text-5xl">
                 Engineering gave me the technical depth.
                 <br />
                 Leadership gives me the perspective to use it well.

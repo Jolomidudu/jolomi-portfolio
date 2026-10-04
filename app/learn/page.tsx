@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import SiteChrome from "../site-chrome";
+import LearningTrackSelector from "./learning-track-selector";
 
 export const metadata: Metadata = {
   title: "Technology Mentorship & Training",
@@ -11,7 +12,8 @@ export const metadata: Metadata = {
 const tracks = [
   {
     number: "01",
-    title: "Web & Software Development",
+    shortTitle: "Web App",
+    title: "Website Development",
     short:
       "Learn to design, build and deploy modern software applications through real projects.",
     topics:
@@ -32,6 +34,7 @@ const tracks = [
   },
   {
     number: "02",
+    shortTitle: "Mobile App",
     title: "Mobile App Development",
     short:
       "Go from an idea to a working mobile application using practical development workflows.",
@@ -53,6 +56,7 @@ const tracks = [
   },
   {
     number: "03",
+    shortTitle: "Analytics",
     title: "Data Analytics & Business Intelligence",
     short:
       "Turn raw data into useful insights, dashboards and decisions that businesses can act on.",
@@ -75,6 +79,7 @@ const tracks = [
   },
   {
     number: "04",
+    shortTitle: "Cyber",
     title: "Cybersecurity & Security Engineering",
     short:
       "Understand how modern systems are protected and learn practical defensive security techniques.",
@@ -97,6 +102,7 @@ const tracks = [
   },
   {
     number: "05",
+    shortTitle: "UI/UX",
     title: "UI/UX & Product Design",
     short:
       "Learn how to turn user problems and product ideas into clear, usable digital experiences.",
@@ -120,6 +126,7 @@ const tracks = [
   },
   {
     number: "06",
+    shortTitle: "DevOps",
     title: "DevOps, Cloud & Infrastructure",
     short:
       "Learn how modern software is deployed, monitored and maintained in production.",
@@ -143,6 +150,7 @@ const tracks = [
   },
   {
     number: "07",
+    shortTitle: "Systems",
     title: "Systems Engineering & Architecture",
     short:
       "Learn to think beyond individual applications and design reliable technology systems.",
@@ -166,6 +174,7 @@ const tracks = [
   },
   {
     number: "08",
+    shortTitle: "Robotics",
     title: "Robotics, IoT & Embedded Systems",
     short:
       "Explore how software, electronics and physical systems work together to create intelligent devices.",
@@ -189,6 +198,7 @@ const tracks = [
   },
   {
     number: "09",
+    shortTitle: "Leadership",
     title: "Technology Leadership & IT Management",
     short:
       "Develop the thinking required to lead technology teams, ICT functions and digital transformation initiatives.",
@@ -312,6 +322,8 @@ const audiences = [
   ],
 ];
 
+
+
 export default function LearnPage() {
   return (
     <SiteChrome>
@@ -323,12 +335,12 @@ export default function LearnPage() {
           </p>
 
           <div className="mt-6 grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
-            <h1 className="max-w-5xl text-6xl font-semibold leading-[0.9] tracking-[-0.06em] md:text-8xl">
+            <h1 className="max-w-5xl text-4xl font-semibold leading-[0.9] tracking-[-0.06em] md:text-6xl">
               Learn technology by building something real.
             </h1>
 
             <div className="max-w-md">
-              <p className="text-lg leading-8 text-black/60">
+              <p className="text-lg leading-8 text-black/70">
                 Private, practical mentorship for people who want more than
                 tutorials. Learn the tools, understand how professionals work
                 and build something you can actually show.
@@ -345,7 +357,7 @@ export default function LearnPage() {
         </section>
 
         {/* APPROACH */}
-        <section className="bg-[#111111] px-6 py-20 text-[#f5f5f0] md:px-12 md:py-28 lg:px-16">
+        {/* <section className="bg-[#111111] px-6 py-20 text-[#f5f5f0] md:px-12 md:py-28 lg:px-16">
           <div className="grid gap-12 lg:grid-cols-[0.75fr_1.25fr] lg:gap-20">
             <div>
               <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#78d8ca]">
@@ -368,12 +380,12 @@ export default function LearnPage() {
               </p>
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* LEARNING TRACKS */}
         <section
           id="tracks"
-          className="bg-[#111111] px-6 pb-24 text-[#f5f5f0] md:px-12 md:pb-32 lg:px-16"
+          className="bg-[#3e3b3b] px-6 pb-24 text-[#f5f5f0] md:px-12 md:pb-32 lg:px-16"
         >
           <div className="mb-12 border-t border-white/15 pt-10">
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#78d8ca]">
@@ -381,11 +393,11 @@ export default function LearnPage() {
             </p>
 
             <div className="mt-5 flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
-              <h2 className="max-w-4xl text-5xl font-semibold leading-[0.95] tracking-[-0.05em] md:text-7xl">
+              <h2 className="max-w-4xl text-3xl font-semibold leading-[0.95] tracking-[-0.05em] md:text-5xl">
                 Choose what you want to build your capability in.
               </h2>
 
-              <p className="max-w-sm text-sm leading-6 text-white/45">
+              <p className="max-w-sm text-md leading-6 text-[#5fe825]">
                 Every track can be adapted to your current level, goals and
                 project. Beginner, intermediate and professional learning
                 paths are available.
@@ -393,114 +405,7 @@ export default function LearnPage() {
             </div>
           </div>
 
-          <div className="grid gap-px overflow-hidden border border-white/15 bg-white/15 md:grid-cols-2">
-            {tracks.map((track) => (
-              <article
-                key={track.number}
-                className="bg-[#111111] p-7 md:p-9"
-              >
-                <div className="flex items-start justify-between gap-5">
-                  <span className="text-sm text-white/35">
-                    {track.number}
-                  </span>
-
-                  <span className="rounded-full border border-white/15 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-white/45">
-                    {track.timeline}
-                  </span>
-                </div>
-
-                <h3 className="mt-8 max-w-xl text-3xl font-semibold leading-tight md:text-4xl">
-                  {track.title}
-                </h3>
-
-                <p className="mt-4 max-w-xl text-base leading-7 text-white/55">
-                  {track.short}
-                </p>
-
-                <div className="mt-7 border-t border-white/10 pt-6">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#78d8ca]">
-                    What you will work on
-                  </p>
-
-                  <p className="mt-3 text-sm leading-6 text-white/50">
-                    {track.topics}
-                  </p>
-                </div>
-
-                {/* PROGRAM DETAILS */}
-                <div className="mt-7 grid gap-5 border-t border-white/10 pt-6 sm:grid-cols-2">
-                  <div>
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-white/35">
-                      Format
-                    </p>
-
-                    <p className="mt-2 text-sm text-white/75">
-                      {track.frequency}
-                    </p>
-                  </div>
-
-                  <div>
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-white/35">
-                      Estimated program
-                    </p>
-
-                    <p className="mt-2 text-sm text-white/75">
-                      {track.timeline}
-                    </p>
-                  </div>
-
-                  <div className="sm:col-span-2">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-white/35">
-                      Program fee
-                    </p>
-
-                    <p className="mt-2 text-2xl font-semibold text-[#d7f36a]">
-                      {track.total}
-                    </p>
-                  </div>
-
-                  <div>
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-white/35">
-                      Deposit
-                    </p>
-
-                    <p className="mt-2 text-sm text-white/75">
-                      {track.deposit}
-                    </p>
-                  </div>
-
-                  <div>
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-white/35">
-                      Monthly payment
-                    </p>
-
-                    <p className="mt-2 text-sm text-white/75">
-                      {track.monthly}
-                    </p>
-                  </div>
-                </div>
-
-                {/* RESULTS */}
-                <div className="mt-7 border-t border-white/10 pt-6">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#78d8ca]">
-                    Expected learning results
-                  </p>
-
-                  <ul className="mt-4 space-y-3">
-                    {track.results.map((result) => (
-                      <li
-                        key={result}
-                        className="flex gap-3 text-sm leading-6 text-white/55"
-                      >
-                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#78d8ca]" />
-                        <span>{result}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </article>
-            ))}
-          </div>
+          <LearningTrackSelector tracks={tracks} />
 
           {/* PROGRAM FEE NOTE */}
           <div className="mt-8 border-t border-white/10 pt-6">
@@ -601,7 +506,7 @@ export default function LearnPage() {
               </h2>
             </div>
 
-            <div className="grid border-t border-white/15 sm:grid-cols-2">
+            <div className="grid  border-t border-white/15 sm:grid-cols-2">
               {audiences.map(([title, description]) => (
                 <article
                   key={title}
@@ -769,7 +674,7 @@ export default function LearnPage() {
                 Build the skill. Build the project. Build the confidence.
               </h2>
 
-              <p className="mt-7 max-w-2xl text-lg leading-8 text-white/50">
+              <p className="mt-7 max-w-2xl text-lg leading-8 text-white/70">
                 Tell me what you want to learn, where you are currently and
                 what you want to achieve. We can define the right learning
                 path together.

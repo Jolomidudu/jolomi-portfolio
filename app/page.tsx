@@ -208,9 +208,12 @@ export default function Home() {
       </nav>
 
       <div className="fixed bottom-6 right-6 z-40 flex flex-col items-center gap-2 md:bottom-6">
-        <span className="-translate-y-[30px] rotate-90 text-[10px] font-bold uppercase tracking-[0.12em] text-[#12211f] md:-translate-y-[15px]">
+        <span className="-translate-y-[30px] rotate-90 text-[10px] font-bold uppercase tracking-[0.12em] text-[#5d5a5a] md:-translate-y-[15px]">
           SCROLL
         </span>
+
+        
+        
         <button
           type="button"
           aria-label={atPageEnd ? "Scroll up" : "Scroll down"}
@@ -359,8 +362,8 @@ export default function Home() {
   <div className="mb-16 grid gap-8 md:grid-cols-[1fr_0.45fr] md:items-end">
 
     <div>
-      <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#00A9A5]">
-        Deliveries
+      <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#751a1a]">
+        Delivered
       </p>
 
       <h3 className="mt-5 text-[1.8rem] font-semibold tracking-[-0.05em] md:text-[2.25rem] lg:text-[2.7rem]">
@@ -393,10 +396,10 @@ export default function Home() {
 
         <div className="flex items-center justify-between gap-3 px-4 py-4">
           <div>
-            <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-black/45">
+            <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-[#751a1a]/90">
               Featured
             </p>
-            <h3 className="mt-2 text-xl font-semibold tracking-tight text-[#111111]">
+            <h3 className="mt-2 text-1xl font-semibold tracking-tight text-[#111111]">
               {project.name}
             </h3>
           </div>
@@ -419,9 +422,9 @@ export default function Home() {
     
     <a
       href="/projects"
-      className="inline-flex items-center justify-center rounded-full border border-black bg-[#343434] px-6 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-[#ffffff] transition-colors hover:bg-[#111111] hover:text-white"
+      className="inline-flex items-center justify-center rounded-full border border-black bg-[#343434] px-6 py-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#ffffff] transition-colors hover:bg-[#111111] hover:text-white"
     >
-      See More
+      VIEW FULL CATALOG
     </a>
   </div>
 </section>
@@ -440,7 +443,7 @@ export default function Home() {
       Expertise
     </p>
 
-    <h2 className="mt-5 max-w-5xl text-1xl font-semibold leading-[0.95] tracking-[-0.05em] md:text-6xl lg:text-5xl">
+    <h2 className="mt-5 max-w-5xl text-2xl font-semibold leading-[0.95] tracking-[-0.05em] md:text-6xl lg:text-5xl">
       Technology,
       <span className="text-[#00A9A5]">
         {" "}engineered and led.
@@ -623,14 +626,14 @@ export default function Home() {
 
         <div className="max-w-6xl">
 
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#00A9A5]">
+          <p className="text-md font-bold uppercase tracking-[0.2em] text-[#751a1a]">
             GET IN TOUCH
           </p>
 
           <h2 className="mt-6 text-[25px] font-bold leading-[1.2] tracking-[-0.01em] md:text-[35px]">
-            I love to hear from you. 
+            I really love to hear from you. 
             <br />
-            <span className="text-[#00A9A5]">
+            <span className="text-[#751a1a]">
              Whether you have a question or want to collaborate, shoot me a message.
             </span>
           </h2>
