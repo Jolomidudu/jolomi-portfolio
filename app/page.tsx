@@ -133,7 +133,7 @@ export default function Home() {
             href="/blog"
             className="transition-opacity hover:opacity-50"
           >
-            MY JOURNAL
+            MY BLOG
           </Link>
 
           <a

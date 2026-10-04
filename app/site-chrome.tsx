@@ -10,7 +10,7 @@ const links = [
   ["PROJECTS", "/projects"],
   ["SERVICES", "/services"],
   ["LEARN", "/learn"],
-  ["JOURNAL", "/blog"],
+  ["BLOG", "/blog"],
   ["CONTACT", "/contact"],
 ] as const;
 
@@ -86,7 +86,7 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
               <span className="h-2 w-2 rounded-full bg-[#78d8ca]" />
               {menuView === "main" ? "Menu / Available for Hire" : "About / Explore"}
             </div>
-            <nav className="flex flex-1 flex-col" aria-label="Mobile navigation">
+            <nav className="min-h-0 flex-1 flex-col overflow-y-auto" aria-label="Mobile navigation">
               {menuView === "main" ? (
                 <>
                   <Link href="/" onClick={() => setMenuOpen(false)} className="group flex items-center justify-between border-y border-white/15 py-4 hover:text-[#78d8ca]">
@@ -118,10 +118,7 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
                 </>
               )}
             </nav>
-            <div className="mt-10 flex items-end justify-between border-t border-white/15 pt-5 text-xs uppercase tracking-[0.15em] text-white/45">
-              <span>Lagos / Nigeria</span>
-              <Link href="/services#booking" onClick={() => setMenuOpen(false)} className="text-[#78d8ca]">Start a project ↗</Link>
-            </div>
+           
           </div>
         )}
       </header>

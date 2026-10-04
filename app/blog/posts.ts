@@ -43,7 +43,7 @@ export async function getPublishedPost(slug: string): Promise<BlogPost | undefin
 			if (result.post) return normalizePost(result.post);
 		}
 	} catch {
-		// The seeded articles keep the public journal available if the API is offline.
+		// The seeded articles keep the public blogs available if the API is offline.
 	}
 
 	return seededPosts.find((post) => post.slug === slug);

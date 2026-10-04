@@ -175,7 +175,7 @@ export default function BlogManager() {
       <section className="border-b border-black/10 bg-white lg:border-b-0 lg:border-r">
         <div className="border-b border-black/10 p-4 sm:p-5">
           <div className="flex items-baseline justify-between gap-3">
-            <h2 className="font-semibold">Journal posts</h2>
+            <h2 className="font-semibold">blog posts</h2>
             <span className="text-xs text-black/45">{posts.length} total</span>
           </div>
           <button

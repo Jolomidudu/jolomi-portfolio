@@ -173,7 +173,7 @@ export default function EnquiryPortal() {
       <header className="flex flex-wrap items-center justify-between gap-4 border-b border-black/10 bg-white px-5 py-4 sm:px-8">
         <div>
           <Link href="/" className="text-xs font-semibold uppercase tracking-[0.15em] text-[#008e8a]">Jolomi Dudu</Link>
-          <h1 className="mt-1 text-xl font-semibold">{activeSection === "enquiries" ? "Project enquiries" : "Journal posts"}</h1>
+          <h1 className="mt-1 text-xl font-semibold">{activeSection === "enquiries" ? "Project enquiries" : "Blog posts"}</h1>
         </div>
         <nav aria-label="Portal sections" className="flex items-center gap-1 border-b border-black/10">
           <button
