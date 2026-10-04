@@ -1,11 +1,14 @@
 import { NextResponse } from "next/server";
 import { callRailway } from "../../portal/railway";
 
-function redirect(request: Request, result: "success" | "failed", reference?: string, isLearning = false) {
+function redirect(request: Request, result: "success" | "failed", reference?: string, isLearning = false, accountCreated = false) {
   const url = new URL(result === "success" ? "/payment/success" : isLearning ? "/learn" : "/services", request.url);
   if (result === "success" && reference) {
     url.searchParams.set("reference", reference);
-    if (isLearning) url.searchParams.set("type", "learning");
+    if (isLearning) {
+      url.searchParams.set("type", "learning");
+      url.searchParams.set("accountCreated", accountCreated ? "1" : "0");
+    }
   } else if (result === "failed") {
     url.searchParams.set("payment", result);
   }
@@ -37,7 +40,9 @@ export async function GET(request: Request) {
           email: data.data?.customer?.email,
         }),
       });
+      const confirmationData = await confirmation.json().catch(() => ({}));
       if (!confirmation.ok) return redirect(request, "failed", undefined, true);
+      return redirect(request, "success", reference, isLearning, Boolean(confirmationData?.accountCreated || confirmationData?.account));
     }
 
     return redirect(request, "success", reference, isLearning);

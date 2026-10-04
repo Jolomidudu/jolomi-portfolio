@@ -1,4 +1,4 @@
-import { createHmac, timingSafeEqual } from "node:crypto";
+import { createHmac, pbkdf2Sync, randomBytes, timingSafeEqual } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import express from "express";
 import { neon } from "@neondatabase/serverless";
@@ -54,6 +54,80 @@ function safeEqual(left, right) {
   const leftBuffer = Buffer.from(String(left));
   const rightBuffer = Buffer.from(String(right));
   return leftBuffer.length === rightBuffer.length && timingSafeEqual(leftBuffer, rightBuffer);
+}
+
+function hashPassword(password) {
+  const salt = randomBytes(16).toString("hex");
+  const hash = pbkdf2Sync(password, salt, 120000, 32, "sha256").toString("hex");
+  return `${salt}:${hash}`;
+}
+
+function verifyPassword(password, storedHash) {
+  if (typeof password !== "string" || typeof storedHash !== "string") return false;
+  const [salt, hash] = storedHash.split(":");
+  if (!salt || !hash) return false;
+  const expected = pbkdf2Sync(password, salt, 120000, 32, "sha256").toString("hex");
+  return safeEqual(expected, hash);
+}
+
+function generateLearnerPassword() {
+  return randomBytes(12).toString("base64url").replace(/[-_]/g, "").slice(0, 12);
+}
+
+function createLearnerSession(account) {
+  const payload = Buffer.from(JSON.stringify({
+    id: account.id,
+    email: account.email,
+    fullName: account.full_name ?? account.fullName,
+    expiresAt: Math.floor(Date.now() / 1000) + 60 * 60 * 12,
+  })).toString("base64url");
+  const signature = createHmac("sha256", process.env.LEARNING_SESSION_SECRET || process.env.PORTAL_SESSION_SECRET || "jolomi-learning-dev-secret")
+    .update(payload)
+    .digest("base64url");
+  return `${payload}.${signature}`;
+}
+
+function getLearnerSession(token) {
+  if (typeof token !== "string") return null;
+  const [payload, signature, extra] = token.split(".");
+  if (!payload || !signature || extra) return null;
+
+  const expected = createHmac("sha256", process.env.LEARNING_SESSION_SECRET || process.env.PORTAL_SESSION_SECRET || "jolomi-learning-dev-secret")
+    .update(payload)
+    .digest("base64url");
+  if (!safeEqual(signature, expected)) return null;
+
+  try {
+    const session = JSON.parse(Buffer.from(payload, "base64url").toString("utf8"));
+    if (!session.email || !session.id || session.expiresAt <= Math.floor(Date.now() / 1000)) return null;
+    return session;
+  } catch {
+    return null;
+  }
+}
+
+async function ensureLearningAccount(enrollmentId, fullName, email) {
+  const normalizedEmail = String(email).trim().toLowerCase();
+  const accountRecord = await sql`
+    SELECT id, enrollment_id AS "enrollmentId", full_name AS "fullName", email, password_hash AS "passwordHash", status
+    FROM learning_accounts
+    WHERE enrollment_id = ${enrollmentId}
+    LIMIT 1
+  `;
+  const [existingAccount] = accountRecord;
+  if (existingAccount) {
+    return { account: existingAccount, isNew: false };
+  }
+
+  const password = generateLearnerPassword();
+  const passwordHash = hashPassword(password);
+  const [created] = await sql`
+    INSERT INTO learning_accounts (enrollment_id, full_name, email, password_hash, status)
+    VALUES (${enrollmentId}, ${fullName}, ${normalizedEmail}, ${passwordHash}, 'active')
+    RETURNING id, enrollment_id AS "enrollmentId", full_name AS "fullName", email, status
+  `;
+
+  return { account: created, password, isNew: true };
 }
 
 function requireInternalKey(request, response, next) {
@@ -272,6 +346,41 @@ app.post("/api/auth/login", (request, response) => {
   return response.json({ token: createSession(adminEmail), expiresIn: sessionLifetimeSeconds });
 });
 
+app.post("/api/learning/login", async (request, response) => {
+  const email = typeof request.body?.email === "string" ? request.body.email.trim().toLowerCase() : "";
+  const password = typeof request.body?.password === "string" ? request.body.password : "";
+
+  if (!email || !password) {
+    return response.status(400).json({ error: "Enter your learning email and password." });
+  }
+
+  try {
+    const [account] = await request.sql`
+      SELECT id, full_name AS "fullName", email, password_hash AS "passwordHash", status
+      FROM learning_accounts
+      WHERE email = ${email}
+      LIMIT 1
+    `;
+
+    if (!account || account.status !== "active" || !verifyPassword(password, account.passwordHash)) {
+      return response.status(401).json({ error: "Your learning email or password is incorrect." });
+    }
+
+    return response.json({
+      token: createLearnerSession(account),
+      expiresIn: 60 * 60 * 12,
+      user: {
+        id: account.id,
+        fullName: account.fullName,
+        email: account.email,
+      },
+    });
+  } catch (error) {
+    console.error("Failed to sign in learner account:", error);
+    return response.status(500).json({ error: "The learning portal is unavailable. Please try again later." });
+  }
+});
+
 app.post("/api/enquiries", async (request, response) => {
   const enquiry = readProjectRequest(request.body);
   if (!enquiry) return response.status(400).json({ error: "Please check the project enquiry details." });
@@ -422,7 +531,7 @@ app.post("/api/learning/payments/:reference/confirm", async (request, response) 
   try {
     const [payment] = await request.sql`
       SELECT p.id, p.amount, p.status AS "paymentStatus", e.id AS "enrollmentId",
-             e.payment_plan AS "paymentPlan", e.email
+             e.payment_plan AS "paymentPlan", e.email, e.full_name AS "fullName"
       FROM learning_enrollment_payments p
       JOIN learning_enrollments e ON e.id = p.enrollment_id
       WHERE p.reference = ${reference} AND e.id = ${enrollmentId}
@@ -443,7 +552,15 @@ app.post("/api/learning/payments/:reference/confirm", async (request, response) 
       SET status = ${payment.paymentPlan === "full" ? "enrolled" : "awaiting_balance"}, updated_at = NOW()
       WHERE id = ${enrollmentId}
     `;
-    return response.json({ confirmed: true, enrollmentId });
+
+    const accountResult = await ensureLearningAccount(Number(enrollmentId), payment.fullName || "Learner", payment.email);
+    return response.json({
+      confirmed: true,
+      enrollmentId,
+      accountCreated: accountResult.isNew,
+      account: accountResult.account,
+      temporaryPassword: accountResult.password,
+    });
   } catch (error) {
     console.error("Failed to confirm learning payment:", error);
     return response.status(500).json({ error: "Unable to confirm this payment." });
@@ -626,6 +743,18 @@ async function start() {
       status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'succeeded', 'failed')),
       paid_at TIMESTAMPTZ,
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  await sql`
+    CREATE TABLE IF NOT EXISTS learning_accounts (
+      id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+      enrollment_id BIGINT NOT NULL UNIQUE REFERENCES learning_enrollments(id),
+      full_name TEXT NOT NULL,
+      email TEXT NOT NULL UNIQUE,
+      password_hash TEXT NOT NULL,
+      status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'disabled')),
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
   `;
 

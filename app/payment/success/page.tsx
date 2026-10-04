@@ -7,13 +7,14 @@ export const metadata: Metadata = {
 };
 
 type PaymentSuccessPageProps = {
-  searchParams: Promise<{ reference?: string | string[]; type?: string | string[] }>;
+  searchParams: Promise<{ reference?: string | string[]; type?: string | string[]; accountCreated?: string | string[] }>;
 };
 
 export default async function PaymentSuccessPage({ searchParams }: PaymentSuccessPageProps) {
   const params = await searchParams;
   const reference = typeof params.reference === "string" ? params.reference : undefined;
   const isLearning = params.type === "learning";
+  const accountCreated = typeof params.accountCreated === "string" ? params.accountCreated === "1" : false;
 
   return (
     <div className="min-h-screen bg-[#f5f5f0] text-[#111111]">
@@ -44,7 +45,9 @@ export default async function PaymentSuccessPage({ searchParams }: PaymentSucces
               </h1>
               <p className="mt-4 max-w-md text-base leading-7 text-white/70">
                 {isLearning
-                  ? "Paystack has verified your payment and your program registration is received. Tutor assignment and your learning schedule will be confirmed separately."
+                  ? accountCreated
+                    ? "Paystack has verified your payment and your learning account is ready. Sign in with the email used for registration and the temporary password assigned to your learner profile."
+                    : "Paystack has verified your payment and your program registration is received. Tutor assignment and your learning schedule will be confirmed separately."
                   : "Paystack has verified your payment. Thank you for choosing to work with me; I&apos;ll be in touch about the next steps."}
               </p>
             </div>
@@ -55,7 +58,9 @@ export default async function PaymentSuccessPage({ searchParams }: PaymentSucces
                 <h2 className="mt-3 text-2xl font-semibold leading-tight">{isLearning ? "Your learning journey is getting started." : "A good next step starts here."}</h2>
                 <p className="mt-3 text-sm leading-6 text-black/60">
                   {isLearning
-                    ? "Keep your payment reference for your records. We will follow up about tutor assignment and scheduling."
+                    ? accountCreated
+                      ? "Your learner profile is active. Use the login page to continue into your learning dashboard and track your course progress."
+                      : "Keep your payment reference for your records. We will follow up about tutor assignment and scheduling."
                     : "Take a look through the services and find what you'd like to build next."}
                 </p>
               </div>
@@ -67,8 +72,8 @@ export default async function PaymentSuccessPage({ searchParams }: PaymentSucces
                 </div>
               )}
 
-              <Link href={isLearning ? "/learn" : "/services"} className="inline-flex min-h-14 items-center justify-between gap-5 bg-[#163d34] px-5 py-4 text-sm font-semibold text-white transition-colors hover:bg-[#00A9A5]">
-                {isLearning ? "Return to learning programs" : "Check out my services"}
+              <Link href={isLearning ? (accountCreated ? "/learn/login" : "/learn") : "/services"} className="inline-flex min-h-14 items-center justify-between gap-5 bg-[#163d34] px-5 py-4 text-sm font-semibold text-white transition-colors hover:bg-[#00A9A5]">
+                {isLearning ? (accountCreated ? "Open learner sign in" : "Return to learning programs") : "Check out my services"}
                 <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5 fill-none stroke-current stroke-2">
                   <path d="M5 12h14m-6-6 6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>

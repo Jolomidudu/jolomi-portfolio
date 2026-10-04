@@ -161,9 +161,13 @@ export default function LearningRegistration() {
         type="button"
         onClick={openForm}
         aria-haspopup="dialog"
-        className="inline-flex min-h-14 shrink-0 items-center justify-between gap-8 bg-[#d7f36a] px-6 py-4 text-sm font-semibold text-[#163d34] transition-colors hover:bg-white"
+        aria-label="Start learning registration"
+        className="fixed bottom-[200px] right-5 z-50 flex h-20 w-20 items-center justify-center rounded-full bg-[#d7f36a] text-[#2f2f2f] shadow-[0_12px_32px_rgba(0,0,0,0.16)] transition-transform duration-200 hover:scale-105 sm:right-8"
       >
-        Start Up <span aria-hidden="true">↗</span>
+        <span className="flex flex-col items-center text-[10px] font-semibold uppercase leading-[1.05] tracking-[0.12em]">
+          <span>Start</span>
+          <span>Up</span>
+        </span>
       </button>
 
       {isOpen && (
