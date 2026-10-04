@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import SiteChrome from "../site-chrome";
 
 export const metadata: Metadata = {
@@ -189,9 +190,7 @@ export default function AboutPage() {
                   className="inline-flex min-h-12 items-center bg-[#163d34] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#008c87]"
                 >
                   MY SERVICE CATALOG
-                  <span aria-hidden="true" className="ml-3">
-                    ↗
-                  </span>
+                  <ArrowUpRight aria-hidden="true" className="ml-3 h-4 w-4" />
                 </Link>
 
                 <Link
@@ -405,8 +404,8 @@ export default function AboutPage() {
               href="/projects"
               className="inline-flex items-center gap-2 text-sm font-semibold hover:text-[#008c87]"
             >
-              MY PROJECT CATALOG
-              <span aria-hidden="true">↗</span>
+              <span>MY PROJECT CATALOG</span>
+              <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
             </Link>
           </div>
 
@@ -447,10 +446,10 @@ export default function AboutPage() {
 
             <Link
               href="https://calendly.com/jollofdudu/let-s-discuss-your-project"
-              className="inline-flex min-h-12 items-center justify-between gap-8 bg-[#d7f36a] px-5 py-3 text-sm font-semibold text-[#163d34] transition-colors hover:bg-white"
+              className="inline-flex min-h-12 items-center justify-between gap-3 bg-[#d7f36a] px-5 py-3 text-sm font-semibold text-[#163d34] transition-colors hover:bg-white"
             >
-              Start a conversation
-              <span aria-hidden="true">↗</span>
+              <span>Start a conversation</span>
+              <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
             </Link>
           </div>
         </section>

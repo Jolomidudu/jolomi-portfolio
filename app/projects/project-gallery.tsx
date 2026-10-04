@@ -96,7 +96,7 @@ export default function ProjectGallery({ projects }: { projects: readonly Projec
                   aria-label={`View ${project.name}`}
                   className="flex h-9 w-9 items-center justify-center rounded-full border border-black/10 bg-[#f5f5f0] text-base text-[#111111] transition-colors hover:bg-[#111111] hover:text-white"
                 >
-                  ↗
+                  <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
                 </a>
               </div>
 

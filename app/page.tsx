@@ -3,6 +3,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowDown, ArrowLeft, ArrowUp, ArrowUpRight, ChevronDown, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import ProjectRequestLauncher from "./projects/project-request-launcher";
 const homepageProjects = [
@@ -104,7 +105,8 @@ export default function Home() {
 
           <details className="group relative">
             <summary className="flex cursor-pointer list-none items-center gap-1 transition-opacity hover:opacity-50">
-              ABOUT <span aria-hidden="true" className="text-base transition-transform group-open:rotate-180">⌄</span>
+              <span>ABOUT</span>
+              <ChevronDown aria-hidden="true" className="h-4 w-4 transition-transform group-open:rotate-180" />
             </summary>
             <div className="absolute left-0 top-full z-[60] mt-4 min-w-48 border border-black/10 bg-[#f5f5f0] p-2 text-[#111111] shadow-xl">
               {aboutLinks.map(([label, href]) => (
@@ -199,7 +201,7 @@ export default function Home() {
                         <span className="text-xs font-normal text-white/35">0{index + 1}</span>
                         <span className="text-[1.3125rem] font-semibold tracking-[-0.04em]">{label}</span>
                       </span>
-                      <span aria-hidden="true" className="text-xl text-white/35 transition-transform group-hover:translate-x-1 group-hover:text-[#78d8ca]">↗</span>
+                      <ArrowUpRight aria-hidden="true" className="h-5 w-5 text-white/35 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#78d8ca]" />
                     </a>
                   ))}
                   <button
@@ -211,11 +213,11 @@ export default function Home() {
                       <span className="text-xs font-normal text-white/35">02</span>
                       <span className="text-[1.3125rem] font-semibold tracking-[-0.04em]">ABOUT</span>
                     </span>
-                    <span aria-hidden="true" className="text-3xl leading-none text-white/35 transition-transform group-hover:translate-x-1 group-hover:text-[#78d8ca]">›</span>
+                    <ChevronRight aria-hidden="true" className="h-6 w-6 text-white/35 transition-transform group-hover:translate-x-1 group-hover:text-[#78d8ca]" />
                   </button>
                   {[
                     ["SERVICES", "/services"],
-                    ["GET TO LEARN", "/learn"],
+                    ["SKILL UP", "/learn"],
                     ["MY BLOG", "/blog"],
                     ["CONTACT", "/contact"],
                   ].map(([label, href], index) => (
@@ -229,7 +231,7 @@ export default function Home() {
                         <span className="text-xs font-normal text-white/35">0{index + 3}</span>
                         <span className="text-[1.3125rem] font-semibold tracking-[-0.04em]">{label}</span>
                       </span>
-                      <span aria-hidden="true" className="text-xl text-white/35 transition-transform group-hover:translate-x-1 group-hover:text-[#78d8ca]">↗</span>
+                      <ArrowUpRight aria-hidden="true" className="h-5 w-5 text-white/35 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#78d8ca]" />
                     </a>
                   ))}
                 </>
@@ -240,7 +242,7 @@ export default function Home() {
                     onClick={() => setMenuView("main")}
                     className="mb-5 flex items-center gap-3 self-start py-2 text-sm font-semibold uppercase tracking-[0.12em] text-white/65 transition-colors hover:text-[#78d8ca]"
                   >
-                    <span aria-hidden="true" className="text-xl">←</span> Main menu
+                    <ArrowLeft aria-hidden="true" className="h-5 w-5" /> Main menu
                   </button>
                   {aboutLinks.map(([label, href], index) => (
                     <a
@@ -253,7 +255,7 @@ export default function Home() {
                         <span className="text-xs font-normal text-white/35">0{index + 1}</span>
                         <span className="text-[1.3125rem] font-semibold tracking-[-0.04em]">{label}</span>
                       </span>
-                      <span aria-hidden="true" className="text-xl text-white/35 transition-transform group-hover:translate-x-1 group-hover:text-[#78d8ca]">↗</span>
+                      <ArrowUpRight aria-hidden="true" className="h-5 w-5 text-white/35 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#78d8ca]" />
                     </a>
                   ))}
                 </>
@@ -262,7 +264,10 @@ export default function Home() {
 
             <div className="mt-10 flex items-end justify-between border-t border-white/15 pt-5 text-xs uppercase tracking-[0.15em] text-white/45">
               <span>Lagos / Nigeria</span>
-              <Link href="/services#booking" onClick={() => setMenuOpen(false)} className="text-[#78d8ca]">Start a project ↗</Link>
+              <Link href="/services#booking" onClick={() => setMenuOpen(false)} className="inline-flex items-center gap-1 text-[#78d8ca]">
+                <span>Start a project</span>
+                <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
+              </Link>
             </div>
           </div>
         )}
@@ -287,7 +292,7 @@ export default function Home() {
           }
           className="-translate-y-[10px] flex h-10 w-10 animate-bounce items-center justify-center rounded-full bg-[#374151] text-base text-white shadow-lg transition-colors hover:bg-[#1f2937] md:translate-y-0 md:h-20 md:w-20 md:text-xl"
         >
-          {atPageEnd ? "↑" : "↓"}
+          {atPageEnd ? <ArrowUp aria-hidden="true" className="h-5 w-5" /> : <ArrowDown aria-hidden="true" className="h-5 w-5" />}
         </button>
       </div>
 
@@ -393,7 +398,7 @@ export default function Home() {
                     Projects
                   </span>
                   <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/30 bg-white/60 text-[10px] text-[#111111] transition-all duration-300 group-hover:bg-white/80 group-hover:text-[#3a3a3a]">
-                    ↓
+                    <ArrowDown aria-hidden="true" className="h-4 w-4" />
                   </span>
                 </span>
               </a>
@@ -473,7 +478,7 @@ export default function Home() {
             aria-label={`View ${project.name}`}
             className="flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-[#f5f5f0] text-lg text-[#111111] transition-colors hover:bg-[#111111] hover:text-white"
           >
-            ↗
+            <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
           </a>
         </div>
       </article>
@@ -715,7 +720,7 @@ export default function Home() {
     
 
             <span className="flex h-14 w-14 items-center justify-center rounded-full bg-[#343434] text-white transition-all group-hover:bg-black group-hover:text-white">
-              ↗
+              <ArrowUpRight aria-hidden="true" className="h-5 w-5" />
             </span>
           </a>
         </div>

@@ -27,7 +27,8 @@ export default function ServicesPage() {
                 <ServicePrice nigeria={service.nigeria} international={service.international} />
               </div>
               <Link href={`/services/${service.slug}`} className="mt-auto inline-flex w-fit items-center gap-2 rounded-lg bg-gray-200 px-3 py-2 text-xs font-semibold text-[#343434] transition-colors hover:bg-[#E8DCC8] sm:text-sm">
-                HAVE A LOOK <span aria-hidden="true">↗</span>
+                <span>HAVE A LOOK</span>
+                <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
               </Link>
             </article>
           ))}

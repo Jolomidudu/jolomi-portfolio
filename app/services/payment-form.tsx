@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowUpRight } from "lucide-react";
 import { useEffect, useState, type FormEvent } from "react";
 
 type Service = {
@@ -139,8 +140,9 @@ export default function PaymentForm({ services }: { services: Service[] }) {
 
               <div className="mt-6 flex flex-col gap-4 border-t border-black/10 pt-5 sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-sm text-black/55">Payment total: <strong className="text-[#111111]">₦{paymentAmount.toLocaleString()}</strong></p>
-                <button type="submit" disabled={loading || (paymentType === "deposit" ? !selectedService : !customAmountIsValid)} className="inline-flex w-fit bg-[#111111] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#008c87] disabled:cursor-wait disabled:opacity-50">
-                  {loading ? "Opening checkout..." : "Continue to Paystack ↗"}
+                <button type="submit" disabled={loading || (paymentType === "deposit" ? !selectedService : !customAmountIsValid)} className="inline-flex w-fit items-center gap-2 bg-[#111111] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#008c87] disabled:cursor-wait disabled:opacity-50">
+                  <span>{loading ? "Opening checkout..." : "Continue to Paystack"}</span>
+                  <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
                 </button>
               </div>
               {status && <p role="alert" className="mt-4 text-sm text-red-700">{status}</p>}

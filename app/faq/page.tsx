@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import SiteChrome from "../site-chrome";
 
 import FAQCategorySelector from "./faq-category-selector";
@@ -269,9 +270,10 @@ export default function FAQPage() {
 
                 <Link
                   href="/contact"
-                  className="mt-7 inline-flex rounded-full bg-[#111111] px-6 py-4 text-sm font-semibold text-white transition-colors hover:bg-[#00A9A5]"
+                  className="mt-7 inline-flex items-center gap-2 rounded-full bg-[#111111] px-6 py-4 text-sm font-semibold text-white transition-colors hover:bg-[#00A9A5]"
                 >
-                  Make an enquiry ↗
+                  <span>Make an enquiry</span>
+                  <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
                 </Link>
               </div>
             </div>
@@ -302,10 +304,10 @@ export default function FAQPage() {
 
             <Link
               href="/contact"
-              className="inline-flex min-h-14 shrink-0 items-center justify-between gap-8 bg-[#d7f36a] px-6 py-4 text-sm font-semibold text-[#163d34] transition-colors hover:bg-white"
+              className="inline-flex min-h-14 shrink-0 items-center justify-between gap-3 bg-[#d7f36a] px-6 py-4 text-sm font-semibold text-[#163d34] transition-colors hover:bg-white"
             >
-              Start a conversation
-              <span aria-hidden="true">↗</span>
+              <span>Start a conversation</span>
+              <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
             </Link>
           </div>
         </section>

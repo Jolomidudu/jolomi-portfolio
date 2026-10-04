@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowDownRight } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import SiteChrome from "../site-chrome";
 import LearningTrackSelector from "./learning-track-selector";
 import LearningRegistration from "./learning-registration";
@@ -548,9 +548,10 @@ export default function LearnPage() {
 
             <Link
               href="mailto:jollofdudu@gmail.com?subject=Corporate%20Technology%20Training"
-              className="inline-flex shrink-0 rounded-full bg-[#111111] px-6 py-4 text-sm font-semibold text-white transition-colors hover:bg-[#163d34]"
+              className="inline-flex shrink-0 items-center gap-2 rounded-full bg-[#111111] px-6 py-4 text-sm font-semibold text-white transition-colors hover:bg-[#163d34]"
             >
-              Discuss team training ↗
+              <span>Discuss team training</span>
+              <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
             </Link>
           </div>
 

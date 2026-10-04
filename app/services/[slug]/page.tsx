@@ -77,7 +77,8 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
                 <p className="mt-4 leading-7 font-semibold text-black/60">Every engagement starts with a conversation to confirm what you need, what is included and the right timeline.</p>
               </div>
               <a href="https://calendly.com/jollofdudu/let-s-discuss-your-project" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 bg-[#343434] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#008c87]">
-                Discuss this service <span aria-hidden="true">↗</span>
+                <span>Discuss this service</span>
+                <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
               </a>
             </div>
           </div>

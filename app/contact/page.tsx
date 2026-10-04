@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ArrowUpRight, ChevronDown } from "lucide-react";
 import SiteChrome from "../site-chrome";
 
 export const metadata: Metadata = {
@@ -154,7 +155,7 @@ export default function ContactPage() {
                     rel="noreferrer"
                     className="mt-2 inline-flex items-center gap-2 text-lg font-semibold transition-colors hover:text-[#008c87]"
                   >
-                    Book a conversation <span>↗</span>
+                    Book a conversation <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
                   </a>
                 </div>
 
@@ -184,7 +185,7 @@ export default function ContactPage() {
                       rel="noreferrer"
                       className="text-sm font-semibold hover:text-[#008c87]"
                     >
-                      LinkedIn ↗
+                      LinkedIn <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
                     </a>
 
                     <a
@@ -193,7 +194,7 @@ export default function ContactPage() {
                       rel="noreferrer"
                       className="text-sm font-semibold hover:text-[#008c87]"
                     >
-                      GitHub ↗
+                      GitHub <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
                     </a>
                   </div>
                 </div>
@@ -327,9 +328,7 @@ export default function ContactPage() {
                         </option>
                       ))}
                     </select>
-                    <span aria-hidden="true" className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 text-lg text-black/50">
-                      ⌄
-                    </span>
+                    <ChevronDown aria-hidden="true" className="pointer-events-none absolute right-0 top-1/2 h-4 w-4 -translate-y-1/2 text-black/50" />
                   </div>
                 </div>
 
@@ -363,9 +362,7 @@ export default function ContactPage() {
                         </option>
                         <option value="not-sure">Not sure yet</option>
                       </select>
-                      <span aria-hidden="true" className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 text-lg text-black/50">
-                        ⌄
-                      </span>
+                      <ChevronDown aria-hidden="true" className="pointer-events-none absolute right-0 top-1/2 h-4 w-4 -translate-y-1/2 text-black/50" />
                     </div>
                   </div>
 
@@ -394,9 +391,7 @@ export default function ContactPage() {
                         <option value="6-plus-months">6+ months</option>
                         <option value="flexible">Flexible</option>
                       </select>
-                      <span aria-hidden="true" className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 text-lg text-black/50">
-                        ⌄
-                      </span>
+                      <ChevronDown aria-hidden="true" className="pointer-events-none absolute right-0 top-1/2 h-4 w-4 -translate-y-1/2 text-black/50" />
                     </div>
                   </div>
                 </div>
@@ -446,9 +441,7 @@ export default function ContactPage() {
                       <option value="portfolio">Portfolio / Website</option>
                       <option value="other">Other</option>
                     </select>
-                    <span aria-hidden="true" className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 text-lg text-black/50">
-                      ⌄
-                    </span>
+                    <ChevronDown aria-hidden="true" className="pointer-events-none absolute right-0 top-1/2 h-4 w-4 -translate-y-1/2 text-black/50" />
                   </div>
                 </div>
 
@@ -459,7 +452,7 @@ export default function ContactPage() {
                     className="inline-flex min-h-14 items-center justify-between gap-12 bg-[#163d34] px-7 py-4 text-sm font-semibold text-white transition-colors hover:bg-[#008c87]"
                   >
                     Continue to email
-                    <span aria-hidden="true">↗</span>
+                    <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
                   </button>
 
                   <p className="mt-4 max-w-lg text-xs leading-5 text-black/40">
@@ -565,10 +558,10 @@ export default function ContactPage() {
 
               <a
                 href="mailto:jollofdudu@gmail.com"
-                className="inline-flex min-h-14 shrink-0 items-center justify-between gap-8 bg-[#d7f36a] px-6 py-4 text-sm font-semibold text-[#163d34] transition-colors hover:bg-white"
+                className="inline-flex min-h-14 shrink-0 items-center justify-between gap-3 bg-[#d7f36a] px-6 py-4 text-sm font-semibold text-[#163d34] transition-colors hover:bg-white"
               >
-                Email me
-                <span aria-hidden="true">↗</span>
+                <span>Email me</span>
+                <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
               </a>
             </div>
           </div>

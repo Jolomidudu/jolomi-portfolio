@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import SiteChrome from "../site-chrome";
 import { getPublishedPosts } from "./posts";
 
@@ -35,7 +36,8 @@ export default async function BlogPage() {
                 <h2 className="mt-16 max-w-lg text-3xl font-semibold leading-tight tracking-tight md:text-4xl">{post.title}</h2>
                 <p className="mt-4 max-w-md leading-7 text-black/60">{post.description}</p>
                 <Link href={`/blog/${post.slug}`} className="mt-6 inline-flex items-center gap-2 text-sm font-semibold underline decoration-[#00A9A5] underline-offset-4">
-                  Read more <span aria-hidden="true">↗</span>
+                  <span>Read more</span>
+                  <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
                 </Link>
               </article>
             ))}

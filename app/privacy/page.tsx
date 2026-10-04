@@ -1,5 +1,6 @@
 
 import type { Metadata } from "next";
+import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import SiteChrome from "../site-chrome";
 
 export const metadata: Metadata = {
@@ -406,10 +407,10 @@ export default function PrivacyPage() {
 
             <a
               href="mailto:jollofdudu@gmail.com?subject=Privacy%20Enquiry"
-              className="inline-flex min-h-12 shrink-0 items-center justify-between gap-8 bg-[#d7f36a] px-5 py-3 text-sm font-semibold text-[#163d34] transition-colors hover:bg-white"
+              className="inline-flex min-h-12 shrink-0 items-center justify-between gap-3 bg-[#d7f36a] px-5 py-3 text-sm font-semibold text-[#163d34] transition-colors hover:bg-white"
             >
-              Contact me
-              <span aria-hidden="true">↗</span>
+              <span>Contact me</span>
+              <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
             </a>
           </div>
         </section>

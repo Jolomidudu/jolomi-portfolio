@@ -260,10 +260,10 @@ export default function ExperiencePage() {
 
             <Link
               href="https://calendly.com/jollofdudu/let-s-discuss-your-project"
-              className="inline-flex w-fit items-center justify-center rounded-full bg-[#00A9A5] px-6 py-4 text-sm font-semibold text-white transition-transform hover:-translate-y-1"
+              className="inline-flex w-fit items-center justify-center gap-3 rounded-full bg-[#00A9A5] px-6 py-4 text-sm font-semibold text-white transition-transform hover:-translate-y-1"
             >
-              Start a conversation
-              <span className="ml-3">↗</span>
+              <span>Start a conversation</span>
+              <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
             </Link>
           </div>
         </section>
