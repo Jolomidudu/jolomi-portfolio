@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ArrowDownRight } from "lucide-react";
 import SiteChrome from "../site-chrome";
 import LearningTrackSelector from "./learning-track-selector";
 import LearningRegistration from "./learning-registration";
@@ -341,17 +342,17 @@ export default function LearnPage() {
             </h1>
 
             <div className="max-w-md">
-              <p className="text-lg leading-8 text-black/70">
+              {/* <p className="text-lg leading-8 text-black/70">
                 Private, practical mentorship for people who want more than
                 tutorials. Learn the tools, understand how professionals work
                 and build something you can actually show.
-              </p>
+              </p> */}
 
               <a
                 href="#tracks"
                 className="mt-7 inline-flex rounded-full bg-[#111111] px-6 py-4 text-sm font-semibold text-white transition-colors hover:bg-[#078f8a]"
               >
-                Explore learning tracks ↘
+                Explore learning tracks <ArrowDownRight aria-hidden="true" className="ml-2 h-4 w-4" />
               </a>
             </div>
           </div>
@@ -398,11 +399,11 @@ export default function LearnPage() {
                 Choose what you want to build your capability in.
               </h2>
 
-              <p className="max-w-sm text-md leading-6 text-[#5fe825]">
+              {/* <p className="max-w-sm text-md leading-6 text-[#5fe825]">
                 Every track can be adapted to your current level, goals and
                 project. Beginner, intermediate and professional learning
                 paths are available.
-              </p>
+              </p> */}
             </div>
           </div>
 
