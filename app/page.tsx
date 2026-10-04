@@ -383,7 +383,7 @@ export default function Home() {
               </div>
 
               <a
-                href="#project"
+                href="#projects"
                 aria-label="View projects"
                 className="group -translate-x-[10px] mt-[25px] flex w-fit items-center pl-[7px] md:mt-[30px]"
               >

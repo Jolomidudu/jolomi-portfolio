@@ -42,7 +42,7 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
           <CurrencyToggle />
         </div>
 
-        <nav className="hidden items-center gap-8 text-sm font-bold text-[#751a1a] md:flex" aria-label="Main navigation">
+        <nav className="hidden items-center gap-8 text-sm font-semibold text-[#111111] md:flex" aria-label="Main navigation">
           <Link href="/" className="transition-opacity hover:opacity-50">HOME</Link>
           <details className="group relative">
             <summary className="flex cursor-pointer list-none items-center gap-1 transition-opacity hover:opacity-50">

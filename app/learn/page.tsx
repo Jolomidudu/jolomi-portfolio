@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import SiteChrome from "../site-chrome";
 import LearningTrackSelector from "./learning-track-selector";
+import LearningRegistration from "./learning-registration";
 
 export const metadata: Metadata = {
   title: "Technology Mentorship & Training",
@@ -681,13 +682,7 @@ export default function LearnPage() {
               </p>
             </div>
 
-            <a
-              href="mailto:jollofdudu@gmail.com?subject=Technology%20Mentorship%20Enquiry"
-              className="inline-flex min-h-14 shrink-0 items-center justify-between gap-8 bg-[#d7f36a] px-6 py-4 text-sm font-semibold text-[#163d34] transition-colors hover:bg-white"
-            >
-              Book a learning session
-              <span aria-hidden="true">↗</span>
-            </a>
+            <LearningRegistration />
           </div>
         </section>
       </main>

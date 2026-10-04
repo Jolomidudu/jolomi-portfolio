@@ -42,7 +42,7 @@ const projects = [
   {
     name: "Kids College",
     category: "Web App",
-    image: "/images/projects/kidscollege-mckp.png",
+    image: "/images/projects/kidscollege.jpg",
     alt: "School management platform dashboard",
     href: "https://kcbn.vercel.app",
     description:
@@ -52,7 +52,7 @@ const projects = [
   {
     name: "Lovenorth",
     category: "Web App",
-    image: "/images/projects/lovenorth-mckp.png",
+    image: "/images/projects/loven.jpg",
     alt: "Lovenorth dating platform",
     href: "https://lovenorth.vercel.app",
     description:
@@ -110,11 +110,11 @@ const projects = [
     stacks: ["Flutter"],
   },
   {
-    name: "Rideyroute",
+    name: "Routyride",
     category: "Web & Mobile",
     image: "/images/projects/routyride.jpg",
     alt: "Car ride sharing platform",
-    href: "https://rideyroute.vercel.app",
+    href: "https://routyride.vercel.app",
     description:
       "A car ride hailing platform designed to help people find rides, connect with drivers and enjoy seamless travel experiences.",
     stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "Flutter"],

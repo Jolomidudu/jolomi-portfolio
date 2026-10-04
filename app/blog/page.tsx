@@ -4,7 +4,7 @@ import SiteChrome from "../site-chrome";
 import { getPublishedPosts } from "./posts";
 
 export const metadata: Metadata = {
-  title: "Journal",
+  title: "Blog",
   description: "Notes on business, technology, lifestyle and finance from Jolomi Dudu.",
 };
 
@@ -17,7 +17,7 @@ export default async function BlogPage() {
     <SiteChrome>
       <main className="min-h-screen bg-[#f5f5f0] text-[#111111]">
         <section className="px-6 pb-20 pt-20 md:px-12 md:pb-28 md:pt-28 lg:px-16">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#00A9A5]">The journal</p>
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#00A9A5]">The blog</p>
           <div className="mt-6 grid gap-10 lg:grid-cols-[1fr_0.65fr] lg:items-end">
             <h1 className="max-w-4xl text-6xl font-semibold leading-[0.9] tracking-[-0.06em] md:text-8xl">Ideas for building a better life and business.</h1>
             <p className="max-w-md text-lg leading-8 text-black/60">Short, useful essays about technology, business, lifestyle and finance.</p>
