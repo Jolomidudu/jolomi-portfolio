@@ -2,6 +2,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import ProjectRequestLauncher from "./projects/project-request-launcher";
 const homepageProjects = [
@@ -38,8 +39,15 @@ const heroTitles = [
   "A\nDIGITAL TRANSFORMATION LEADER.",
 ] as const;
 
+const aboutLinks = [
+  ["ABOUT", "/about"],
+  ["EXPERIENCE", "/experience"],
+  ["FAQS", "/faq"],
+] as const;
+
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [menuView, setMenuView] = useState<"main" | "about">("main");
   const [atPageEnd, setAtPageEnd] = useState(false);
   const [activeTitle, setActiveTitle] = useState(0);
 
@@ -94,19 +102,25 @@ export default function Home() {
             PROJECTS
           </a>
 
-          <a
-            href="/about"
-            className="transition-opacity hover:opacity-50"
-          >
-            WHO I AM
-          </a>
+          <details className="group relative">
+            <summary className="flex cursor-pointer list-none items-center gap-1 transition-opacity hover:opacity-50">
+              ABOUT <span aria-hidden="true" className="text-base transition-transform group-open:rotate-180">⌄</span>
+            </summary>
+            <div className="absolute left-0 top-full z-[60] mt-4 min-w-48 border border-black/10 bg-[#f5f5f0] p-2 text-[#111111] shadow-xl">
+              {aboutLinks.map(([label, href]) => (
+                <a key={href} href={href} className="block px-4 py-3 transition-colors hover:bg-black/5 hover:text-[#008c87]">
+                  {label}
+                </a>
+              ))}
+            </div>
+          </details>
 
-          <a
+          <Link
             href="/services"
             className="transition-opacity hover:opacity-50"
           >
             SERVICES
-          </a>
+          </Link>
 
           <a
             href="/learn"
@@ -115,22 +129,15 @@ export default function Home() {
             LEARN A SKILL
           </a>
 
-          <a
+          <Link
             href="/blog"
             className="transition-opacity hover:opacity-50"
           >
             MY JOURNAL
-          </a>
+          </Link>
 
           <a
-            href="/experience"
-            className="transition-opacity hover:opacity-50"
-          >
-            EXPERIENCE
-          </a>
-
-          <a
-            href="#contact"
+            href="/contact"
             className="transition-opacity hover:opacity-50"
           >
             CONTACT
@@ -148,7 +155,10 @@ export default function Home() {
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
             aria-controls="mobile-navigation"
-            onClick={() => setMenuOpen(!menuOpen)}
+            onClick={() => {
+              setMenuOpen(!menuOpen);
+              setMenuView("main");
+            }}
           >
             {menuOpen ? "×" : "☰"}
           </button>
@@ -170,37 +180,89 @@ export default function Home() {
 
             <div className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#78d8ca]">
               <span className="h-2 w-2 rounded-full bg-[#78d8ca]" />
-              <span>Menu / Available for Hire</span>
+              <span>{menuView === "main" ? "Menu / Available for Hire" : "About / Explore"}</span>
             </div>
 
-            <div className="flex flex-1 flex-col">
-              {[
-                ["PROJECTS", "/projects"],
-                ["WHO I AM", "/about"],
-                ["SERVICES", "/services"],
-                ["GET TO LEARN", "/learn"],
-                ["MY BLOG", "/blog"],
-                ["EXPERIENCE", "/experience"],
-                ["GET IN TOUCH", "#contact"],
-              ].map(([label, href]) => (
-                <a
-                  key={label}
-                  href={href}
-                  className="group flex items-center justify-between border-b border-white/15 py-4 transition-colors first:border-t hover:text-[#78d8ca]"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  <span className="flex items-center gap-4">
-                    <span className="text-xs font-normal text-white/35">0{["PROJECTS", "ABOUT ME", "SERVICES", "LEARN NEW", "BLOG", "EXPERIENCE", "CONTACT"].indexOf(label) + 1}</span>
-                    <span className="text-[1.3125rem] font-semibold tracking-[-0.04em]">{label}</span>
-                  </span>
-                  <span className="text-xl text-white/35 transition-transform group-hover:translate-x-1 group-hover:text-[#78d8ca]">↗</span>
-                </a>
-              ))}
-            </div>
+            <nav className="flex flex-1 flex-col" aria-label="Mobile navigation">
+              {menuView === "main" ? (
+                <>
+                  {[
+                    ["PROJECTS", "/projects"],
+                  ].map(([label, href], index) => (
+                    <a
+                      key={href}
+                      href={href}
+                      className="group flex items-center justify-between border-b border-white/15 py-4 transition-colors first:border-t hover:text-[#78d8ca]"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      <span className="flex items-center gap-4">
+                        <span className="text-xs font-normal text-white/35">0{index + 1}</span>
+                        <span className="text-[1.3125rem] font-semibold tracking-[-0.04em]">{label}</span>
+                      </span>
+                      <span aria-hidden="true" className="text-xl text-white/35 transition-transform group-hover:translate-x-1 group-hover:text-[#78d8ca]">↗</span>
+                    </a>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() => setMenuView("about")}
+                    className="group flex items-center justify-between border-b border-white/15 py-4 text-left transition-colors hover:text-[#78d8ca]"
+                  >
+                    <span className="flex items-center gap-4">
+                      <span className="text-xs font-normal text-white/35">02</span>
+                      <span className="text-[1.3125rem] font-semibold tracking-[-0.04em]">ABOUT</span>
+                    </span>
+                    <span aria-hidden="true" className="text-3xl leading-none text-white/35 transition-transform group-hover:translate-x-1 group-hover:text-[#78d8ca]">›</span>
+                  </button>
+                  {[
+                    ["SERVICES", "/services"],
+                    ["GET TO LEARN", "/learn"],
+                    ["MY BLOG", "/blog"],
+                    ["CONTACT", "/contact"],
+                  ].map(([label, href], index) => (
+                    <a
+                      key={href}
+                      href={href}
+                      className="group flex items-center justify-between border-b border-white/15 py-4 transition-colors hover:text-[#78d8ca]"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      <span className="flex items-center gap-4">
+                        <span className="text-xs font-normal text-white/35">0{index + 3}</span>
+                        <span className="text-[1.3125rem] font-semibold tracking-[-0.04em]">{label}</span>
+                      </span>
+                      <span aria-hidden="true" className="text-xl text-white/35 transition-transform group-hover:translate-x-1 group-hover:text-[#78d8ca]">↗</span>
+                    </a>
+                  ))}
+                </>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => setMenuView("main")}
+                    className="mb-5 flex items-center gap-3 self-start py-2 text-sm font-semibold uppercase tracking-[0.12em] text-white/65 transition-colors hover:text-[#78d8ca]"
+                  >
+                    <span aria-hidden="true" className="text-xl">←</span> Main menu
+                  </button>
+                  {aboutLinks.map(([label, href], index) => (
+                    <a
+                      key={href}
+                      href={href}
+                      onClick={() => { setMenuOpen(false); setMenuView("main"); }}
+                      className="group flex items-center justify-between border-b border-white/15 py-4 transition-colors first:border-t hover:text-[#78d8ca]"
+                    >
+                      <span className="flex items-center gap-4">
+                        <span className="text-xs font-normal text-white/35">0{index + 1}</span>
+                        <span className="text-[1.3125rem] font-semibold tracking-[-0.04em]">{label}</span>
+                      </span>
+                      <span aria-hidden="true" className="text-xl text-white/35 transition-transform group-hover:translate-x-1 group-hover:text-[#78d8ca]">↗</span>
+                    </a>
+                  ))}
+                </>
+              )}
+            </nav>
 
             <div className="mt-10 flex items-end justify-between border-t border-white/15 pt-5 text-xs uppercase tracking-[0.15em] text-white/45">
               <span>Lagos / Nigeria</span>
-              <a href="/services#booking" onClick={() => setMenuOpen(false)} className="text-[#78d8ca]">Start a project ↗</a>
+              <Link href="/services#booking" onClick={() => setMenuOpen(false)} className="text-[#78d8ca]">Start a project ↗</Link>
             </div>
           </div>
         )}
