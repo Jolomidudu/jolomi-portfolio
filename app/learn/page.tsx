@@ -3,7 +3,7 @@ import Link from "next/link";
 import SiteChrome from "../site-chrome";
 
 export const metadata: Metadata = {
-  title: "Technology Mentorship & Training | Jolomi Dudu",
+  title: "Technology Mentorship & Training",
   description:
     "Practical technology mentorship and professional training across software development, mobile apps, data analytics, cybersecurity, UI/UX, DevOps, systems engineering, robotics and technology leadership.",
 };

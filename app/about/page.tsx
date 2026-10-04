@@ -4,7 +4,7 @@ import Link from "next/link";
 import SiteChrome from "../site-chrome";
 
 export const metadata: Metadata = {
-  title: "About | Jolomi Dudu",
+  title: "Who i am",
   description:
     "Meet Jolomi Dudu, a technology leader, software engineer and technology consultant working across technology strategy, ICT leadership, software engineering and digital transformation.",
 };

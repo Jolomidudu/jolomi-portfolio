@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import SiteChrome from "../site-chrome";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Jolomi Dudu",
+  title: "Policy",
   description: "Privacy information for the Jolomi Dudu website.",
 };
 

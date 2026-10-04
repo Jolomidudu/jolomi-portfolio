@@ -128,8 +128,8 @@ export default function EnquiryPortal() {
             Jolomi Dudu
           </Link>
           <p className="mt-8 text-xs font-semibold uppercase tracking-[0.16em] text-black/45">Private workspace</p>
-          <h1 className="mt-2 text-3xl font-semibold">Enquiry portal</h1>
-          <p className="mt-3 text-sm leading-6 text-black/55">Sign in to view project requests.</p>
+          <h1 className="mt-2 text-3xl font-semibold">Admin Center</h1>
+          <p className="mt-3 text-sm leading-6 text-black/55">Sign in to manage app activities</p>
 
           <form className="mt-7 space-y-4" onSubmit={signIn}>
             <label className="block text-sm font-medium">

@@ -4,7 +4,7 @@ import ProjectRequestLauncher from "./project-request-launcher";
 import ProjectGallery from "./project-gallery";
 
 export const metadata: Metadata = {
-  title: "Projects | Jolomi Dudu",
+  title: "Projects",
   description: "A portfolio of Jolomi Dudu's projects across web apps, mobile apps, SaaS products and digital platforms.",
 };
 
@@ -110,11 +110,11 @@ const projects = [
     stacks: ["Flutter"],
   },
   {
-    name: "Routyride",
+    name: "Rideyroute",
     category: "Web & Mobile",
     image: "/images/projects/routyride.jpg",
     alt: "Car ride sharing platform",
-    href: "https://routyride.vercel.app",
+    href: "https://rideyroute.vercel.app",
     description:
       "A car ride hailing platform designed to help people find rides, connect with drivers and enjoy seamless travel experiences.",
     stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "Flutter"],

@@ -35,7 +35,7 @@ export default function PaymentForm({ services }: { services: Service[] }) {
   }, [open]);
 
   const selectedService = services.find((service) => service.id === serviceId);
-  const depositAmount = selectedService ? Math.round(selectedService.startingAmount * 0.25) : 0;
+  const depositAmount = selectedService ? Math.round(selectedService.startingAmount * 0.45) : 0;
   const customAmountValue = Number(customAmount);
   const customAmountIsValid = Number.isSafeInteger(customAmountValue) && customAmountValue >= 100;
   const paymentAmount = paymentType === "deposit" ? depositAmount : customAmountIsValid ? customAmountValue : 0;
@@ -83,7 +83,7 @@ export default function PaymentForm({ services }: { services: Service[] }) {
             <div className="flex items-start justify-between gap-6">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#008c87]">Secure checkout</p>
-                <h2 id="payment-title" className="mt-2 text-2xl font-semibold">Make a payment</h2>
+                <h2 id="payment-title" className="mt-2 text-1xl font-semibold">MAKE A SERVICE PAYMENT</h2>
               </div>
               <button type="button" onClick={() => setOpen(false)} aria-label="Close payment form" className="flex h-10 w-10 shrink-0 items-center justify-center border border-black/15 text-2xl leading-none hover:bg-black/5">×</button>
             </div>
@@ -113,7 +113,7 @@ export default function PaymentForm({ services }: { services: Service[] }) {
                       ))}
                     </select>
                   </label>
-                  <p className="pb-3 text-sm text-black/60">25% of Nigeria starting price: <strong className="text-[#008c87]">₦{depositAmount.toLocaleString()}</strong></p>
+                  <p className="pb-3 text-sm text-black/60">45% of Selected Service Fee: <strong className="text-[#008c87]">₦{depositAmount.toLocaleString()}</strong></p>
                 </div>
               ) : (
                 <label className="mt-5 block text-sm font-medium">

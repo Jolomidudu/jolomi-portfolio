@@ -6,16 +6,16 @@ import { useEffect, useState } from "react";
 import ProjectRequestLauncher from "./projects/project-request-launcher";
 const homepageProjects = [
   {
-    name: "Spa Elaris",
-    image: "/images/projects/spaelaris1-mckp.jpg",
-    alt: "Spa Elaris wellness website",
-    href: "https://spaelaris.vercel.app",
+    name: "Festyvibe",
+    image: "/images/projects/festyvibe.jpg",
+    alt: "Festyvibe event platform",
+    href: "https://festyvibe.vercel.app",
   },
   {
-    name: "Kids College",
-    image: "/images/projects/kidscollege-mckp.png",
-    alt: "School management platform dashboard",
-    href: "https://kcbn.vercel.app",
+    name: "BudgetAll",
+    image: "/images/projects/budgetall.jpg",
+    alt: "BudgetAll financial platform",
+    href: "https://budgetall.vercel.app",
   },
   {
     name: "Lovenorth",
@@ -24,10 +24,10 @@ const homepageProjects = [
     href: "https://lovenorth.vercel.app",
   },
   {
-    name: "Elvara Hotel",
-    image: "/images/projects/elvarahotel-mckp.jpg",
-    alt: "A hotel booking platform",
-    href: "https://elvarahotel.vercel.app",
+    name: "Kids College",
+    image: "/images/projects/kidscollege-mckp.png",
+    alt: "School Management Platform",
+    href: "https://kcbn.vercel.app",
   },
 ] as const;
 

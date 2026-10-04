@@ -4,7 +4,7 @@ import SiteChrome from "../site-chrome";
 import { getPublishedPosts } from "./posts";
 
 export const metadata: Metadata = {
-  title: "Journal | Jolomi Dudu",
+  title: "Journal",
   description: "Notes on business, technology, lifestyle and finance from Jolomi Dudu.",
 };
 

@@ -3,7 +3,7 @@ import Link from "next/link";
 import SiteChrome from "../site-chrome";
 
 export const metadata: Metadata = {
-  title: "Experience | Jolomi Dudu",
+  title: "Experience",
   description:
     "Jolomi Dudu's experience across technology leadership, software engineering, product development, digital transformation, and technology consulting.",
 };
