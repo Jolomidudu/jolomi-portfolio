@@ -24,6 +24,8 @@ const validServices = new Set([
   "Technical Due Diligence / IT Audit",
 ]);
 const validCountryCodes = new Set(["+234", "+233", "+254", "+27", "+44", "+1", "+61", "+91"]);
+const validExperienceLevels = new Set(["beginner", "intermediate", "advanced"]);
+const validLearningFormats = new Set(["online", "in-person", "flexible"]);
 const validBlogCategories = new Set([
   "Technology",
   "Business",
@@ -39,6 +41,7 @@ const validBlogCategories = new Set([
 ]);
 const loginAttempts = new Map();
 let sql;
+let learningTracks = [];
 
 app.disable("x-powered-by");
 app.use(express.json({ limit: "20kb" }));
@@ -168,6 +171,67 @@ function readBlogPost(body) {
   return post;
 }
 
+function readLearningRegistration(body) {
+  if (!body || typeof body !== "object" || Array.isArray(body)) return null;
+
+  const value = (field, maxLength) =>
+    typeof body[field] === "string" ? body[field].trim().slice(0, maxLength) : "";
+  const registration = {
+    requestId: value("requestId", 36),
+    trackId: value("trackId", 2),
+    paymentPlan: value("paymentPlan", 10),
+    fullName: value("fullName", 160),
+    email: value("email", 254).toLowerCase(),
+    phone: value("phone", 30),
+    country: value("country", 100),
+    timeZone: value("timeZone", 100),
+    experienceLevel: value("experienceLevel", 20),
+    background: value("background", 2000),
+    goals: value("goals", 3000),
+    preferredTime: value("preferredTime", 200),
+    preferredStart: value("preferredStart", 40),
+    learningFormat: value("learningFormat", 20),
+    guardianName: value("guardianName", 160),
+    guardianEmail: value("guardianEmail", 254).toLowerCase(),
+    guardianPhone: value("guardianPhone", 30),
+    isAdult: body.isAdult === true,
+    acceptedTerms: body.acceptedTerms === true,
+    acceptedPrivacy: body.acceptedPrivacy === true,
+  };
+  const allowedDays = new Set(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]);
+  const preferredDays = Array.isArray(body.preferredDays)
+    ? [...new Set(body.preferredDays.filter((day) => typeof day === "string" && allowedDays.has(day)))]
+    : [];
+
+  if (
+    !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(registration.requestId)
+    || !learningTracks.some(({ id }) => id === registration.trackId)
+    || !["deposit", "full"].includes(registration.paymentPlan)
+    || !registration.fullName
+    || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(registration.email)
+    || !registration.phone
+    || !registration.country
+    || !registration.timeZone
+    || !validExperienceLevels.has(registration.experienceLevel)
+    || !registration.goals
+    || !preferredDays.length
+    || !registration.preferredTime
+    || !registration.preferredStart
+    || !validLearningFormats.has(registration.learningFormat)
+    || !registration.acceptedTerms
+    || !registration.acceptedPrivacy
+    || (!registration.isAdult && (
+      !registration.guardianName
+      || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(registration.guardianEmail)
+      || !registration.guardianPhone
+    ))
+  ) {
+    return null;
+  }
+
+  return { ...registration, preferredDays };
+}
+
 const blogPostFields = `
   id, slug, category, title, description, content, status,
   created_at AS "createdAt", updated_at AS "updatedAt"
@@ -270,6 +334,119 @@ app.get("/api/enquiries/:id", requireAdmin, async (request, response) => {
   } catch (error) {
     console.error("Failed to load project enquiry:", error);
     return response.status(500).json({ error: "Unable to load this enquiry." });
+  }
+});
+
+app.post("/api/learning/enrollments", async (request, response) => {
+  const registration = readLearningRegistration(request.body);
+  if (!registration) return response.status(400).json({ error: "Check the registration details and try again." });
+
+  const track = learningTracks.find(({ id }) => id === registration.trackId);
+  try {
+    const [enrollment] = await request.sql`
+      INSERT INTO learning_enrollments (
+        request_id, track_id, track_title, payment_plan, full_name, email, phone,
+        country, time_zone, experience_level, background, goals, preferred_days,
+        preferred_time, preferred_start, learning_format, is_adult, guardian_name, guardian_email,
+        guardian_phone, accepted_terms, accepted_privacy
+      ) VALUES (
+        ${registration.requestId}, ${track.id}, ${track.title}, ${registration.paymentPlan},
+        ${registration.fullName}, ${registration.email}, ${registration.phone},
+        ${registration.country}, ${registration.timeZone}, ${registration.experienceLevel},
+        ${registration.background}, ${registration.goals}, ${JSON.stringify(registration.preferredDays)}::jsonb,
+        ${registration.preferredTime}, ${registration.preferredStart}, ${registration.learningFormat}, ${registration.isAdult},
+        ${registration.guardianName || null}, ${registration.guardianEmail || null},
+        ${registration.guardianPhone || null}, ${registration.acceptedTerms}, ${registration.acceptedPrivacy}
+      )
+      ON CONFLICT (request_id) DO UPDATE SET
+        track_id = EXCLUDED.track_id, track_title = EXCLUDED.track_title,
+        payment_plan = EXCLUDED.payment_plan, full_name = EXCLUDED.full_name,
+        email = EXCLUDED.email, phone = EXCLUDED.phone, country = EXCLUDED.country,
+        time_zone = EXCLUDED.time_zone, experience_level = EXCLUDED.experience_level,
+        background = EXCLUDED.background, goals = EXCLUDED.goals,
+        preferred_days = EXCLUDED.preferred_days, preferred_time = EXCLUDED.preferred_time,
+        learning_format = EXCLUDED.learning_format, is_adult = EXCLUDED.is_adult,
+        guardian_name = EXCLUDED.guardian_name, guardian_email = EXCLUDED.guardian_email,
+        guardian_phone = EXCLUDED.guardian_phone,
+        accepted_terms = EXCLUDED.accepted_terms, accepted_privacy = EXCLUDED.accepted_privacy,
+        updated_at = NOW()
+      RETURNING id, status, payment_plan AS "paymentPlan", track_id AS "trackId"
+    `;
+    return response.status(201).json({ enrollment });
+  } catch (error) {
+    console.error("Failed to save learning registration:", error);
+    return response.status(500).json({ error: "Unable to save this registration." });
+  }
+});
+
+app.post("/api/learning/enrollments/:id/payments", async (request, response) => {
+  const enrollmentId = request.params.id;
+  const reference = typeof request.body?.reference === "string" ? request.body.reference : "";
+  if (!/^\d+$/.test(enrollmentId) || !/^jolomi-learning-\d+-[0-9a-f-]{8,36}$/i.test(reference)) {
+    return response.status(400).json({ error: "Invalid enrollment or payment reference." });
+  }
+
+  try {
+    const [enrollment] = await request.sql`
+      SELECT id, track_id AS "trackId", track_title AS "trackTitle", payment_plan AS "paymentPlan",
+             full_name AS "fullName", email, status
+      FROM learning_enrollments WHERE id = ${enrollmentId} LIMIT 1
+    `;
+    if (!enrollment) return response.status(404).json({ error: "Registration not found." });
+    if (enrollment.status === "enrolled") return response.status(409).json({ error: "This enrollment is already paid in full." });
+
+    const track = learningTracks.find(({ id }) => id === enrollment.trackId);
+    const amount = enrollment.paymentPlan === "full" ? track.totalAmount : track.depositAmount;
+    const [payment] = await request.sql`
+      INSERT INTO learning_enrollment_payments (enrollment_id, reference, amount, payment_plan)
+      VALUES (${enrollmentId}, ${reference}, ${amount}, ${enrollment.paymentPlan})
+      RETURNING id, reference, amount
+    `;
+    return response.status(201).json({ payment, enrollment });
+  } catch (error) {
+    if (error?.code === "23505") return response.status(409).json({ error: "That payment attempt already exists." });
+    console.error("Failed to prepare learning payment:", error);
+    return response.status(500).json({ error: "Unable to prepare this payment." });
+  }
+});
+
+app.post("/api/learning/payments/:reference/confirm", async (request, response) => {
+  const reference = request.params.reference;
+  const enrollmentId = typeof request.body?.enrollmentId === "string" ? request.body.enrollmentId : "";
+  const amountKobo = request.body?.amountKobo;
+  const providerEmail = typeof request.body?.email === "string" ? request.body.email.trim().toLowerCase() : "";
+  if (!/^jolomi-learning-\d+-[0-9a-f-]{8,36}$/i.test(reference) || !/^\d+$/.test(enrollmentId) || !Number.isSafeInteger(amountKobo)) {
+    return response.status(400).json({ error: "Invalid verified payment details." });
+  }
+
+  try {
+    const [payment] = await request.sql`
+      SELECT p.id, p.amount, p.status AS "paymentStatus", e.id AS "enrollmentId",
+             e.payment_plan AS "paymentPlan", e.email
+      FROM learning_enrollment_payments p
+      JOIN learning_enrollments e ON e.id = p.enrollment_id
+      WHERE p.reference = ${reference} AND e.id = ${enrollmentId}
+      LIMIT 1
+    `;
+    if (!payment) return response.status(404).json({ error: "Payment attempt not found." });
+    if (Number(payment.amount) * 100 !== amountKobo || payment.email !== providerEmail) {
+      return response.status(400).json({ error: "Verified payment does not match this enrollment." });
+    }
+
+    await request.sql`
+      UPDATE learning_enrollment_payments
+      SET status = 'succeeded', paid_at = COALESCE(paid_at, NOW())
+      WHERE id = ${payment.id} AND status IN ('pending', 'succeeded')
+    `;
+    await request.sql`
+      UPDATE learning_enrollments
+      SET status = ${payment.paymentPlan === "full" ? "enrolled" : "awaiting_balance"}, updated_at = NOW()
+      WHERE id = ${enrollmentId}
+    `;
+    return response.json({ confirmed: true, enrollmentId });
+  } catch (error) {
+    console.error("Failed to confirm learning payment:", error);
+    return response.status(500).json({ error: "Unable to confirm this payment." });
   }
 });
 
@@ -380,6 +557,7 @@ async function start() {
   if (missingVariables.length) throw new Error(`Missing required environment variables: ${missingVariables.join(", ")}`);
 
   sql = neon(process.env.DATABASE_URL);
+  learningTracks = JSON.parse(await readFile(new URL("./learning-tracks.json", import.meta.url), "utf8"));
   await sql`
     CREATE TABLE IF NOT EXISTS project_enquiries (
       id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -406,6 +584,48 @@ async function start() {
       status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'published')),
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
       updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  await sql`
+    CREATE TABLE IF NOT EXISTS learning_enrollments (
+      id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+      request_id UUID NOT NULL UNIQUE,
+      track_id TEXT NOT NULL,
+      track_title TEXT NOT NULL,
+      payment_plan TEXT NOT NULL CHECK (payment_plan IN ('deposit', 'full')),
+      full_name TEXT NOT NULL,
+      email TEXT NOT NULL,
+      phone TEXT NOT NULL,
+      country TEXT NOT NULL,
+      time_zone TEXT NOT NULL,
+      experience_level TEXT NOT NULL CHECK (experience_level IN ('beginner', 'intermediate', 'advanced')),
+      background TEXT NOT NULL DEFAULT '',
+      goals TEXT NOT NULL,
+      preferred_days JSONB NOT NULL,
+      preferred_time TEXT NOT NULL,
+      preferred_start TEXT NOT NULL,
+      learning_format TEXT NOT NULL CHECK (learning_format IN ('online', 'in-person', 'flexible')),
+      is_adult BOOLEAN NOT NULL,
+      guardian_name TEXT,
+      guardian_email TEXT,
+      guardian_phone TEXT,
+      accepted_terms BOOLEAN NOT NULL,
+      accepted_privacy BOOLEAN NOT NULL,
+      status TEXT NOT NULL DEFAULT 'pending_payment' CHECK (status IN ('pending_payment', 'awaiting_balance', 'enrolled')),
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  await sql`
+    CREATE TABLE IF NOT EXISTS learning_enrollment_payments (
+      id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+      enrollment_id BIGINT NOT NULL REFERENCES learning_enrollments(id),
+      reference TEXT NOT NULL UNIQUE,
+      amount BIGINT NOT NULL CHECK (amount > 0),
+      payment_plan TEXT NOT NULL CHECK (payment_plan IN ('deposit', 'full')),
+      status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'succeeded', 'failed')),
+      paid_at TIMESTAMPTZ,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
   `;
 

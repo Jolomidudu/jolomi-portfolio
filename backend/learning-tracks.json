@@ -1,0 +1,83 @@
+[
+  {
+    "id": "01",
+    "shortTitle": "Web App",
+    "title": "Website Development",
+    "duration": "8–16 weeks",
+    "totalAmount": 600000,
+    "depositAmount": 180000,
+    "monthlyAmount": 150000
+  },
+  {
+    "id": "02",
+    "shortTitle": "Mobile App",
+    "title": "Mobile App Development",
+    "duration": "10–16 weeks",
+    "totalAmount": 750000,
+    "depositAmount": 225000,
+    "monthlyAmount": 190000
+  },
+  {
+    "id": "03",
+    "shortTitle": "Analytics",
+    "title": "Data Analytics & Business Intelligence",
+    "duration": "8–12 weeks",
+    "totalAmount": 400000,
+    "depositAmount": 120000,
+    "monthlyAmount": 135000
+  },
+  {
+    "id": "04",
+    "shortTitle": "Cyber",
+    "title": "Cybersecurity & Security Engineering",
+    "duration": "10–16 weeks",
+    "totalAmount": 650000,
+    "depositAmount": 195000,
+    "monthlyAmount": 165000
+  },
+  {
+    "id": "05",
+    "shortTitle": "UI/UX",
+    "title": "UI/UX & Product Design",
+    "duration": "6–10 weeks",
+    "totalAmount": 350000,
+    "depositAmount": 105000,
+    "monthlyAmount": 120000
+  },
+  {
+    "id": "06",
+    "shortTitle": "DevOps",
+    "title": "DevOps, Cloud & Infrastructure",
+    "duration": "10–16 weeks",
+    "totalAmount": 700000,
+    "depositAmount": 210000,
+    "monthlyAmount": 175000
+  },
+  {
+    "id": "07",
+    "shortTitle": "Systems",
+    "title": "Systems Engineering & Architecture",
+    "duration": "8–12 weeks",
+    "totalAmount": 550000,
+    "depositAmount": 165000,
+    "monthlyAmount": 185000
+  },
+  {
+    "id": "08",
+    "shortTitle": "Robotics",
+    "title": "Robotics, IoT & Embedded Systems",
+    "duration": "10–16 weeks",
+    "totalAmount": 650000,
+    "depositAmount": 195000,
+    "monthlyAmount": 165000
+  },
+  {
+    "id": "09",
+    "shortTitle": "Leadership",
+    "title": "Technology Leadership & IT Management",
+    "duration": "6–10 weeks",
+    "totalAmount": 450000,
+    "depositAmount": 135000,
+    "monthlyAmount": 150000
+  }
+]

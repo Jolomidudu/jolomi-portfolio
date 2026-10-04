@@ -18,7 +18,7 @@ The API runs on Railway and stores project requests in Neon Postgres. The Next.j
 
 The API creates the `project_enquiries` and `blog_posts` tables on startup if they do not exist. The original articles in `blog-seed.json` are inserted into `blog_posts` the first time the service starts.
 
-After signing in at `/portal`, use the **Blog** section to create, edit, publish, save drafts, and delete journal posts. Public blog pages show published posts only; drafts remain private to the portal.
+After signing in at `/portal`, use the **Blog** section to create, edit, publish, save drafts, and delete blog posts. Public blog pages show published posts only; drafts remain private to the portal.
 
 ## Connect Vercel
 
