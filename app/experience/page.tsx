@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import SiteChrome from "../site-chrome";
 
 export const metadata: Metadata = {

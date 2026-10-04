@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import { notFound } from "next/navigation";
 import SiteChrome from "../../site-chrome";
 import { projectServices } from "../../projects/project-services";

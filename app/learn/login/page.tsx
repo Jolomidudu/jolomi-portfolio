@@ -28,7 +28,7 @@ export default function LearningLoginPage() {
         throw new Error(result.error ?? "Unable to sign in.");
       }
 
-      router.push("/learn");
+      router.push("/learn/dashboard");
       router.refresh();
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : "Unable to sign in.");

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import SiteChrome from "../site-chrome";
 import PaymentForm from "./payment-form";
 import { projectServices } from "../projects/project-services";

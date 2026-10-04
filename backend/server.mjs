@@ -381,6 +381,40 @@ app.post("/api/learning/login", async (request, response) => {
   }
 });
 
+app.get("/api/learning/me", async (request, response) => {
+  const authorization = request.get("authorization") || "";
+  const token = authorization.startsWith("Bearer ") ? authorization.slice(7) : "";
+  const session = getLearnerSession(token);
+
+  if (!session) {
+    return response.status(401).json({ error: "Please sign in again." });
+  }
+
+  try {
+    const [account] = await request.sql`
+      SELECT id, full_name AS "fullName", email
+      FROM learning_accounts
+      WHERE id = ${Number(session.id)}
+      LIMIT 1
+    `;
+
+    if (!account) {
+      return response.status(401).json({ error: "Your learning account could not be found." });
+    }
+
+    return response.json({
+      user: {
+        id: account.id,
+        fullName: account.fullName,
+        email: account.email,
+      },
+    });
+  } catch (error) {
+    console.error("Failed to load learner session:", error);
+    return response.status(500).json({ error: "The learning portal is unavailable. Please try again later." });
+  }
+});
+
 app.post("/api/enquiries", async (request, response) => {
   const enquiry = readProjectRequest(request.body);
   if (!enquiry) return response.status(400).json({ error: "Please check the project enquiry details." });
