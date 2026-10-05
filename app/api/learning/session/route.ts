@@ -21,7 +21,23 @@ export async function GET(request: Request) {
 
     const result = await railwayResponse.json() as {
       error?: string;
-      user?: { id?: number | string; email?: string; fullName?: string };
+      user?: {
+        id?: number | string;
+        email?: string;
+        fullName?: string;
+        enrollment?: {
+          trackTitle?: string;
+          status?: string;
+          paymentPlan?: string;
+          experienceLevel?: string;
+          learningFormat?: string;
+          preferredDays?: string[];
+          preferredTime?: string;
+          preferredStart?: string;
+          timeZone?: string;
+          goals?: string;
+        };
+      };
     };
 
     if (!railwayResponse.ok || !result.user) {

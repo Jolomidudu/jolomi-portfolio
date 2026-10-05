@@ -3,6 +3,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import Link from "next/link";
 import BlogManager from "./blog-manager";
+import LearningManager from "./learning-manager";
 
 type Enquiry = {
   id: string;
@@ -38,7 +39,7 @@ export default function EnquiryPortal() {
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [refreshVersion, setRefreshVersion] = useState(0);
-  const [activeSection, setActiveSection] = useState<"enquiries" | "blog">("enquiries");
+  const [activeSection, setActiveSection] = useState<"enquiries" | "blog" | "learning">("enquiries");
 
   useEffect(() => {
     let active = true;
@@ -173,7 +174,7 @@ export default function EnquiryPortal() {
       <header className="flex flex-wrap items-center justify-between gap-4 border-b border-black/10 bg-white px-5 py-4 sm:px-8">
         <div>
           <Link href="/" className="text-xs font-semibold uppercase tracking-[0.15em] text-[#008e8a]">Jolomi Dudu</Link>
-          <h1 className="mt-1 text-xl font-semibold">{activeSection === "enquiries" ? "Project enquiries" : "Blog posts"}</h1>
+          <h1 className="mt-1 text-xl font-semibold">{activeSection === "enquiries" ? "Project enquiries" : activeSection === "blog" ? "Blog posts" : "Learning content"}</h1>
         </div>
         <nav aria-label="Portal sections" className="flex items-center gap-1 border-b border-black/10">
           <button
@@ -191,6 +192,14 @@ export default function EnquiryPortal() {
             className={`border-b-2 px-3 py-2 text-sm font-medium ${activeSection === "blog" ? "border-[#00A9A5] text-[#007d79]" : "border-transparent text-black/50 hover:text-black"}`}
           >
             Blog
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveSection("learning")}
+            aria-pressed={activeSection === "learning"}
+            className={`border-b-2 px-3 py-2 text-sm font-medium ${activeSection === "learning" ? "border-[#00A9A5] text-[#007d79]" : "border-transparent text-black/50 hover:text-black"}`}
+          >
+            Learning
           </button>
         </nav>
         <div className="flex items-center gap-2">
@@ -213,7 +222,7 @@ export default function EnquiryPortal() {
         </div>
       </header>
 
-      {activeSection === "blog" ? <BlogManager /> : (
+      {activeSection === "blog" ? <BlogManager /> : activeSection === "learning" ? <LearningManager /> : (
       <div className="grid min-h-[calc(100vh-73px)] lg:grid-cols-[minmax(300px,0.8fr)_minmax(0,1.5fr)]">
         <section className="border-b border-black/10 bg-white lg:border-b-0 lg:border-r">
           <div className="border-b border-black/10 p-4 sm:p-5">

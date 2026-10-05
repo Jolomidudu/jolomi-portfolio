@@ -245,6 +245,47 @@ function readBlogPost(body) {
   return post;
 }
 
+function readLearningItem(body) {
+  if (!body || typeof body !== "object" || Array.isArray(body)) return null;
+
+  const value = (field, maxLength) =>
+    typeof body[field] === "string" ? body[field].trim().slice(0, maxLength) : "";
+  const item = {
+    trackId: value("trackId", 10),
+    type: value("type", 20),
+    title: value("title", 180),
+    description: value("description", 5000),
+    resourceUrl: value("resourceUrl", 1000),
+    dueDate: value("dueDate", 10),
+    status: value("status", 20),
+  };
+  let validResourceUrl = true;
+  if (item.resourceUrl) {
+    try {
+      validResourceUrl = ["http:", "https:"].includes(new URL(item.resourceUrl).protocol);
+    } catch {
+      validResourceUrl = false;
+    }
+  }
+  const validDueDate = !item.dueDate || (/^\d{4}-\d{2}-\d{2}$/.test(item.dueDate)
+    && !Number.isNaN(new Date(`${item.dueDate}T00:00:00.000Z`).getTime())
+    && new Date(`${item.dueDate}T00:00:00.000Z`).toISOString().slice(0, 10) === item.dueDate);
+
+  if (
+    !learningTracks.some(({ id }) => id === item.trackId)
+    || !["resource", "assignment"].includes(item.type)
+    || !item.title
+    || !item.description
+    || !validResourceUrl
+    || !validDueDate
+    || !["draft", "published"].includes(item.status)
+  ) {
+    return null;
+  }
+
+  return item;
+}
+
 function readLearningRegistration(body) {
   if (!body || typeof body !== "object" || Array.isArray(body)) return null;
 
@@ -392,9 +433,15 @@ app.get("/api/learning/me", async (request, response) => {
 
   try {
     const [account] = await request.sql`
-      SELECT id, full_name AS "fullName", email
-      FROM learning_accounts
-      WHERE id = ${Number(session.id)}
+      SELECT a.id, a.full_name AS "fullName", a.email,
+             e.track_title AS "trackTitle", e.status AS "enrollmentStatus",
+             e.payment_plan AS "paymentPlan", e.experience_level AS "experienceLevel",
+             e.learning_format AS "learningFormat", e.preferred_days AS "preferredDays",
+             e.preferred_time AS "preferredTime", e.preferred_start AS "preferredStart",
+             e.time_zone AS "timeZone", e.goals
+      FROM learning_accounts a
+      JOIN learning_enrollments e ON e.id = a.enrollment_id
+      WHERE a.id = ${Number(session.id)}
       LIMIT 1
     `;
 
@@ -407,11 +454,96 @@ app.get("/api/learning/me", async (request, response) => {
         id: account.id,
         fullName: account.fullName,
         email: account.email,
+        enrollment: {
+          trackTitle: account.trackTitle,
+          status: account.enrollmentStatus,
+          paymentPlan: account.paymentPlan,
+          experienceLevel: account.experienceLevel,
+          learningFormat: account.learningFormat,
+          preferredDays: account.preferredDays,
+          preferredTime: account.preferredTime,
+          preferredStart: account.preferredStart,
+          timeZone: account.timeZone,
+          goals: account.goals,
+        },
       },
     });
   } catch (error) {
     console.error("Failed to load learner session:", error);
     return response.status(500).json({ error: "The learning portal is unavailable. Please try again later." });
+  }
+});
+
+app.get("/api/learning/progress", async (request, response) => {
+  const authorization = request.get("authorization") || "";
+  const token = authorization.startsWith("Bearer ") ? authorization.slice(7) : "";
+  const session = getLearnerSession(token);
+  if (!session) return response.status(401).json({ error: "Please sign in again." });
+
+  try {
+    const entries = await request.sql`
+      SELECT p.id, p.topic, p.reflection, p.created_at AS "createdAt"
+      FROM learning_progress_entries p
+      JOIN learning_accounts a ON a.id = p.account_id
+      WHERE p.account_id = ${Number(session.id)} AND a.status = 'active'
+      ORDER BY p.created_at DESC
+      LIMIT 100
+    `;
+    return response.json({ entries });
+  } catch (error) {
+    console.error("Failed to load learner progress:", error);
+    return response.status(500).json({ error: "Unable to load your learning log." });
+  }
+});
+
+app.get("/api/learning/items", async (request, response) => {
+  const authorization = request.get("authorization") || "";
+  const token = authorization.startsWith("Bearer ") ? authorization.slice(7) : "";
+  const session = getLearnerSession(token);
+  if (!session) return response.status(401).json({ error: "Please sign in again." });
+
+  try {
+    const items = await request.sql`
+      SELECT i.id, i.track_id AS "trackId", i.type, i.title, i.description,
+             i.resource_url AS "resourceUrl", i.due_date AS "dueDate", i.created_at AS "createdAt"
+      FROM learning_course_items i
+      JOIN learning_accounts a ON a.id = ${Number(session.id)}
+      JOIN learning_enrollments e ON e.id = a.enrollment_id AND e.track_id = i.track_id
+      WHERE a.status = 'active' AND i.status = 'published'
+      ORDER BY CASE WHEN i.due_date IS NULL THEN 1 ELSE 0 END, i.due_date ASC, i.created_at DESC
+    `;
+    return response.json({ items });
+  } catch (error) {
+    console.error("Failed to load learner course items:", error);
+    return response.status(500).json({ error: "Unable to load your course materials." });
+  }
+});
+
+app.post("/api/learning/progress", async (request, response) => {
+  const authorization = request.get("authorization") || "";
+  const token = authorization.startsWith("Bearer ") ? authorization.slice(7) : "";
+  const session = getLearnerSession(token);
+  if (!session) return response.status(401).json({ error: "Please sign in again." });
+
+  const topic = typeof request.body?.topic === "string" ? request.body.topic.trim().slice(0, 120) : "";
+  const reflection = typeof request.body?.reflection === "string" ? request.body.reflection.trim().slice(0, 1200) : "";
+  if (!topic || !reflection) {
+    return response.status(400).json({ error: "Add a topic and a short note about what you learned." });
+  }
+
+  try {
+    const [entry] = await request.sql`
+      INSERT INTO learning_progress_entries (account_id, topic, reflection)
+      SELECT id, ${topic}, ${reflection}
+      FROM learning_accounts
+      WHERE id = ${Number(session.id)} AND status = 'active'
+      RETURNING id, topic, reflection, created_at AS "createdAt"
+    `;
+    if (!entry) return response.status(401).json({ error: "Your learning account could not be found." });
+    return response.status(201).json({ entry });
+  } catch (error) {
+    console.error("Failed to save learner progress:", error);
+    return response.status(500).json({ error: "Unable to save this learning log entry." });
   }
 });
 
@@ -646,6 +778,80 @@ app.get("/api/admin/blog", requireAdmin, async (_request, response) => {
   }
 });
 
+app.get("/api/admin/learning-items", requireAdmin, async (_request, response) => {
+  try {
+    const items = await sql`
+      SELECT id, track_id AS "trackId", type, title, description,
+             resource_url AS "resourceUrl", due_date AS "dueDate", status,
+             created_at AS "createdAt", updated_at AS "updatedAt"
+      FROM learning_course_items
+      ORDER BY updated_at DESC
+    `;
+    return response.json({ items });
+  } catch (error) {
+    console.error("Failed to load admin learning items:", error);
+    return response.status(500).json({ error: "Unable to load course materials." });
+  }
+});
+
+app.post("/api/admin/learning-items", requireAdmin, async (request, response) => {
+  const item = readLearningItem(request.body);
+  if (!item) return response.status(400).json({ error: "Check the course item fields and try again." });
+
+  try {
+    const [created] = await sql`
+      INSERT INTO learning_course_items (track_id, type, title, description, resource_url, due_date, status)
+      VALUES (${item.trackId}, ${item.type}, ${item.title}, ${item.description}, ${item.resourceUrl || null}, ${item.dueDate || null}, ${item.status})
+      RETURNING id, track_id AS "trackId", type, title, description,
+                resource_url AS "resourceUrl", due_date AS "dueDate", status,
+                created_at AS "createdAt", updated_at AS "updatedAt"
+    `;
+    return response.status(201).json({ item: created });
+  } catch (error) {
+    console.error("Failed to create admin learning item:", error);
+    return response.status(500).json({ error: "Unable to save this course item." });
+  }
+});
+
+app.patch("/api/admin/learning-items/:id", requireAdmin, async (request, response) => {
+  if (!/^\d+$/.test(request.params.id)) return response.status(400).json({ error: "Invalid course item ID." });
+  const item = readLearningItem(request.body);
+  if (!item) return response.status(400).json({ error: "Check the course item fields and try again." });
+
+  try {
+    const [updated] = await sql`
+      UPDATE learning_course_items
+      SET track_id = ${item.trackId}, type = ${item.type}, title = ${item.title},
+          description = ${item.description}, resource_url = ${item.resourceUrl || null},
+          due_date = ${item.dueDate || null}, status = ${item.status}, updated_at = NOW()
+      WHERE id = ${request.params.id}
+      RETURNING id, track_id AS "trackId", type, title, description,
+                resource_url AS "resourceUrl", due_date AS "dueDate", status,
+                created_at AS "createdAt", updated_at AS "updatedAt"
+    `;
+    if (!updated) return response.status(404).json({ error: "Course item not found." });
+    return response.json({ item: updated });
+  } catch (error) {
+    console.error("Failed to update admin learning item:", error);
+    return response.status(500).json({ error: "Unable to update this course item." });
+  }
+});
+
+app.delete("/api/admin/learning-items/:id", requireAdmin, async (request, response) => {
+  if (!/^\d+$/.test(request.params.id)) return response.status(400).json({ error: "Invalid course item ID." });
+
+  try {
+    const [deleted] = await sql`
+      DELETE FROM learning_course_items WHERE id = ${request.params.id} RETURNING id
+    `;
+    if (!deleted) return response.status(404).json({ error: "Course item not found." });
+    return response.json({ deleted: true });
+  } catch (error) {
+    console.error("Failed to delete admin learning item:", error);
+    return response.status(500).json({ error: "Unable to delete this course item." });
+  }
+});
+
 app.post("/api/admin/blog", requireAdmin, async (request, response) => {
   const post = readBlogPost(request.body);
   if (!post) return response.status(400).json({ error: "Check the blog post fields and try again." });
@@ -787,6 +993,29 @@ async function start() {
       email TEXT NOT NULL UNIQUE,
       password_hash TEXT NOT NULL,
       status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'disabled')),
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  await sql`
+    CREATE TABLE IF NOT EXISTS learning_progress_entries (
+      id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+      account_id BIGINT NOT NULL REFERENCES learning_accounts(id) ON DELETE CASCADE,
+      topic TEXT NOT NULL CHECK (char_length(topic) <= 120),
+      reflection TEXT NOT NULL CHECK (char_length(reflection) <= 1200),
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  await sql`
+    CREATE TABLE IF NOT EXISTS learning_course_items (
+      id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+      track_id TEXT NOT NULL,
+      type TEXT NOT NULL CHECK (type IN ('resource', 'assignment')),
+      title TEXT NOT NULL CHECK (char_length(title) <= 180),
+      description TEXT NOT NULL CHECK (char_length(description) <= 5000),
+      resource_url TEXT,
+      due_date DATE,
+      status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'published')),
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
       updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
