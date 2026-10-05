@@ -25,6 +25,7 @@ export async function GET(request: Request) {
         id?: number | string;
         email?: string;
         fullName?: string;
+        tutor?: { name?: string; email?: string | null } | null;
         enrollment?: {
           trackTitle?: string;
           status?: string;

@@ -7,6 +7,7 @@ import { useEffect, useState, type FormEvent } from "react";
 type Learner = {
   fullName?: string;
   email?: string;
+  tutor?: { name?: string; email?: string | null } | null;
   enrollment?: {
     trackTitle?: string;
     status?: string;
@@ -36,6 +37,14 @@ type CourseItem = {
   description: string;
   resourceUrl: string | null;
   dueDate: string | null;
+  submission: {
+    id: string | number;
+    response: string;
+    resourceUrl: string | null;
+    status: "submitted" | "reviewed" | "needs_revision";
+    feedback: string | null;
+    submittedAt: string;
+  } | null;
 };
 
 function formatLabel(value?: string) {
@@ -55,6 +64,11 @@ export default function LearningDashboardPage() {
   const [courseItems, setCourseItems] = useState<CourseItem[]>([]);
   const [topic, setTopic] = useState("");
   const [reflection, setReflection] = useState("");
+  const [activeAssignmentId, setActiveAssignmentId] = useState<string | number | null>(null);
+  const [assignmentResponse, setAssignmentResponse] = useState("");
+  const [assignmentUrl, setAssignmentUrl] = useState("");
+  const [assignmentError, setAssignmentError] = useState("");
+  const [isSubmittingAssignment, setIsSubmittingAssignment] = useState(false);
   const [progressError, setProgressError] = useState("");
   const [courseItemsError, setCourseItemsError] = useState("");
   const [isSavingProgress, setIsSavingProgress] = useState(false);
@@ -130,6 +144,35 @@ export default function LearningDashboardPage() {
     }
   }
 
+  function editAssignment(item: CourseItem) {
+    setActiveAssignmentId(item.id);
+    setAssignmentResponse(item.submission?.response ?? "");
+    setAssignmentUrl(item.submission?.resourceUrl ?? "");
+    setAssignmentError("");
+  }
+
+  async function submitAssignment(event: FormEvent<HTMLFormElement>, itemId: string | number) {
+    event.preventDefault();
+    setIsSubmittingAssignment(true);
+    setAssignmentError("");
+    try {
+      const response = await fetch("/api/learning/assignments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ itemId, submission: assignmentResponse, resourceUrl: assignmentUrl }),
+      });
+      const result = await response.json() as { submission?: NonNullable<CourseItem["submission"]>; error?: string };
+      if (!response.ok || !result.submission) throw new Error(result.error ?? "Unable to submit this assignment.");
+      setCourseItems((currentItems) => currentItems.map((item) => item.id === itemId
+        ? { ...item, submission: result.submission! }
+        : item));
+    } catch (error) {
+      setAssignmentError(error instanceof Error ? error.message : "Unable to submit this assignment.");
+    } finally {
+      setIsSubmittingAssignment(false);
+    }
+  }
+
   return (
     <main className="min-h-screen bg-[#f5f5f0] px-5 py-10 text-[#111111] sm:px-8 lg:px-12">
       <div className="mx-auto max-w-5xl">
@@ -199,6 +242,18 @@ export default function LearningDashboardPage() {
               </dl>
             </section>
 
+            {user.tutor && (
+              <section className="border border-black/10 bg-white p-6 sm:p-8">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#547067]">Your tutor</p>
+                <h2 className="mt-2 text-xl font-semibold">{user.tutor.name}</h2>
+                {user.tutor.email && (
+                  <a href={`mailto:${user.tutor.email}`} className="mt-2 inline-flex text-sm font-semibold text-[#007d79] underline decoration-[#007d79]/30 underline-offset-4 hover:decoration-[#007d79]">
+                    {user.tutor.email}
+                  </a>
+                )}
+              </section>
+            )}
+
             {user.enrollment.goals && (
               <section className="border border-black/10 bg-white p-6 sm:p-8">
                 <h2 className="text-lg font-semibold">Your learning goals</h2>
@@ -227,15 +282,73 @@ export default function LearningDashboardPage() {
                           Open resource
                         </a>
                       )}
+                      {item.type === "assignment" && (
+                        <div className="mt-5 border-t border-black/10 pt-4">
+                          {item.submission ? (
+                            <div className="mb-4">
+                              <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#547067]">
+                                {formatLabel(item.submission.status)}
+                              </p>
+                              {item.submission.response && <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-black/65">{item.submission.response}</p>}
+                              {item.submission.resourceUrl && (
+                                <a href={item.submission.resourceUrl} target="_blank" rel="noreferrer" className="mt-2 inline-flex text-sm font-semibold text-[#007d79] underline underline-offset-4">Open submitted work</a>
+                              )}
+                              {item.submission.feedback && (
+                                <div className="mt-3 border-l-2 border-[#008c87] bg-[#f5f5f0] px-4 py-3">
+                                  <p className="text-xs font-semibold uppercase tracking-[0.1em] text-[#547067]">Tutor feedback</p>
+                                  <p className="mt-1 whitespace-pre-wrap text-sm leading-6 text-black/70">{item.submission.feedback}</p>
+                                </div>
+                              )}
+                            </div>
+                          ) : <p className="mb-3 text-sm text-black/55">No work submitted yet.</p>}
+                          {activeAssignmentId === item.id ? (
+                            <form onSubmit={(event) => submitAssignment(event, item.id)} className="grid gap-3">
+                              <label className="block text-sm font-medium">
+                                Your response
+                                <textarea
+                                  rows={3}
+                                  maxLength={10000}
+                                  required={!assignmentUrl.trim()}
+                                  value={assignmentResponse}
+                                  onChange={(event) => setAssignmentResponse(event.target.value)}
+                                  className="mt-2 w-full resize-y border border-black/15 bg-[#f7f7f2] px-3 py-3 outline-none focus:border-[#008c87]"
+                                  placeholder="Write your answer or reflection"
+                                />
+                              </label>
+                              <label className="block text-sm font-medium">
+                                Link to your work <span className="font-normal text-black/45">(optional)</span>
+                                <input
+                                  type="url"
+                                  required={!assignmentResponse.trim()}
+                                  value={assignmentUrl}
+                                  onChange={(event) => setAssignmentUrl(event.target.value)}
+                                  className="mt-2 w-full border border-black/15 bg-[#f7f7f2] px-3 py-3 outline-none focus:border-[#008c87]"
+                                  placeholder="https://..."
+                                />
+                              </label>
+                              {assignmentError && <p role="alert" className="text-sm text-red-700">{assignmentError}</p>}
+                              <div className="flex flex-wrap gap-3">
+                                <button type="submit" disabled={isSubmittingAssignment} className="min-h-10 bg-[#163d34] px-4 py-2 text-sm font-semibold text-white hover:bg-[#214d47] disabled:cursor-not-allowed disabled:opacity-60">
+                                  {isSubmittingAssignment ? "Submitting..." : item.submission ? "Resubmit work" : "Submit work"}
+                                </button>
+                                <button type="button" onClick={() => setActiveAssignmentId(null)} className="min-h-10 border border-black/15 px-4 py-2 text-sm font-medium hover:bg-black/5">
+                                  Cancel
+                                </button>
+                              </div>
+                            </form>
+                          ) : (
+                            <button type="button" onClick={() => editAssignment(item)} className="min-h-10 border border-[#163d34]/25 px-4 py-2 text-sm font-semibold text-[#163d34] hover:bg-[#163d34]/5">
+                              {item.submission ? "Edit submission" : "Submit assignment"}
+                            </button>
+                          )}
+                        </div>
+                      )}
                     </li>
                   ))}
                 </ul>
               ) : !courseItemsError ? (
                 <p className="py-5 text-sm text-black/55">No course materials or assignments have been published for this track yet.</p>
               ) : null}
-              {courseItems.some(({ type }) => type === "assignment") && (
-                <p className="border-t border-black/10 pt-4 text-sm text-black/50">Assignment submissions and tutor feedback are not available in the portal yet.</p>
-              )}
             </section>
 
             <section className="border border-black/10 bg-white p-6 sm:p-8">
@@ -301,7 +414,7 @@ export default function LearningDashboardPage() {
             </section>
 
             <p className="border-l-2 border-[#008c87] px-4 py-2 text-sm leading-6 text-black/55">
-              Course materials, assignments, and mentor feedback are not available in the portal yet.
+              Lesson completion and course progress tracking are not available in the portal yet.
             </p>
           </div>
         ) : (

@@ -438,9 +438,11 @@ app.get("/api/learning/me", async (request, response) => {
              e.payment_plan AS "paymentPlan", e.experience_level AS "experienceLevel",
              e.learning_format AS "learningFormat", e.preferred_days AS "preferredDays",
              e.preferred_time AS "preferredTime", e.preferred_start AS "preferredStart",
-             e.time_zone AS "timeZone", e.goals
+                  e.time_zone AS "timeZone", e.goals,
+                  ta.tutor_name AS "tutorName", ta.tutor_email AS "tutorEmail"
       FROM learning_accounts a
       JOIN learning_enrollments e ON e.id = a.enrollment_id
+                LEFT JOIN learning_tutor_assignments ta ON ta.account_id = a.id
       WHERE a.id = ${Number(session.id)}
       LIMIT 1
     `;
@@ -454,6 +456,10 @@ app.get("/api/learning/me", async (request, response) => {
         id: account.id,
         fullName: account.fullName,
         email: account.email,
+        tutor: account.tutorName ? {
+          name: account.tutorName,
+          email: account.tutorEmail,
+        } : null,
         enrollment: {
           trackTitle: account.trackTitle,
           status: account.enrollmentStatus,
@@ -503,19 +509,79 @@ app.get("/api/learning/items", async (request, response) => {
   if (!session) return response.status(401).json({ error: "Please sign in again." });
 
   try {
-    const items = await request.sql`
+    const rows = await request.sql`
       SELECT i.id, i.track_id AS "trackId", i.type, i.title, i.description,
-             i.resource_url AS "resourceUrl", i.due_date AS "dueDate", i.created_at AS "createdAt"
+             i.resource_url AS "resourceUrl", i.due_date AS "dueDate", i.created_at AS "createdAt",
+             s.id AS "submissionId", s.response AS "submissionResponse",
+             s.response_url AS "submissionUrl", s.status AS "submissionStatus",
+             s.feedback AS "submissionFeedback", s.submitted_at AS "submittedAt"
       FROM learning_course_items i
       JOIN learning_accounts a ON a.id = ${Number(session.id)}
       JOIN learning_enrollments e ON e.id = a.enrollment_id AND e.track_id = i.track_id
+      LEFT JOIN learning_assignment_submissions s ON s.item_id = i.id AND s.account_id = a.id
       WHERE a.status = 'active' AND i.status = 'published'
       ORDER BY CASE WHEN i.due_date IS NULL THEN 1 ELSE 0 END, i.due_date ASC, i.created_at DESC
     `;
+    const items = rows.map(({ submissionId, submissionResponse, submissionUrl, submissionStatus, submissionFeedback, submittedAt, ...item }) => ({
+      ...item,
+      submission: submissionId ? {
+        id: submissionId,
+        response: submissionResponse,
+        resourceUrl: submissionUrl,
+        status: submissionStatus,
+        feedback: submissionFeedback,
+        submittedAt,
+      } : null,
+    }));
     return response.json({ items });
   } catch (error) {
     console.error("Failed to load learner course items:", error);
     return response.status(500).json({ error: "Unable to load your course materials." });
+  }
+});
+
+app.post("/api/learning/assignments", async (request, response) => {
+  const authorization = request.get("authorization") || "";
+  const token = authorization.startsWith("Bearer ") ? authorization.slice(7) : "";
+  const session = getLearnerSession(token);
+  if (!session) return response.status(401).json({ error: "Please sign in again." });
+
+  const itemId = typeof request.body?.itemId === "string" || typeof request.body?.itemId === "number"
+    ? String(request.body.itemId)
+    : "";
+  const submission = typeof request.body?.submission === "string" ? request.body.submission.trim().slice(0, 10000) : "";
+  const resourceUrl = typeof request.body?.resourceUrl === "string" ? request.body.resourceUrl.trim().slice(0, 1000) : "";
+  let validResourceUrl = !resourceUrl;
+  if (resourceUrl) {
+    try {
+      validResourceUrl = ["http:", "https:"].includes(new URL(resourceUrl).protocol);
+    } catch {
+      validResourceUrl = false;
+    }
+  }
+  if (!/^\d+$/.test(itemId) || (!submission && !resourceUrl) || !validResourceUrl) {
+    return response.status(400).json({ error: "Add a written response or a valid link to your work." });
+  }
+
+  try {
+    const [saved] = await request.sql`
+      INSERT INTO learning_assignment_submissions (item_id, account_id, response, response_url)
+      SELECT i.id, a.id, ${submission}, ${resourceUrl || null}
+      FROM learning_course_items i
+      JOIN learning_accounts a ON a.id = ${Number(session.id)} AND a.status = 'active'
+      JOIN learning_enrollments e ON e.id = a.enrollment_id AND e.track_id = i.track_id
+      WHERE i.id = ${itemId} AND i.type = 'assignment' AND i.status = 'published'
+      ON CONFLICT (item_id, account_id) DO UPDATE
+      SET response = EXCLUDED.response, response_url = EXCLUDED.response_url,
+          status = 'submitted', feedback = NULL, submitted_at = NOW(), updated_at = NOW()
+      RETURNING id, item_id AS "itemId", response, response_url AS "resourceUrl",
+                status, feedback, submitted_at AS "submittedAt"
+    `;
+    if (!saved) return response.status(404).json({ error: "This assignment is not available for your learning track." });
+    return response.status(201).json({ submission: saved });
+  } catch (error) {
+    console.error("Failed to save learner assignment:", error);
+    return response.status(500).json({ error: "Unable to submit this assignment." });
   }
 });
 
@@ -794,6 +860,100 @@ app.get("/api/admin/learning-items", requireAdmin, async (_request, response) =>
   }
 });
 
+app.get("/api/admin/learning-submissions", requireAdmin, async (_request, response) => {
+  try {
+    const submissions = await sql`
+      SELECT s.id, s.item_id AS "itemId", s.account_id AS "accountId",
+             s.response, s.response_url AS "resourceUrl", s.status, s.feedback,
+             s.submitted_at AS "submittedAt", s.updated_at AS "updatedAt",
+             i.title AS "assignmentTitle", i.track_id AS "trackId",
+             a.full_name AS "learnerName", a.email AS "learnerEmail"
+      FROM learning_assignment_submissions s
+      JOIN learning_course_items i ON i.id = s.item_id
+      JOIN learning_accounts a ON a.id = s.account_id
+      ORDER BY s.updated_at DESC
+      LIMIT 300
+    `;
+    return response.json({ submissions });
+  } catch (error) {
+    console.error("Failed to load assignment submissions:", error);
+    return response.status(500).json({ error: "Unable to load assignment submissions." });
+  }
+});
+
+app.get("/api/admin/learning-assignments", requireAdmin, async (_request, response) => {
+  try {
+    const learners = await sql`
+      SELECT a.id AS "accountId", a.full_name AS "fullName", a.email,
+             e.track_title AS "trackTitle", e.status AS "enrollmentStatus",
+             ta.tutor_name AS "tutorName", ta.tutor_email AS "tutorEmail",
+             ta.notes AS "tutorNotes", ta.updated_at AS "assignedAt"
+      FROM learning_accounts a
+      JOIN learning_enrollments e ON e.id = a.enrollment_id
+      LEFT JOIN learning_tutor_assignments ta ON ta.account_id = a.id
+      WHERE a.status = 'active'
+      ORDER BY e.created_at DESC
+      LIMIT 500
+    `;
+    return response.json({ learners });
+  } catch (error) {
+    console.error("Failed to load learner tutor assignments:", error);
+    return response.status(500).json({ error: "Unable to load learners." });
+  }
+});
+
+app.patch("/api/admin/learning-assignments/:accountId", requireAdmin, async (request, response) => {
+  if (!/^\d+$/.test(request.params.accountId)) return response.status(400).json({ error: "Invalid learner account ID." });
+  const tutorName = typeof request.body?.tutorName === "string" ? request.body.tutorName.trim().slice(0, 160) : "";
+  const tutorEmail = typeof request.body?.tutorEmail === "string" ? request.body.tutorEmail.trim().slice(0, 254).toLowerCase() : "";
+  const notes = typeof request.body?.notes === "string" ? request.body.notes.trim().slice(0, 2000) : "";
+  if (!tutorName || (tutorEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(tutorEmail))) {
+    return response.status(400).json({ error: "Enter a tutor name and a valid email address." });
+  }
+
+  try {
+    const [assignment] = await sql`
+      INSERT INTO learning_tutor_assignments (account_id, tutor_name, tutor_email, notes)
+      SELECT id, ${tutorName}, ${tutorEmail || null}, ${notes}
+      FROM learning_accounts
+      WHERE id = ${request.params.accountId} AND status = 'active'
+      ON CONFLICT (account_id) DO UPDATE
+      SET tutor_name = EXCLUDED.tutor_name, tutor_email = EXCLUDED.tutor_email,
+          notes = EXCLUDED.notes, updated_at = NOW()
+      RETURNING account_id AS "accountId", tutor_name AS "tutorName",
+                tutor_email AS "tutorEmail", notes AS "tutorNotes", updated_at AS "assignedAt"
+    `;
+    if (!assignment) return response.status(404).json({ error: "Active learner account not found." });
+    return response.json({ assignment });
+  } catch (error) {
+    console.error("Failed to assign learner tutor:", error);
+    return response.status(500).json({ error: "Unable to save the tutor assignment." });
+  }
+});
+
+app.patch("/api/admin/learning-submissions/:id", requireAdmin, async (request, response) => {
+  if (!/^\d+$/.test(request.params.id)) return response.status(400).json({ error: "Invalid submission ID." });
+  const feedback = typeof request.body?.feedback === "string" ? request.body.feedback.trim().slice(0, 5000) : "";
+  const status = request.body?.status;
+  if (!feedback || !["reviewed", "needs_revision"].includes(status)) {
+    return response.status(400).json({ error: "Enter feedback and choose a review outcome." });
+  }
+
+  try {
+    const [updated] = await sql`
+      UPDATE learning_assignment_submissions
+      SET feedback = ${feedback}, status = ${status}, updated_at = NOW()
+      WHERE id = ${request.params.id}
+      RETURNING id, item_id AS "itemId", status, feedback, updated_at AS "updatedAt"
+    `;
+    if (!updated) return response.status(404).json({ error: "Assignment submission not found." });
+    return response.json({ submission: updated });
+  } catch (error) {
+    console.error("Failed to review assignment submission:", error);
+    return response.status(500).json({ error: "Unable to save assignment feedback." });
+  }
+});
+
 app.post("/api/admin/learning-items", requireAdmin, async (request, response) => {
   const item = readLearningItem(request.body);
   if (!item) return response.status(400).json({ error: "Check the course item fields and try again." });
@@ -1016,6 +1176,31 @@ async function start() {
       resource_url TEXT,
       due_date DATE,
       status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'published')),
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  await sql`
+    CREATE TABLE IF NOT EXISTS learning_assignment_submissions (
+      id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+      item_id BIGINT NOT NULL REFERENCES learning_course_items(id) ON DELETE CASCADE,
+      account_id BIGINT NOT NULL REFERENCES learning_accounts(id) ON DELETE CASCADE,
+      response TEXT NOT NULL DEFAULT '' CHECK (char_length(response) <= 10000),
+      response_url TEXT,
+      status TEXT NOT NULL DEFAULT 'submitted' CHECK (status IN ('submitted', 'reviewed', 'needs_revision')),
+      feedback TEXT CHECK (char_length(feedback) <= 5000),
+      submitted_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      UNIQUE (item_id, account_id)
+    )
+  `;
+  await sql`
+    CREATE TABLE IF NOT EXISTS learning_tutor_assignments (
+      id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+      account_id BIGINT NOT NULL UNIQUE REFERENCES learning_accounts(id) ON DELETE CASCADE,
+      tutor_name TEXT NOT NULL CHECK (char_length(tutor_name) <= 160),
+      tutor_email TEXT,
+      notes TEXT NOT NULL DEFAULT '' CHECK (char_length(notes) <= 2000),
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
       updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
