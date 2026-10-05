@@ -37,6 +37,8 @@ type CourseItem = {
   description: string;
   resourceUrl: string | null;
   dueDate: string | null;
+  completed: boolean;
+  completedAt: string | null;
   submission: {
     id: string | number;
     response: string;
@@ -72,6 +74,7 @@ export default function LearningDashboardPage() {
   const [progressError, setProgressError] = useState("");
   const [courseItemsError, setCourseItemsError] = useState("");
   const [isSavingProgress, setIsSavingProgress] = useState(false);
+  const [isUpdatingCompletion, setIsUpdatingCompletion] = useState<Record<string | number, boolean>>({});
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -170,6 +173,29 @@ export default function LearningDashboardPage() {
       setAssignmentError(error instanceof Error ? error.message : "Unable to submit this assignment.");
     } finally {
       setIsSubmittingAssignment(false);
+    }
+  }
+
+  async function toggleResourceCompletion(item: CourseItem) {
+    const nextCompleted = !item.completed;
+    setIsUpdatingCompletion((current) => ({ ...current, [item.id]: true }));
+    setCourseItemsError("");
+
+    try {
+      const response = await fetch(`/api/learning/items/${encodeURIComponent(String(item.id))}/completion`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ completed: nextCompleted }),
+      });
+      const result = await response.json() as { completed?: boolean; completedAt?: string | null; error?: string };
+      if (!response.ok) throw new Error(result.error ?? "Unable to update your course progress.");
+      setCourseItems((currentItems) => currentItems.map((currentItem) => currentItem.id === item.id
+        ? { ...currentItem, completed: result.completed ?? nextCompleted, completedAt: result.completedAt ?? (nextCompleted ? new Date().toISOString() : null) }
+        : currentItem));
+    } catch (error) {
+      setCourseItemsError(error instanceof Error ? error.message : "Unable to update your course progress.");
+    } finally {
+      setIsUpdatingCompletion((current) => ({ ...current, [item.id]: false }));
     }
   }
 
@@ -281,6 +307,21 @@ export default function LearningDashboardPage() {
                         <a href={item.resourceUrl} target="_blank" rel="noreferrer" className="mt-3 inline-flex text-sm font-semibold text-[#007d79] underline decoration-[#007d79]/30 underline-offset-4 hover:decoration-[#007d79]">
                           Open resource
                         </a>
+                      )}
+                      {item.type === "resource" && (
+                        <div className="mt-4 flex flex-wrap items-center gap-3">
+                          <button
+                            type="button"
+                            onClick={() => toggleResourceCompletion(item)}
+                            disabled={Boolean(isUpdatingCompletion[item.id])}
+                            className={`min-h-10 border px-4 py-2 text-sm font-semibold transition-colors ${item.completed ? "border-[#163d34] bg-[#163d34] text-white hover:bg-[#214d47]" : "border-[#163d34]/25 bg-white text-[#163d34] hover:bg-[#163d34]/5"} disabled:cursor-not-allowed disabled:opacity-60`}
+                          >
+                            {isUpdatingCompletion[item.id] ? "Updating..." : item.completed ? "Mark as incomplete" : "Mark as complete"}
+                          </button>
+                          <span className={`text-sm ${item.completed ? "text-[#163d34]" : "text-black/55"}`}>
+                            {item.completed ? (item.completedAt ? `Completed ${new Intl.DateTimeFormat(undefined, { dateStyle: "medium" }).format(new Date(item.completedAt))}` : "Completed") : "Not completed yet"}
+                          </span>
+                        </div>
                       )}
                       {item.type === "assignment" && (
                         <div className="mt-5 border-t border-black/10 pt-4">

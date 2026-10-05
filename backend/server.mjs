@@ -514,16 +514,20 @@ app.get("/api/learning/items", async (request, response) => {
              i.resource_url AS "resourceUrl", i.due_date AS "dueDate", i.created_at AS "createdAt",
              s.id AS "submissionId", s.response AS "submissionResponse",
              s.response_url AS "submissionUrl", s.status AS "submissionStatus",
-             s.feedback AS "submissionFeedback", s.submitted_at AS "submittedAt"
+                  s.feedback AS "submissionFeedback", s.submitted_at AS "submittedAt",
+                  c.completed_at AS "completedAt"
       FROM learning_course_items i
       JOIN learning_accounts a ON a.id = ${Number(session.id)}
       JOIN learning_enrollments e ON e.id = a.enrollment_id AND e.track_id = i.track_id
       LEFT JOIN learning_assignment_submissions s ON s.item_id = i.id AND s.account_id = a.id
+                LEFT JOIN learning_item_completions c ON c.item_id = i.id AND c.account_id = a.id
       WHERE a.status = 'active' AND i.status = 'published'
       ORDER BY CASE WHEN i.due_date IS NULL THEN 1 ELSE 0 END, i.due_date ASC, i.created_at DESC
     `;
-    const items = rows.map(({ submissionId, submissionResponse, submissionUrl, submissionStatus, submissionFeedback, submittedAt, ...item }) => ({
+    const items = rows.map(({ submissionId, submissionResponse, submissionUrl, submissionStatus, submissionFeedback, submittedAt, completedAt, ...item }) => ({
       ...item,
+      completed: Boolean(completedAt),
+      completedAt,
       submission: submissionId ? {
         id: submissionId,
         response: submissionResponse,
@@ -537,6 +541,45 @@ app.get("/api/learning/items", async (request, response) => {
   } catch (error) {
     console.error("Failed to load learner course items:", error);
     return response.status(500).json({ error: "Unable to load your course materials." });
+  }
+});
+
+app.patch("/api/learning/items/:id/completion", async (request, response) => {
+  const authorization = request.get("authorization") || "";
+  const token = authorization.startsWith("Bearer ") ? authorization.slice(7) : "";
+  const session = getLearnerSession(token);
+  if (!session) return response.status(401).json({ error: "Please sign in again." });
+  if (!/^\d+$/.test(request.params.id) || typeof request.body?.completed !== "boolean") {
+    return response.status(400).json({ error: "Invalid course item completion update." });
+  }
+
+  try {
+    if (request.body.completed) {
+      const [completion] = await request.sql`
+        INSERT INTO learning_item_completions (item_id, account_id)
+        SELECT i.id, a.id
+        FROM learning_course_items i
+        JOIN learning_accounts a ON a.id = ${Number(session.id)} AND a.status = 'active'
+        JOIN learning_enrollments e ON e.id = a.enrollment_id AND e.track_id = i.track_id
+        WHERE i.id = ${request.params.id} AND i.type = 'resource' AND i.status = 'published'
+        ON CONFLICT (item_id, account_id) DO UPDATE SET completed_at = NOW()
+        RETURNING item_id AS "itemId", completed_at AS "completedAt"
+      `;
+      if (!completion) return response.status(404).json({ error: "This resource is not available for your learning track." });
+      return response.json({ completed: true, completedAt: completion.completedAt });
+    }
+
+    await request.sql`
+      DELETE FROM learning_item_completions c
+      USING learning_course_items i, learning_accounts a, learning_enrollments e
+      WHERE c.item_id = i.id AND c.account_id = a.id AND a.id = ${Number(session.id)}
+        AND a.status = 'active' AND e.id = a.enrollment_id AND e.track_id = i.track_id
+        AND i.id = ${request.params.id} AND i.type = 'resource' AND i.status = 'published'
+    `;
+    return response.json({ completed: false, completedAt: null });
+  } catch (error) {
+    console.error("Failed to update resource completion:", error);
+    return response.status(500).json({ error: "Unable to update course progress." });
   }
 });
 
@@ -1178,6 +1221,14 @@ async function start() {
       status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'published')),
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
       updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  await sql`
+    CREATE TABLE IF NOT EXISTS learning_item_completions (
+      account_id BIGINT NOT NULL REFERENCES learning_accounts(id) ON DELETE CASCADE,
+      item_id BIGINT NOT NULL REFERENCES learning_course_items(id) ON DELETE CASCADE,
+      completed_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      PRIMARY KEY (account_id, item_id)
     )
   `;
   await sql`
