@@ -43,7 +43,7 @@ export default function LearningLoginPage() {
         <div className="grid lg:grid-cols-[1.15fr_0.85fr]">
           <section className="bg-[#163d34] px-6 py-8 text-[#f7f5ee] sm:px-10 sm:py-10">
             <Link href="/learn" className="inline-flex text-sm font-semibold uppercase tracking-[0.18em] text-[#d7f36a]">
-              Jolomi Learning
+             SkillCraft
             </Link>
             <h1 className="mt-6 text-4xl font-semibold tracking-[-0.05em] sm:text-5xl">Sign into your learner account.</h1>
             <p className="mt-4 max-w-md text-base leading-7 text-white/70">
@@ -51,7 +51,7 @@ export default function LearningLoginPage() {
             </p>
             <div className="mt-8 rounded-2xl border border-white/15 bg-white/5 p-5 text-sm leading-6 text-white/75">
               <p className="font-semibold text-[#d7f36a]">After registration</p>
-              <p className="mt-2">Your learner profile is created automatically after payment is verified. Use the email address you registered with along with your temporary password.</p>
+              <p className="mt-2">Your skillcraft profile is created automatically after payment is verified. Use the email address you registered with along with your temporary password.</p>
             </div>
           </section>
 

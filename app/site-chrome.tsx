@@ -10,7 +10,7 @@ const links = [
   ["HOME", "/"],
   ["PROJECTS", "/projects"],
   ["SERVICES", "/services"],
-  ["SKILL UP", "/learn"],
+  ["SKILLCRAFT", "/learn"],
   ["BLOG", "/blog"],
   ["CONTACT", "/contact"],
 ] as const;

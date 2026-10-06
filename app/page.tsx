@@ -217,7 +217,7 @@ export default function Home() {
                   </button>
                   {[
                     ["SERVICES", "/services"],
-                    ["SKILL UP", "/learn"],
+                    ["SKILLCRAFT", "/learn"],
                     ["MY BLOG", "/blog"],
                     ["CONTACT", "/contact"],
                   ].map(([label, href], index) => (
