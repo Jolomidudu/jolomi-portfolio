@@ -128,7 +128,7 @@ export default function Home() {
             href="/learn"
             className="transition-opacity hover:opacity-50"
           >
-            SKILL UP
+            SKILLCRAFT
           </a>
 
           <Link
