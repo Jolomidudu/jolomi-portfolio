@@ -30,6 +30,16 @@ const projects = [
     stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "Flutter"],
   },
   {
+    name: "Signvault",
+    category: "Web & Mobile",
+    image: "/images/projects/signvault.jpg",
+    alt: "Signvault Digital Signage Platform",
+    href: "https://signvaulty.vercel.app",
+    description:
+      "A premium digital signage platform for customers to create and manage engaging content for their displays.",
+    stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "Flutter"],
+  },
+  {
     name: "Spa Elaris",
     category: "Web & Mobile",
     image: "/images/projects/spaelaris1-mckp.jpg",

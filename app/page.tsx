@@ -27,7 +27,7 @@ const homepageProjects = [
   },
   {
     name: "Kids College",
-    image: "/images/projects/kidscollege-mckp.png",
+    image: "/images/projects/kidscollege.jpg",
     alt: "School Management Platform",
     href: "https://kcbn.vercel.app",
   },

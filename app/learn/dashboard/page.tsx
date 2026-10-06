@@ -455,7 +455,7 @@ export default function LearningDashboardPage() {
             </section>
 
             <p className="border-l-2 border-[#008c87] px-4 py-2 text-sm leading-6 text-black/55">
-              Lesson completion and course progress tracking are not available in the portal yet.
+              Resource completion is saved to your learner account and reflected in this dashboard.
             </p>
           </div>
         ) : (
