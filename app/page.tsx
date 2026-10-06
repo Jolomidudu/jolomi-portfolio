@@ -50,6 +50,7 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [menuView, setMenuView] = useState<"main" | "about">("main");
   const [atPageEnd, setAtPageEnd] = useState(false);
+  const [headerScrolled, setHeaderScrolled] = useState(false);
   const [activeTitle, setActiveTitle] = useState(0);
 
   useEffect(() => {
@@ -57,6 +58,7 @@ export default function Home() {
       setAtPageEnd(
         window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 8,
       );
+      setHeaderScrolled(window.scrollY > 120);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -76,12 +78,12 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-[#f5f5f0] pt-[110px] text-[#111111] md:pt-20">
+    <main className="min-h-screen bg-[#f5f5f0] text-[#111111]">
 
       {/* =====================================================
           NAVIGATION
       ====================================================== */}
-      <nav className={`fixed inset-x-0 top-0 z-50 flex min-h-20 shrink-0 items-center justify-between bg-[#f5f5f0] px-6 pb-5 pt-[50px] transition-colors md:px-12 md:py-5 lg:px-16 ${menuOpen ? "bg-[#12211f] text-[#f5f5f0]" : "text-[#111111]"}`}>
+      <nav className={`fixed inset-x-0 top-0 z-50 flex min-h-20 shrink-0 items-center justify-between px-6 pb-5 pt-[50px] transition-all duration-300 md:px-12 md:py-5 lg:px-16 ${menuOpen ? "bg-[#12211f] text-[#f5f5f0]" : headerScrolled ? "bg-[#f5f5f0] text-[#111111]" : "bg-transparent text-white"}`}>
 
         <a
           href="#"
@@ -95,12 +97,13 @@ export default function Home() {
           />
         </a>
 
-        <div className="hidden items-center gap-8 text-sm font-medium md:flex">
+        <div className={`hidden items-center gap-8 text-sm font-medium transition-colors md:flex ${headerScrolled ? "text-[#111111]" : "text-white"}`}>
+          
           <a
-            href="/projects"
+            href="/"
             className="transition-opacity hover:opacity-50"
           >
-            PROJECTS
+            HOME
           </a>
 
           <details className="group relative">
@@ -117,12 +120,19 @@ export default function Home() {
             </div>
           </details>
 
-          <Link
+          <a
             href="/services"
             className="transition-opacity hover:opacity-50"
           >
             SERVICES
-          </Link>
+          </a>
+
+          <a
+            href="/projects"
+            className="transition-opacity hover:opacity-50"
+          >
+            PROJECTS
+          </a>
 
           <a
             href="/learn"
@@ -135,7 +145,7 @@ export default function Home() {
             href="/blog"
             className="transition-opacity hover:opacity-50"
           >
-            MY BLOG
+            BLOG
           </Link>
 
           <a
@@ -152,7 +162,7 @@ export default function Home() {
 
         <div className="flex items-center gap-1 md:hidden">
           <button
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-[#374151] bg-[#374151] text-white transition-colors hover:bg-[#1f2937]"
+            className={`flex h-9 w-9 items-center justify-center rounded-full border text-white transition-colors ${menuOpen ? "border-white/40 bg-[#12211f] hover:bg-[#1f2937]" : headerScrolled ? "border-[#374151] bg-[#374151] hover:bg-[#1f2937]" : "border-white/50 bg-white/10 hover:bg-white/20"}`}
             type="button"
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
@@ -182,7 +192,7 @@ export default function Home() {
 
             <div className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#78d8ca]">
               <span className="h-2 w-2 rounded-full bg-[#78d8ca]" />
-              <span>{menuView === "main" ? "Menu / Available for Hire" : "About / Explore"}</span>
+              <span>{menuView === "main" ? "Menu / Open to Collaboration" : "About / Explore"}</span>
             </div>
 
             <nav className="flex flex-1 flex-col" aria-label="Mobile navigation">
@@ -301,13 +311,13 @@ export default function Home() {
           HERO
       ====================================================== */}
       <section
-        className="relative -top-20 flex min-h-[calc(100vh-90px)] flex-col justify-center px-6 pb-16 pt-16 text-white md:-top-5 md:px-12 lg:px-16 md:min-h-[calc(100vh-90px)] sm:min-h-[calc(100vh-90px)]"
+        className="relative flex min-h-[100svh] flex-col justify-center px-6 pb-16 pt-28 text-white md:px-12 md:pt-32 lg:px-16"
         style={{
           backgroundImage:
             "linear-gradient(135deg, rgba(17, 17, 17, 0.62), rgba(17, 17, 17, 0.38)), url('/suit.jpg')",
           backgroundSize: "cover",
           backgroundPosition: "center",
-          minHeight: "calc(100vh - 90px + 100px)",
+          minHeight: "100svh",
         }}
       >
 

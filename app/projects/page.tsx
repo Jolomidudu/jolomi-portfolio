@@ -32,23 +32,23 @@ const projects = [
   {
     name: "Signvault",
     category: "Web & Mobile",
-    image: "/images/projects/signvault.jpg",
+    image: "/images/projects/signvault.png",
     alt: "Signvault Digital Signage Platform",
     href: "https://signvaulty.vercel.app",
     description:
       "A premium digital signage platform for customers to create and manage engaging content for their displays.",
     stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "Flutter"],
   },
-  {
-    name: "Spa Elaris",
-    category: "Web & Mobile",
-    image: "/images/projects/spaelaris1-mckp.jpg",
-    alt: "Spa Elaris wellness website",
-    href: "https://spaelaris.vercel.app",
-    description:
-      "A premium wellness & spa platform for customers to book appointments and explore services, treatments and packages through a polished digital experience.",
-    stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "Flutter"],
-  },
+  // {
+  //   name: "Spa Elaris",
+  //   category: "Web & Mobile",
+  //   image: "/images/projects/spaelaris1-mckp.jpg",
+  //   alt: "Spa Elaris wellness website",
+  //   href: "https://spaelaris.vercel.app",
+  //   description:
+  //     "A premium wellness & spa platform for customers to book appointments and explore services, treatments and packages through a polished digital experience.",
+  //   stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "Flutter"],
+  // },
   {
     name: "Kids College",
     category: "Web App",

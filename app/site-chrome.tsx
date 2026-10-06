@@ -8,8 +8,8 @@ import { CurrencyToggle } from "./currency-provider";
 
 const links = [
   ["HOME", "/"],
-  ["PROJECTS", "/projects"],
   ["SERVICES", "/services"],
+  ["PROJECTS", "/projects"],
   ["SKILLCRAFT", "/learn"],
   ["BLOG", "/blog"],
   ["CONTACT", "/contact"],
