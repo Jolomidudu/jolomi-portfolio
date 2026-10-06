@@ -375,7 +375,7 @@ export default function Home() {
                   rel="noreferrer"
                   aria-label="Call me"
                   title="Call me"
-                  className="flex min-w-0 flex-1 items-center justify-center gap-2 rounded-[0.65rem] border border-white/30 bg-white/70 px-2 py-3 text-center text-[#111111] backdrop-blur-sm transition-all hover:bg-white/80 hover:text-[#3a3a3a]"
+                  className="flex min-w-0 w-[33.75%] shrink-0 items-center justify-center gap-2 rounded-[0.65rem] border border-white/30 bg-white/70 px-2 py-3 text-center text-[#111111] backdrop-blur-sm transition-all hover:bg-white/80 hover:text-[#3a3a3a]"
                 >
                   <svg viewBox="0 0 24 24" aria-hidden="true" className="h-[1.25rem] w-[1.25rem] fill-none stroke-current stroke-[1.8] md:h-[1.5rem] md:w-[1.5rem]">
                     <path d="M7.2 3.8h2.5l1.2 4.1-1.8 1.5a14.1 14.1 0 0 0 5.5 5.5l1.5-1.8 4.1 1.2v2.5a2 2 0 0 1-2.2 2A15.9 15.9 0 0 1 5.2 6a2 2 0 0 1 2-2.2Z" strokeLinecap="round" strokeLinejoin="round" />
@@ -388,7 +388,7 @@ export default function Home() {
                   rel="noreferrer"
                   aria-label="Download CV"
                   title="Download CV"
-                  className="flex min-w-0 flex-1 items-center justify-center gap-2 rounded-[0.65rem] border border-white/30 bg-white/70 px-2 py-3 text-center text-[#111111] backdrop-blur-sm transition-all hover:bg-white/80 hover:text-[#3a3a3a]"
+                  className="flex min-w-0 w-[33.75%] shrink-0 items-center justify-center gap-2 rounded-[0.65rem] border border-white/30 bg-white/70 px-2 py-3 text-center text-[#111111] backdrop-blur-sm transition-all hover:bg-white/80 hover:text-[#3a3a3a]"
                 >
                   <svg viewBox="0 0 24 24" aria-hidden="true" className="h-[1.125rem] w-[1.125rem] shrink-0 fill-none stroke-current stroke-[1.8] md:h-[1.4rem] md:w-[1.4rem]">
                     <path d="M12 3v11m0 0 4-4m-4 4-4-4M5 16v4h14v-4" strokeLinecap="round" strokeLinejoin="round" />
