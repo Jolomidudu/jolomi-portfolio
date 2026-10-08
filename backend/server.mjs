@@ -481,6 +481,102 @@ app.post("/api/auth/login", (request, response) => {
   return response.json({ token: createSession(adminEmail), expiresIn: sessionLifetimeSeconds });
 });
 
+app.post("/api/contact", async (request, response) => {
+  const read = (field, maxLength) => typeof request.body?.[field] === "string"
+    ? request.body[field].trim().slice(0, maxLength + 1)
+    : "";
+  const contact = {
+    name: read("name", 120),
+    email: read("email", 254),
+    company: read("company", 120),
+    role: read("role", 120),
+    enquiry: read("enquiry", 80),
+    budget: read("budget", 40),
+    timeline: read("timeline", 40),
+    message: read("message", 2500),
+    source: read("source", 40),
+  };
+  const validEnquiries = new Set([
+    "Technology leadership / ICT consulting",
+    "Technology strategy & digital transformation",
+    "Software / web application",
+    "Mobile application",
+    "Systems architecture / technical review",
+    "Data & analytics",
+    "Cloud / DevOps / infrastructure",
+    "Technology training",
+    "Mentorship",
+    "Partnership / collaboration",
+    "Speaking / media",
+    "Other",
+  ]);
+  const validBudgets = new Set(["", "under-500k", "500k-1m", "1m-3m", "3m-5m", "5m-plus", "international", "not-sure"]);
+  const validTimelines = new Set(["", "urgent", "1-month", "1-3-months", "3-6-months", "6-plus-months", "flexible"]);
+  const validSources = new Set(["", "linkedin", "google", "github", "referral", "portfolio", "other"]);
+  if (
+    !contact.name || contact.name.length > 120
+    || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact.email) || contact.email.length > 254
+    || !validEnquiries.has(contact.enquiry)
+    || !validBudgets.has(contact.budget)
+    || !validTimelines.has(contact.timeline)
+    || !validSources.has(contact.source)
+    || contact.message.length < 5 || contact.message.length > 2500
+    || contact.company.length > 120 || contact.role.length > 120
+  ) {
+    return response.status(400).json({ error: "Please check the contact form fields and try again." });
+  }
+
+  if (!process.env.TELEGRAM_BOT_TOKEN || !process.env.TELEGRAM_CHAT_ID) {
+    return response.status(503).json({ error: "Contact messaging is not configured yet. Please try again later." });
+  }
+
+  const clientIp = (request.get("x-client-ip") || "unknown").slice(0, 64);
+  const clientKey = createHash("sha256").update(clientIp).digest("hex");
+  try {
+    const [rateLimit] = await request.sql`
+      INSERT INTO contact_message_rate_limits (client_key, window_started_at, request_count)
+      VALUES (${clientKey}, NOW(), 1)
+      ON CONFLICT (client_key) DO UPDATE
+      SET
+        window_started_at = CASE
+          WHEN contact_message_rate_limits.window_started_at <= NOW() - INTERVAL '10 minutes' THEN NOW()
+          ELSE contact_message_rate_limits.window_started_at
+        END,
+        request_count = CASE
+          WHEN contact_message_rate_limits.window_started_at <= NOW() - INTERVAL '10 minutes' THEN 1
+          ELSE LEAST(contact_message_rate_limits.request_count + 1, 6)
+        END
+      RETURNING request_count, window_started_at + INTERVAL '10 minutes' AS "windowEndsAt"
+    `;
+    if (rateLimit.request_count > 5) {
+      const retryAfter = Math.max(1, Math.ceil((new Date(rateLimit.windowEndsAt).getTime() - Date.now()) / 1000));
+      return response
+        .set("Retry-After", String(retryAfter))
+        .status(429)
+        .json({ error: "Too many contact messages. Please try again in 10 minutes." });
+    }
+
+    const sent = await notifyTelegram([
+      "New contact enquiry",
+      `Name: ${telegramField(contact.name)}`,
+      `Email: ${telegramField(contact.email, 254)}`,
+      `Organization: ${telegramField(contact.company || "Not provided")}`,
+      `Role: ${telegramField(contact.role || "Not provided")}`,
+      `Enquiry: ${telegramField(contact.enquiry, 80)}`,
+      `Budget: ${telegramField(contact.budget || "Not provided", 40)}`,
+      `Timeline: ${telegramField(contact.timeline || "Not provided", 40)}`,
+      `Source: ${telegramField(contact.source || "Not provided", 40)}`,
+      "Message:",
+      telegramField(contact.message, 2500),
+    ].join("\n"));
+    if (!sent) return response.status(503).json({ error: "Unable to send your message right now. Please try again later." });
+    return response.status(202).json({ sent: true });
+  } catch (error) {
+    console.error("Failed to send contact enquiry:", error);
+    return response.status(500).json({ error: "Unable to send your message right now. Please try again later." });
+  }
+});
+
 app.post("/api/learning/support", async (request, response) => {
   const allowedTopics = new Set(["Account Issues ?", "Registration Issues ?", "Need Materials ?"]);
   const topic = typeof request.body?.topic === "string" ? request.body.topic.trim() : "";
@@ -1463,6 +1559,13 @@ async function start() {
   `;
   await sql`
     CREATE TABLE IF NOT EXISTS learning_support_rate_limits (
+      client_key TEXT PRIMARY KEY,
+      window_started_at TIMESTAMPTZ NOT NULL,
+      request_count INTEGER NOT NULL CHECK (request_count > 0)
+    )
+  `;
+  await sql`
+    CREATE TABLE IF NOT EXISTS contact_message_rate_limits (
       client_key TEXT PRIMARY KEY,
       window_started_at TIMESTAMPTZ NOT NULL,
       request_count INTEGER NOT NULL CHECK (request_count > 0)

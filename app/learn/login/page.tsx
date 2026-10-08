@@ -174,6 +174,15 @@ export default function LearningLoginPage() {
                   </span>
                 </label>
 
+                <div className="-mt-3 flex justify-end">
+                  <Link
+                    href="/learn/forgot-password"
+                    className="text-xs font-medium text-[#163d34] underline-offset-4 transition-colors hover:text-[#008c87] hover:underline"
+                  >
+                    Forgot Password ?
+                  </Link>
+                </div>
+
                 {errorMessage && (
                   <p className="rounded border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{errorMessage}</p>
                 )}

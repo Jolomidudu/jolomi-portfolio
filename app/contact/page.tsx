@@ -195,9 +195,7 @@ export default function ContactPage() {
             {/* FORM */}
             <ContactFormModal>
               <form
-                action="mailto:jollofdudu@gmail.com?subject=Website%20Enquiry"
-                method="post"
-                encType="text/plain"
+                id="contact-enquiry-form"
                 className="mt-10 space-y-8"
               >
                 {/* NAME */}
@@ -424,17 +422,14 @@ export default function ContactPage() {
                 <div className="border-t border-black/15 pt-8">
                   <button
                     type="submit"
+                    data-contact-submit
                     className="inline-flex min-h-14 items-center justify-between gap-12 bg-[#163d34] px-7 py-4 text-sm font-semibold text-white transition-colors hover:bg-[#008c87]"
                   >
-                    Continue to email
+                    Ship Message
                     <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
                   </button>
 
-                  <p className="mt-4 max-w-lg text-xs leading-5 text-black/40">
-                    By submitting this form, you are requesting a professional
-                    conversation about your enquiry. Project scope, pricing,
-                    timelines and engagement terms are agreed separately.
-                  </p>
+                 
                 </div>
               </form>
             </ContactFormModal>
