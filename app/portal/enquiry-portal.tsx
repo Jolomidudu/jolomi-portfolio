@@ -2,7 +2,7 @@
 
 import { useEffect, useState, type FormEvent } from "react";
 import Link from "next/link";
-import { ChevronLeft, Download, Eye, EyeOff } from "lucide-react";
+import { ChevronLeft, Download, Eye, EyeOff, Trash2 } from "lucide-react";
 import BlogManager from "./blog-manager";
 import LearningManager from "./learning-manager";
 
@@ -40,6 +40,9 @@ export default function EnquiryPortal() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [deleteError, setDeleteError] = useState("");
+  const [deleteCandidate, setDeleteCandidate] = useState<Enquiry | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [refreshVersion, setRefreshVersion] = useState(0);
   const [activeSection, setActiveSection] = useState<"enquiries" | "blog" | "learning">("enquiries");
@@ -75,6 +78,16 @@ export default function EnquiryPortal() {
     void loadEnquiries();
     return () => { active = false; };
   }, [refreshVersion]);
+
+  useEffect(() => {
+    if (!deleteCandidate) return;
+
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && !isDeleting) setDeleteCandidate(null);
+    };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [deleteCandidate, isDeleting]);
 
   const normalizedSearch = search.trim().toLowerCase();
   const filteredEnquiries = enquiries.filter((enquiry) =>
@@ -114,6 +127,32 @@ export default function EnquiryPortal() {
     setPassword("");
     setErrorMessage("");
     setActiveSection("enquiries");
+  }
+
+  async function confirmDeleteEnquiry() {
+    if (!deleteCandidate || isDeleting) return;
+
+    setIsDeleting(true);
+    setDeleteError("");
+    try {
+      const response = await fetch(`/api/portal/enquiries/${encodeURIComponent(deleteCandidate.id)}`, {
+        method: "DELETE",
+      });
+      const result = await response.json() as { error?: string };
+      if (!response.ok) throw new Error(result.error ?? "Unable to delete this enquiry.");
+
+      const remainingEnquiries = enquiries.filter(({ id }) => id !== deleteCandidate.id);
+      setEnquiries(remainingEnquiries);
+      if (selectedId === deleteCandidate.id) {
+        setSelectedId(remainingEnquiries[0]?.id ?? null);
+      }
+      setDeleteCandidate(null);
+      setErrorMessage("");
+    } catch (error) {
+      setDeleteError(error instanceof Error ? error.message : "Unable to delete this enquiry.");
+    } finally {
+      setIsDeleting(false);
+    }
   }
 
   if (isCheckingSession && !signedIn) {
@@ -302,9 +341,22 @@ export default function EnquiryPortal() {
                   <h2 className="mt-2 text-3xl font-semibold">{selectedEnquiry.firstName} {selectedEnquiry.lastName}</h2>
                   <time className="mt-2 block text-sm text-black/50" dateTime={selectedEnquiry.createdAt}>{formatDate(selectedEnquiry.createdAt)}</time>
                 </div>
-                <span className="rounded-full border border-[#00A9A5]/25 bg-[#00A9A5]/10 px-3 py-1 text-xs font-semibold capitalize text-[#007d79]">
-                  {selectedEnquiry.status}
-                </span>
+                <div className="flex items-center gap-3">
+                  <span className="rounded-full border border-[#00A9A5]/25 bg-[#00A9A5]/10 px-3 py-1 text-xs font-semibold capitalize text-[#007d79]">
+                    {selectedEnquiry.status}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDeleteError("");
+                      setDeleteCandidate(selectedEnquiry);
+                    }}
+                    className="inline-flex min-h-9 items-center gap-2 rounded-md border border-red-200 px-3 py-2 text-xs font-semibold text-red-700 transition-colors hover:bg-red-50"
+                  >
+                    <Trash2 aria-hidden="true" className="h-4 w-4" />
+                    Delete enquiry
+                  </button>
+                </div>
               </div>
 
               <dl className="mt-6 grid gap-5 sm:grid-cols-2">
@@ -352,6 +404,50 @@ export default function EnquiryPortal() {
           )}
         </section>
       </div>
+      )}
+
+      {deleteCandidate && (
+        <div
+          className="fixed inset-0 z-[90] flex items-end justify-center bg-black/45 sm:items-center sm:p-5"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget && !isDeleting) setDeleteCandidate(null);
+          }}
+        >
+          <section
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="delete-enquiry-title"
+            aria-describedby="delete-enquiry-description"
+            className="w-full rounded-t-xl border border-black/10 bg-[#f5f5f0] px-6 pb-7 pt-6 shadow-2xl sm:max-w-md sm:rounded-xl sm:p-7"
+          >
+            <h2 id="delete-enquiry-title" className="text-xl font-semibold">
+              Are you sure you want to delete?
+            </h2>
+            <p id="delete-enquiry-description" className="mt-3 text-sm leading-6 text-black/60">
+              This will permanently delete the enquiry from {deleteCandidate.firstName} {deleteCandidate.lastName}, including its attachments.
+            </p>
+            {deleteError && <p role="alert" className="mt-4 text-sm text-red-700">{deleteError}</p>}
+            <div className="mt-7 flex justify-end gap-3">
+              <button
+                type="button"
+                autoFocus
+                disabled={isDeleting}
+                onClick={() => setDeleteCandidate(null)}
+                className="min-h-10 rounded-md border border-black/15 px-4 py-2 text-sm font-semibold transition-colors hover:bg-black/5 disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={isDeleting}
+                onClick={confirmDeleteEnquiry}
+                className="min-h-10 rounded-md bg-red-700 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-red-800 disabled:cursor-wait disabled:opacity-50"
+              >
+                {isDeleting ? "Deleting..." : "Continue"}
+              </button>
+            </div>
+          </section>
+        </div>
       )}
     </main>
   );

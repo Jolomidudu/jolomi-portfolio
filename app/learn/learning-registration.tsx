@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import tracks from "../../backend/learning-tracks.json";
 import { formatCurrencyAmount, useCurrency } from "../currency-provider";
 
@@ -60,6 +61,7 @@ type LearningRegistrationProps = {
 export default function LearningRegistration({
   variant = "floating",
 }: LearningRegistrationProps) {
+  const router = useRouter();
   const { currency, rate } = useCurrency();
   const [isOpen, setIsOpen] = useState(false);
   const [step, setStep] = useState(0);
@@ -68,6 +70,8 @@ export default function LearningRegistration({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const dialogRef = useRef<HTMLElement>(null);
+  const holdTimerRef = useRef<number | null>(null);
+  const holdTriggeredRef = useRef(false);
 
   const selectedTrack = tracks.find(({ id }) => id === form.trackId) ?? tracks[0];
   const paymentAmount = form.paymentPlan === "full" ? selectedTrack.totalAmount : selectedTrack.depositAmount;
@@ -98,6 +102,12 @@ export default function LearningRegistration({
     setRequestId(crypto.randomUUID());
     setErrorMessage("");
     setIsOpen(true);
+  }
+
+  function cancelHoldTimer() {
+    if (holdTimerRef.current === null) return;
+    window.clearTimeout(holdTimerRef.current);
+    holdTimerRef.current = null;
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -160,7 +170,27 @@ export default function LearningRegistration({
     <>
       <button
         type="button"
-        onClick={openForm}
+        onPointerDown={(event) => {
+          if (event.button !== 0) return;
+          holdTriggeredRef.current = false;
+          holdTimerRef.current = window.setTimeout(() => {
+            holdTriggeredRef.current = true;
+            holdTimerRef.current = null;
+            router.push("/learn/login");
+          }, 650);
+        }}
+        onPointerUp={cancelHoldTimer}
+        onPointerLeave={cancelHoldTimer}
+        onPointerCancel={cancelHoldTimer}
+        onContextMenu={(event) => event.preventDefault()}
+        onClick={(event) => {
+          if (holdTriggeredRef.current) {
+            event.preventDefault();
+            holdTriggeredRef.current = false;
+            return;
+          }
+          openForm();
+        }}
         aria-haspopup="dialog"
         aria-label="Start learning registration"
         className={variant === "header"

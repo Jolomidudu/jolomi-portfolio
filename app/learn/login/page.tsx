@@ -136,9 +136,9 @@ export default function LearningLoginPage() {
       </div>
       <Link
         href="/contact"
-        className="fixed bottom-[100px] right-6 z-40 flex h-20 w-20 flex-col items-center justify-center gap-1 rounded-full bg-[#7b1e1e] px-2 text-center text-[10px] font-semibold leading-tight text-white shadow-lg transition-colors hover:bg-[#651717]"
+        className="fixed right-6 top-1/2 z-40 flex h-14 w-14 -translate-y-1/2 flex-col items-center justify-center gap-1 rounded-full bg-[#7b1e1e] px-1 text-center text-[7px] font-semibold leading-tight text-white shadow-lg transition-colors hover:bg-[#651717]"
       >
-        <Headset aria-hidden="true" className="h-4 w-4" />
+        <Headset aria-hidden="true" className="h-3 w-3" />
         <span>HELP</span>
       </Link>
     </main>

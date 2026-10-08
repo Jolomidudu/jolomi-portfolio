@@ -794,6 +794,24 @@ app.get("/api/enquiries/:id", requireAdmin, async (request, response) => {
   }
 });
 
+app.delete("/api/enquiries/:id", requireAdmin, async (request, response) => {
+  const id = request.params.id;
+  if (!/^\d+$/.test(id)) return response.status(400).json({ error: "Invalid enquiry ID." });
+
+  try {
+    const [deleted] = await request.sql`
+      DELETE FROM project_enquiries
+      WHERE id = ${id}
+      RETURNING id
+    `;
+    if (!deleted) return response.status(404).json({ error: "Enquiry not found." });
+    return response.json({ deleted: true });
+  } catch (error) {
+    console.error("Failed to delete project enquiry:", error);
+    return response.status(500).json({ error: "Unable to delete this enquiry." });
+  }
+});
+
 app.get("/api/enquiries/:id/attachments/:attachmentId", requireAdmin, requireInternalKey, async (request, response) => {
   const { id, attachmentId } = request.params;
   if (!/^\d+$/.test(id) || !/^\d+$/.test(attachmentId)) {
