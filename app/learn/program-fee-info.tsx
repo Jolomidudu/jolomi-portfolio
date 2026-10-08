@@ -52,7 +52,7 @@ export default function ProgramFeeInfo() {
                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#008e8a]">
                   Program information
                 </p>
-                <h2 id="program-fee-title" className="mt-2 text-2xl font-semibold">
+                <h2 id="program-fee-title" className="mt-2 text-[#008e8a] text-2xl font-semibold">
                   What program fees cover
                 </h2>
               </div>
@@ -65,9 +65,11 @@ export default function ProgramFeeInfo() {
                 <X aria-hidden="true" className="h-4 w-4" />
               </button>
             </div>
-            <p className="mt-5 text-sm leading-7 text-black/65">
-              Program fees cover mentorship, training sessions, learning materials, and cloud usage only. They do not cover devices such as laptops, tablets, phones, or other hardware. Third-party services are separate where applicable.
+            <p className="mt-5 text-md leading-7 text-black/85">
+              Program fees cover mentorship, live or virtual training sessions, learning materials & cloud usage only. They do not cover or guarantee provisions for devices such as laptops, tablets, phones, or other hardware. Third-party services are separate where applicable.
             </p>
+            <br></br>
+            <br></br>
           </section>
         </div>
       )}
