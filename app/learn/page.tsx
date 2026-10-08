@@ -330,58 +330,9 @@ export default function LearnPage() {
     <SiteChrome learningRegistration projectRequestLauncher={false}>
       <main className="min-h-screen bg-[#dce9e3] text-[#111111]">
         {/* HERO */}
-        <section className="px-6 pb-20 pt-16 md:px-12 md:pb-28 md:pt-24 lg:px-16">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#078f8a]">
-            Technology mentorship & practical training
-          </p>
+        
 
-          <div className="mt-6 grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
-            <h1 className="max-w-5xl text-4xl font-semibold leading-[0.9] tracking-[-0.06em] md:text-6xl">
-              Learn technology by building something real.
-            </h1>
-
-            <div className="max-w-md">
-              {/* <p className="text-lg leading-8 text-black/70">
-                Private, practical mentorship for people who want more than
-                tutorials. Learn the tools, understand how professionals work
-                and build something you can actually show.
-              </p> */}
-
-              <a
-                href="#tracks"
-                className="mt-7 inline-flex rounded-full bg-[#111111] px-6 py-4 text-sm font-semibold text-white transition-colors hover:bg-[#078f8a]"
-              >
-                Explore learning tracks <ArrowDownRight aria-hidden="true" className="ml-2 h-4 w-4" />
-              </a>
-            </div>
-          </div>
-        </section>
-
-        {/* APPROACH */}
-        {/* <section className="bg-[#111111] px-6 py-20 text-[#f5f5f0] md:px-12 md:py-28 lg:px-16">
-          <div className="grid gap-12 lg:grid-cols-[0.75fr_1.25fr] lg:gap-20">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#78d8ca]">
-                The approach
-              </p>
-            </div>
-
-            <div>
-              <h2 className="max-w-4xl text-4xl font-semibold leading-[0.98] tracking-[-0.04em] md:text-6xl">
-                Less theory for theory&apos;s sake. More learning through real
-                problems.
-              </h2>
-
-              <p className="mt-7 max-w-3xl text-lg leading-8 text-white/55">
-                Technology is easier to understand when you build with it.
-                Sessions are structured around practical examples, real
-                workflows, useful tools and projects that help you understand
-                not only <em>what</em> to do, but <em>why</em> you are doing
-                it.
-              </p>
-            </div>
-          </div>
-        </section> */}
+        
 
         {/* LEARNING TRACKS */}
         <section
