@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import SiteChrome from "../site-chrome";
 import { getPublishedPosts } from "./posts";
+import blogBackground from "../blogbck.jpg";
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -16,13 +17,22 @@ export default async function BlogPage() {
 
   return (
     <SiteChrome>
-      <main className="min-h-screen bg-[#f5f5f0] text-[#111111]">
+      <main
+        className="min-h-screen text-[#111111]"
+        style={{
+          backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.22)), url('${blogBackground.src}')`,
+          backgroundPosition: "center top",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          backgroundAttachment: "fixed",
+        }}
+      >
         <section className="px-6 pb-20 pt-20 md:px-12 md:pb-28 md:pt-28 lg:px-16">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#00A9A5]">The blog</p>
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#ffffff]">The blog</p>
           <div className="mt-6 grid gap-10 lg:grid-cols-[1fr_0.65fr] lg:items-end">
-            <h1 className="max-w-4xl text-3xl text-[#423333] font-semibold leading-[0.9] tracking-[-0.06em] md:text-5xl">
+            <h1 className="max-w-4xl text-3xl text-[#111111] font-semibold leading-[0.9] tracking-[-0.06em] md:text-5xl">
               Catch tips, tricks and insights related to the world of technology, business, lifestyle and finance.</h1>
-            <p className="max-w-md text-lg leading-8 text-[#2d2d2d]/70">
+            <p className="max-w-md text-lg leading-8 text-[#111111]/85">
             Start Your Read Now</p>
           </div>
         </section>
@@ -36,7 +46,7 @@ export default async function BlogPage() {
                   <span>0{index + 1}</span>
                 </div>
                 <h2 className="mt-16 max-w-lg text-3xl font-semibold leading-tight tracking-tight md:text-4xl">{post.title}</h2>
-                <p className="mt-4 max-w-md leading-7 text-black/60">{post.description}</p>
+                <p className="mt-4 max-w-md leading-7 text-black/85">{post.description}</p>
                 <Link href={`/blog/${post.slug}`} className="mt-6 inline-flex items-center gap-2 text-sm font-semibold underline decoration-[#00A9A5] underline-offset-4">
                   <span>Read more</span>
                   <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
