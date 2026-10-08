@@ -43,7 +43,7 @@ const fieldClassName =
   "mt-2 w-full rounded-md border border-black/15 bg-white px-3 py-3 text-sm outline-none transition-colors focus:border-[#00A9A5]";
 const labelClassName = "block text-sm font-medium text-black/75";
 const secondaryButtonClassName =
-  "rounded-md border border-black/20 px-4 py-2.5 text-sm text-[#ff0000]/75 font-semibold transition-colors hover:bg-black/5 disabled:cursor-not-allowed disabled:opacity-40";
+  "rounded-md border border-black/20 px-4 py-2.5 text-xs text-[#ff0000]/75 font-semibold transition-colors hover:bg-black/5 disabled:cursor-not-allowed disabled:opacity-40";
 const maxAttachmentCount = 3;
 const maxAttachmentSize = 2 * 1024 * 1024;
 const acceptedAttachmentExtensions = new Set([
@@ -251,10 +251,10 @@ export default function ProjectRequestLauncher({
           >
             <header className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#008e8a]">
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#0f3515]">
                   Start A Project · Step {step} of 3
                 </p>
-                <h2 id="project-request-title" className="mt-2 text-2xl text-[#111111] font-semibold">
+                <h2 id="project-request-title" className="mt-2 text-2xl text-[#0f3515] font-semibold">
                   {step === 1 ? "Project Details" : step === 2 ? "Your Details" : "Review Request"}
                 </h2>
               </div>
@@ -273,7 +273,7 @@ export default function ProjectRequestLauncher({
               {[1, 2, 3].map((stepNumber) => (
                 <span
                   key={stepNumber}
-                  className={`h-1 flex-1 rounded-full ${stepNumber <= step ? "bg-[#00A9A5]" : "bg-black/10"}`}
+                  className={`h-1 flex-1 rounded-full ${stepNumber <= step ? "bg-[#0f3515]" : "bg-black/10"}`}
                 />
               ))}
             </div>
@@ -509,13 +509,13 @@ export default function ProjectRequestLauncher({
                   </label>
 
                   <fieldset>
-                    <legend className={labelClassName}>Phone number</legend>
+                    <legend className={labelClassName}>Phone Number</legend>
                     <div className="mt-2 grid grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)] gap-2">
                       <select
                         aria-label="Country calling code"
                         value={request.countryCode}
                         onChange={(event) => updateRequest("countryCode", event.target.value)}
-                        className="min-w-0 rounded-md border border-black/15 bg-white px-3 py-3 text-sm outline-none focus:border-[#00A9A5]"
+                        className="min-w-0 rounded-md border border-black/15 bg-white px-3 py-3 text-[#111111] text-sm outline-none focus:border-[#00A9A5]"
                       >
                         {countryCodes.map(([country, code]) => (
                           <option key={`${country}-${code}`} value={code}>{country} ({code})</option>
@@ -532,7 +532,7 @@ export default function ProjectRequestLauncher({
                         aria-label="10-digit phone number"
                         value={request.phone}
                         onChange={(event) => updateRequest("phone", event.target.value.replace(/\D/g, "").slice(0, 10))}
-                        className="min-w-0 rounded-md border border-black/15 bg-white px-3 py-3 text-sm outline-none focus:border-[#00A9A5]"
+                        className="min-w-0 rounded-md border border-black/15 text-[#111111] bg-white px-3 py-3 text-sm outline-none focus:border-[#00A9A5]"
                         placeholder="10-digit number"
                       />
                     </div>
@@ -543,29 +543,30 @@ export default function ProjectRequestLauncher({
               {step === 3 && (
                 <dl className="space-y-4 rounded-lg border border-black/10 bg-white/70 p-4 text-sm">
                   <div>
-                    <dt className="font-semibold text-black/50">Service</dt>
-                    <dd className="mt-1">{request.service}</dd>
+                    <dt className="font-semibold text-[#1c4916]/80">Selected Service</dt>
+                    <dd className="mt-1 text-[#111111]">{request.service}</dd>
                     {selectedServicePrice && (
                       <dd className="mt-1 text-black/55">
                         Starting at {selectedServicePrice}
                       </dd>
+                      
                     )}
                   </div>
                   <div>
-                    <dt className="font-semibold text-black/50">Project description</dt>
-                    <dd className="mt-1 whitespace-pre-wrap">{request.description}</dd>
+                    <dt className="font-semibold text-[#1c4916]/80">Project In Details</dt>
+                    <dd className="mt-1 text-[#111111] whitespace-pre-wrap">{request.description}</dd>
                   </div>
                   <div>
-                    <dt className="font-semibold text-black/50">Preferred start date</dt>
-                    <dd className="mt-1">{request.startDate}</dd>
+                    <dt className="font-semibold text-[#1c4916]/80">Preferred Start Date</dt>
+                    <dd className="mt-1 text-[#111111]">{request.startDate}</dd>
                   </div>
                   <div>
-                    <dt className="font-semibold text-black/50">Name</dt>
-                    <dd className="mt-1">{request.firstName} {request.lastName}</dd>
+                    <dt className="font-semibold text-[#1c4916]/80">Full Name</dt>
+                    <dd className="mt-1 text-[#111111]">{request.firstName} {request.lastName}</dd>
                   </div>
                   <div>
-                    <dt className="font-semibold text-black/50">Email and phone</dt>
-                    <dd className="mt-1">{request.email} · {request.countryCode} {request.phone}</dd>
+                    <dt className="font-semibold text-[#1c4916]/80">Email and Phone Number</dt>
+                    <dd className="mt-1 text-[#111111]">{request.email} · {request.countryCode} {request.phone}</dd>
                   </div>
                 </dl>
               )}
@@ -598,13 +599,15 @@ export default function ProjectRequestLauncher({
                   >
                     Next
                   </button>
+
+                  
                 ) : (
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="rounded-md bg-[#00A9A5] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#008e8a] disabled:cursor-wait disabled:opacity-60"
+                    className="rounded-md bg-[#0f3515] px-5 py-2.5 text-xs font-semibold text-white transition-colors hover:bg-[#008e8a] disabled:cursor-wait disabled:opacity-60"
                   >
-                    {isSubmitting ? "Sending..." : "Start"}
+                    {isSubmitting ? "Sending..." : "Send It"}
                   </button>
                 )}
               </div>

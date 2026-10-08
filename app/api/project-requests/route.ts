@@ -10,8 +10,10 @@ export async function POST(request: Request) {
   }
 
   try {
+    const clientIp = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
     const response = await callRailway("/api/enquiries", {
       method: "POST",
+      headers: { "x-client-ip": clientIp },
       body: JSON.stringify(body),
     });
     const responseBody = await response.text();

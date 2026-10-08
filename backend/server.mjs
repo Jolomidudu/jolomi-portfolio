@@ -1,4 +1,4 @@
-import { createHmac, pbkdf2Sync, randomBytes, timingSafeEqual } from "node:crypto";
+import { createHash, createHmac, pbkdf2Sync, randomBytes, timingSafeEqual } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import express from "express";
 import { neon } from "@neondatabase/serverless";
@@ -218,6 +218,22 @@ function readProjectRequest(body) {
   }
 
   return enquiry;
+}
+
+function normalizeProjectDetail(value) {
+  return value.normalize("NFKC").toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim();
+}
+
+function projectEnquiryFingerprint(enquiry) {
+  const details = [
+    enquiry.email.normalize("NFKC").trim().toLowerCase(),
+    `${enquiry.countryCode}${enquiry.phone}`,
+    normalizeProjectDetail(enquiry.firstName),
+    normalizeProjectDetail(enquiry.lastName),
+    normalizeProjectDetail(enquiry.service),
+    normalizeProjectDetail(enquiry.description),
+  ];
+  return createHash("sha256").update(JSON.stringify(details)).digest("hex");
 }
 
 const projectAttachmentTypes = new Map([
@@ -709,8 +725,72 @@ app.post("/api/enquiries", async (request, response) => {
   const attachments = readProjectAttachments(request.body?.attachments);
   if (!enquiry || !attachments) return response.status(400).json({ error: "Please check the project enquiry details and attachments." });
 
+  const fingerprint = projectEnquiryFingerprint(enquiry);
+  const clientIp = (request.get("x-client-ip") || "unknown").slice(0, 64);
+  const clientKey = createHash("sha256").update(clientIp).digest("hex");
+  let hasSubmissionClaim = false;
   let saved;
   try {
+    await request.sql`DELETE FROM project_enquiry_submission_claims WHERE expires_at <= NOW()`;
+    const [claim] = await request.sql`
+      INSERT INTO project_enquiry_submission_claims (fingerprint, expires_at)
+      VALUES (${fingerprint}, NOW() + INTERVAL '10 minutes')
+      ON CONFLICT (fingerprint) DO UPDATE
+      SET expires_at = EXCLUDED.expires_at
+      WHERE project_enquiry_submission_claims.expires_at <= NOW()
+      RETURNING fingerprint
+    `;
+    if (!claim) {
+      return response.status(409).json({
+        error: "Details submitted previously. Please wait 10 minutes before submitting again.",
+      });
+    }
+    hasSubmissionClaim = true;
+
+    const [recentDuplicate] = await request.sql`
+      SELECT id
+      FROM project_enquiries
+      WHERE created_at >= NOW() - INTERVAL '10 minutes'
+        AND (
+          lower(btrim(email)) = lower(${enquiry.email})
+          OR (country_code = ${enquiry.countryCode} AND phone = ${enquiry.phone})
+        )
+        AND lower(btrim(first_name)) = lower(${enquiry.firstName})
+        AND lower(btrim(last_name)) = lower(${enquiry.lastName})
+        AND lower(btrim(service)) = lower(${enquiry.service})
+        AND regexp_replace(lower(description), '[^[:alnum:]]+', ' ', 'g')
+          = regexp_replace(lower(${enquiry.description}), '[^[:alnum:]]+', ' ', 'g')
+      LIMIT 1
+    `;
+    if (recentDuplicate) {
+      return response.status(409).json({
+        error: "Details submitted previously. Please wait 10 minutes before submitting again.",
+      });
+    }
+
+    const [rateLimit] = await request.sql`
+      INSERT INTO project_enquiry_rate_limits (client_key, window_started_at, request_count)
+      VALUES (${clientKey}, NOW(), 1)
+      ON CONFLICT (client_key) DO UPDATE
+      SET
+        window_started_at = CASE
+          WHEN project_enquiry_rate_limits.window_started_at <= NOW() - INTERVAL '10 minutes' THEN NOW()
+          ELSE project_enquiry_rate_limits.window_started_at
+        END,
+        request_count = CASE
+          WHEN project_enquiry_rate_limits.window_started_at <= NOW() - INTERVAL '10 minutes' THEN 1
+          ELSE LEAST(project_enquiry_rate_limits.request_count + 1, 6)
+        END
+      RETURNING request_count, window_started_at + INTERVAL '10 minutes' AS "windowEndsAt"
+    `;
+    if (rateLimit.request_count > 5) {
+      const retryAfter = Math.max(1, Math.ceil((new Date(rateLimit.windowEndsAt).getTime() - Date.now()) / 1000));
+      return response
+        .set("Retry-After", String(retryAfter))
+        .status(429)
+        .json({ error: "Too many project requests. Please try again in 10 minutes." });
+    }
+
     [saved] = await request.sql`
       INSERT INTO project_enquiries (
         service, description, start_date, first_name, last_name,
@@ -722,6 +802,7 @@ app.post("/api/enquiries", async (request, response) => {
       )
       RETURNING id, created_at AS "createdAt", status
     `;
+
     for (const attachment of attachments) {
       await request.sql`
         INSERT INTO project_enquiry_attachments (enquiry_id, name, media_type, size_bytes, data)
@@ -735,6 +816,13 @@ app.post("/api/enquiries", async (request, response) => {
         await request.sql`DELETE FROM project_enquiries WHERE id = ${saved.id}`;
       } catch (rollbackError) {
         console.error("Failed to roll back incomplete project enquiry:", rollbackError);
+      }
+    }
+    if (hasSubmissionClaim) {
+      try {
+        await request.sql`DELETE FROM project_enquiry_submission_claims WHERE fingerprint = ${fingerprint}`;
+      } catch (claimError) {
+        console.error("Failed to release project enquiry submission claim:", claimError);
       }
     }
     console.error("Failed to save project enquiry:", error);
@@ -1252,6 +1340,23 @@ async function start() {
       status TEXT NOT NULL DEFAULT 'new',
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
+  `;
+  await sql`
+    CREATE TABLE IF NOT EXISTS project_enquiry_submission_claims (
+      fingerprint TEXT PRIMARY KEY,
+      expires_at TIMESTAMPTZ NOT NULL
+    )
+  `;
+  await sql`
+    CREATE TABLE IF NOT EXISTS project_enquiry_rate_limits (
+      client_key TEXT PRIMARY KEY,
+      window_started_at TIMESTAMPTZ NOT NULL,
+      request_count INTEGER NOT NULL CHECK (request_count > 0)
+    )
+  `;
+  await sql`
+    CREATE INDEX IF NOT EXISTS project_enquiry_rate_limits_window_idx
+    ON project_enquiry_rate_limits (window_started_at)
   `;
   await sql`
     CREATE TABLE IF NOT EXISTS project_enquiry_attachments (
