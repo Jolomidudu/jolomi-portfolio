@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { formatCurrencyAmount, useCurrency } from "../currency-provider";
 
 type LearningTrack = {
   number: string;
@@ -17,8 +18,10 @@ type LearningTrack = {
 };
 
 export default function LearningTrackSelector({ tracks }: { tracks: LearningTrack[] }) {
+  const { currency, rate } = useCurrency();
   const [selectedNumber, setSelectedNumber] = useState(tracks[0]?.number);
   const selectedTrack = tracks.find(({ number }) => number === selectedNumber) ?? tracks[0];
+  const parseAmount = (value: string) => Number(value.replace(/[^0-9.-]/g, ""));
 
   if (!selectedTrack) return null;
 
@@ -75,15 +78,15 @@ export default function LearningTrackSelector({ tracks }: { tracks: LearningTrac
           </div>
           <div className="sm:col-span-2">
             <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-white/65">Program fee</p>
-            <p className="mt-2 text-2xl font-semibold text-[#d7f36a]">{selectedTrack.total}</p>
+            <p className="mt-2 text-2xl font-semibold text-[#d7f36a]">{formatCurrencyAmount(parseAmount(selectedTrack.total), currency, rate)}</p>
           </div>
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-white/40">Deposit</p>
-            <p className="mt-2 text-sm text-[#5fe825]">{selectedTrack.deposit}</p>
+            <p className="mt-2 text-sm text-[#5fe825]">{formatCurrencyAmount(parseAmount(selectedTrack.deposit), currency, rate)}</p>
           </div>
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-white/40">Monthly payment</p>
-            <p className="mt-2 text-sm text-[#d7f36a]">{selectedTrack.monthly}</p>
+            <p className="mt-2 text-sm text-[#d7f36a]">{formatCurrencyAmount(parseAmount(selectedTrack.monthly), currency, rate)}</p>
           </div>
         </div>
 

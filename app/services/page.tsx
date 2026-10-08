@@ -7,18 +7,39 @@ import { projectServices } from "../projects/project-services";
 import ServicePrice from "../projects/service-price";
 
 export const metadata: Metadata = {
-  title: "CATALOG",
+  title: "Catalog",
   description: "Technology strategy, software development, design, analytics, and leadership services.",
 };
 
+
+
 export default function ServicesPage() {
   return (
-    <SiteChrome>
-      <main className="min-h-screen bg-[#f5f5f0] text-[#111111]">
+    <SiteChrome headerMode="services" projectRequestLauncher="circular">
+      <main className="min-h-screen bg-[#858585] text-[#111111]">
+
+      <section
+        className="relative flex min-h-[34.59375svh] flex-col justify-end px-5 pb-16 pt-32 text-white sm:min-h-[34.59375svh] md:px-12 md:pb-24 md:pt-40 lg:px-16"
+        style={{
+          backgroundImage:
+            "linear-gradient(90deg, rgba(13, 25, 25, 0.82), rgba(13, 25, 25, 0.34)), url('/office.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "top center",
+        }}
+      >
+        <div className="max-w-4xl">
+          <p className="mb-4 text-sm font-bold uppercase tracking-[0.24em] text-[#78d8ca]">
+            Technology services
+          </p>
+          <h1 className="text-3xl font-bold leading-[0.95] tracking-[-0.05em] sm:text-[36px] md:text-[48px] lg:text-[57.6px]">
+            Services &amp; Pricing
+          </h1>
+          
+        </div>
+        <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-[10%] bg-[#858585] sm:hidden" />
+      </section>
 
       <section className="px-5 pb-16 pt-10 md:px-12 md:pb-24 md:pt-14 lg:px-16">
-        <p className="mb-6 text-center text-[1.25rem] font-bold uppercase tracking-[0.2em] text-[#751a1a]">Services & pricing</p>
-        
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
           {projectServices.map((service) => (
             <article key={service.id} className="flex min-h-48 flex-col rounded-lg border border-white/80 bg-white/70 p-4 shadow-sm backdrop-blur-sm sm:min-h-52 sm:p-6">

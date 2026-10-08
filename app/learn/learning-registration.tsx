@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import tracks from "../../backend/learning-tracks.json";
+import { formatCurrencyAmount, useCurrency } from "../currency-provider";
 
 type PaymentPlan = "deposit" | "full";
 type RegistrationForm = {
@@ -52,15 +53,14 @@ const initialForm: RegistrationForm = {
   acceptedPrivacy: false,
 };
 
-function formatMoney(amount: number) {
-  return new Intl.NumberFormat("en-NG", {
-    style: "currency",
-    currency: "NGN",
-    maximumFractionDigits: 0,
-  }).format(amount);
-}
+type LearningRegistrationProps = {
+  variant?: "floating" | "header";
+};
 
-export default function LearningRegistration() {
+export default function LearningRegistration({
+  variant = "floating",
+}: LearningRegistrationProps) {
+  const { currency, rate } = useCurrency();
   const [isOpen, setIsOpen] = useState(false);
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<RegistrationForm>(initialForm);
@@ -71,6 +71,7 @@ export default function LearningRegistration() {
 
   const selectedTrack = tracks.find(({ id }) => id === form.trackId) ?? tracks[0];
   const paymentAmount = form.paymentPlan === "full" ? selectedTrack.totalAmount : selectedTrack.depositAmount;
+  const formattedAmount = (amount: number) => formatCurrencyAmount(amount, currency, rate);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -162,12 +163,21 @@ export default function LearningRegistration() {
         onClick={openForm}
         aria-haspopup="dialog"
         aria-label="Start learning registration"
-        className="fixed bottom-[200px] right-5 z-50 flex h-20 w-20 items-center justify-center rounded-full bg-[#d7f36a] text-[#2f2f2f] shadow-[0_12px_32px_rgba(0,0,0,0.16)] transition-transform duration-200 hover:scale-105 sm:right-8"
+        className={variant === "header"
+          ? "flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#d7f36a] text-[9px] font-bold uppercase leading-[1] tracking-[-0.02em] text-[#2f2f2f] shadow-sm transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d7f36a]"
+          : "fixed bottom-[200px] right-5 z-50 flex h-20 w-20 items-center justify-center rounded-full bg-[#d7f36a] text-[#2f2f2f] shadow-[0_12px_32px_rgba(0,0,0,0.16)] transition-transform duration-200 hover:scale-105 sm:right-8"}
       >
-        <span className="flex flex-col items-center text-[10px] font-semibold uppercase leading-[1.05] tracking-[0.12em]">
-          <span>Start</span>
-          <span>Up</span>
-        </span>
+        {variant === "header" ? (
+          <span className="flex flex-col items-center text-[8px] font-semibold uppercase leading-[1.02] tracking-[0.08em]">
+            <span>Start</span>
+            <span>Up</span>
+          </span>
+        ) : (
+          <span className="flex flex-col items-center text-[10px] font-semibold uppercase leading-[1.05] tracking-[0.12em]">
+            <span>Start</span>
+            <span>Up</span>
+          </span>
+        )}
       </button>
 
       {isOpen && (
@@ -229,13 +239,13 @@ export default function LearningRegistration() {
                       <label className={`cursor-pointer border p-4 ${form.paymentPlan === "deposit" ? "border-[#008c87] bg-[#008c87]/5" : "border-black/15 bg-white"}`}>
                         <input type="radio" name="paymentPlan" value="deposit" checked={form.paymentPlan === "deposit"} onChange={() => setForm((current) => ({ ...current, paymentPlan: "deposit" }))} />
                         <span className="ml-2 text-sm font-semibold">Pay deposit</span>
-                        <span className="mt-2 block text-lg font-semibold">{formatMoney(selectedTrack.depositAmount)}</span>
+                        <span className="mt-2 block text-lg font-semibold">{formattedAmount(selectedTrack.depositAmount)}</span>
                         <span className="mt-1 block text-xs text-black/55">Balance is arranged after registration.</span>
                       </label>
                       <label className={`cursor-pointer border p-4 ${form.paymentPlan === "full" ? "border-[#008c87] bg-[#008c87]/5" : "border-black/15 bg-white"}`}>
                         <input type="radio" name="paymentPlan" value="full" checked={form.paymentPlan === "full"} onChange={() => setForm((current) => ({ ...current, paymentPlan: "full" }))} />
                         <span className="ml-2 text-sm font-semibold">Pay in full</span>
-                        <span className="mt-2 block text-lg font-semibold">{formatMoney(selectedTrack.totalAmount)}</span>
+                        <span className="mt-2 block text-lg font-semibold">{formattedAmount(selectedTrack.totalAmount)}</span>
                         <span className="mt-1 block text-xs text-black/55">One secure payment for the full program.</span>
                       </label>
                     </div>
@@ -375,7 +385,7 @@ export default function LearningRegistration() {
                     <div className="flex flex-wrap justify-between gap-2 py-3 text-sm"><dt className="text-black/50">Availability</dt><dd className="font-medium">{form.preferredDays.join(", ")} · {form.preferredTime}</dd></div>
                     <div className="flex flex-wrap justify-between gap-2 py-3 text-sm"><dt className="text-black/50">Format</dt><dd className="font-medium capitalize">{form.learningFormat}</dd></div>
                     <div className="flex flex-wrap justify-between gap-2 py-3 text-sm"><dt className="text-black/50">Payment</dt><dd className="font-medium">{form.paymentPlan === "full" ? "Full program fee" : "Program deposit"}</dd></div>
-                    <div className="flex flex-wrap justify-between gap-2 py-4 text-sm"><dt className="font-semibold">Due securely at checkout</dt><dd className="text-lg font-semibold text-[#007d79]">{formatMoney(paymentAmount)}</dd></div>
+                    <div className="flex flex-wrap justify-between gap-2 py-4 text-sm"><dt className="font-semibold">Due securely at checkout</dt><dd className="text-lg font-semibold text-[#007d79]">{formattedAmount(paymentAmount)}</dd></div>
                   </dl>
                   <label className="flex items-start gap-3 text-sm leading-6">
                     <input required type="checkbox" checked={form.acceptedTerms} onChange={(event) => setForm((current) => ({ ...current, acceptedTerms: event.target.checked }))} className="mt-1 h-4 w-4 accent-[#008c87]" />
@@ -395,7 +405,7 @@ export default function LearningRegistration() {
                   <button type="button" disabled={isSubmitting} onClick={() => { setStep((current) => current - 1); setErrorMessage(""); }} className="px-4 py-3 text-sm font-semibold text-black/60 hover:text-black disabled:opacity-50">Back</button>
                 ) : <span />}
                 <button type="submit" disabled={isSubmitting || (step === 3 && form.preferredDays.length === 0)} className="min-h-12 bg-[#163d34] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#008c87] disabled:cursor-wait disabled:opacity-50">
-                  {isSubmitting ? "Preparing secure checkout..." : step === steps.length - 1 ? `Continue to Paystack · ${formatMoney(paymentAmount)}` : "Continue"}
+                  {isSubmitting ? "Preparing secure checkout..." : step === steps.length - 1 ? `Continue to Paystack · ${formattedAmount(paymentAmount)}` : "Continue"}
                 </button>
               </div>
             </form>

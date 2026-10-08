@@ -5,6 +5,7 @@ import { ArrowLeft, ArrowUp, ArrowUpRight, ChevronDown, ChevronRight } from "luc
 import { useEffect, useState } from "react";
 import ProjectRequestLauncher from "./projects/project-request-launcher";
 import { CurrencyToggle } from "./currency-provider";
+import LearningRegistration from "./learn/learning-registration";
 
 const links = [
   ["HOME", "/"],
@@ -21,13 +22,32 @@ const aboutLinks = [
   ["FAQS", "/faq"],
 ] as const;
 
-export default function SiteChrome({ children }: { children: React.ReactNode }) {
+type SiteChromeProps = {
+  children: React.ReactNode;
+  headerMode?: "default" | "services" | "about";
+  projectRequestLauncher?: "header" | "circular" | false;
+  learningRegistration?: boolean;
+};
+
+export default function SiteChrome({
+  children,
+  headerMode = "default",
+  projectRequestLauncher = "header",
+  learningRegistration = false,
+}: SiteChromeProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [menuView, setMenuView] = useState<"main" | "about">("main");
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [headerScrolled, setHeaderScrolled] = useState(false);
+  const isServicesHeader = headerMode === "services";
+  const isHeroHeader = headerMode === "services" || headerMode === "about";
+  const headerIsTransparent = isHeroHeader && !headerScrolled;
 
   useEffect(() => {
-    const handleScroll = () => setShowScrollTop(window.scrollY > 500);
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 500);
+      setHeaderScrolled(window.scrollY > 120);
+    };
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
@@ -35,15 +55,17 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
 
   return (
     <div className="min-h-screen">
-      <header className={`sticky top-0 z-50 flex min-h-20 shrink-0 items-center justify-between bg-[#f5f5f0] px-6 pb-5 pt-[50px] transition-colors md:px-12 md:py-5 lg:px-16 ${menuOpen ? "bg-[#12211f] text-[#f5f5f0]" : "text-[#111111]"}`}>
+      <header className={`z-50 flex min-h-20 shrink-0 items-center justify-between px-6 pb-5 pt-[50px] transition-all duration-300 md:px-12 md:py-5 lg:px-16 ${isHeroHeader ? "fixed inset-x-0 top-0" : "sticky top-0"} ${menuOpen ? "bg-[#12211f] text-[#f5f5f0]" : headerIsTransparent ? "bg-transparent text-white" : "bg-[#f5f5f0] text-[#111111]"}`}>
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center overflow-hidden rounded-full border border-[#12211f]/10 bg-white shadow-sm ring-1 ring-black/5" aria-label="Home">
             <img src="/jolo.jpg" alt="Jolomi Dudu" className="h-10 w-10 object-cover" />
           </Link>
           <CurrencyToggle />
+          {learningRegistration && <LearningRegistration variant="header" />}
+          {projectRequestLauncher === "circular" && <ProjectRequestLauncher variant="circular" />}
         </div>
 
-        <nav className="hidden items-center gap-8 text-sm font-semibold text-[#111111] md:flex" aria-label="Main navigation">
+        <nav className={`hidden items-center gap-8 text-sm font-semibold md:flex ${menuOpen ? "text-[#f5f5f0]" : headerIsTransparent ? "text-white" : "text-[#111111]"}`} aria-label="Main navigation">
           <Link href="/" className="transition-opacity hover:opacity-50">HOME</Link>
           <details className="group relative">
             <summary className="flex cursor-pointer list-none items-center gap-1 transition-opacity hover:opacity-50">
@@ -63,7 +85,7 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
           ))}
         </nav>
 
-        <ProjectRequestLauncher variant="header" />
+        {projectRequestLauncher === "header" && <ProjectRequestLauncher variant="header" />}
 
         <div className="flex items-center gap-1 md:hidden">
           <button
@@ -75,7 +97,7 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
               setMenuOpen((open) => !open);
               setMenuView("main");
             }}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-[#374151] bg-[#374151] text-white"
+            className={`flex h-9 w-9 items-center justify-center rounded-full border text-white transition-colors ${menuOpen ? "border-white/40 bg-[#12211f]" : headerIsTransparent ? "border-white/50 bg-white/10" : "border-[#374151] bg-[#374151]"}`}
           >
             {menuOpen ? "×" : "☰"}
           </button>
@@ -86,17 +108,20 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
             <button type="button" aria-label="Close menu" onClick={() => { setMenuOpen(false); setMenuView("main"); }} className="absolute right-6 top-5 flex h-10 w-10 items-center justify-center rounded-full border border-white/35 text-2xl font-light text-[#f5f5f0]">×</button>
             <div className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#78d8ca]">
               <span className="h-2 w-2 rounded-full bg-[#78d8ca]" />
-              {menuView === "main" ? "Menu / Available for Hire" : "About / Explore"}
+              {menuView === "main" ? "Menu / Open to Collaboration" : "About / Explore"}
             </div>
+
             <nav className="min-h-0 flex-1 flex-col overflow-y-auto" aria-label="Mobile navigation">
               {menuView === "main" ? (
                 <>
                   <Link href="/" onClick={() => setMenuOpen(false)} className="group flex items-center justify-between border-y border-white/15 py-4 hover:text-[#78d8ca]">
                     <span className="flex items-center gap-4"><span className="text-xs text-white/35">01</span><span className="text-3xl font-semibold tracking-[-0.04em]">HOME</span></span>
+
+                    
                     <ArrowUpRight aria-hidden="true" className="h-5 w-5 text-white/35 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#78d8ca]" />
                   </Link>
-                  <button type="button" onClick={() => setMenuView("about")} className="group flex items-center justify-between border-b border-white/15 py-4 text-left hover:text-[#78d8ca]">
-                    <span className="flex items-center gap-4"><span className="text-xs text-white/35">02</span><span className="text-3xl font-semibold tracking-[-0.04em]">ABOUT</span></span>
+                  <button type="button" onClick={() => setMenuView("about")} className="group flex w-full items-center justify-between border-b border-white/15 py-4 text-left hover:text-[#78d8ca]">
+                    <span className="flex items-center gap-4"><span className="text-xs font-normal text-white/35">02</span><span className="text-3xl font-semibold tracking-[-0.04em]">ABOUT</span></span>
                     <ChevronRight aria-hidden="true" className="h-6 w-6 text-white/35 transition-transform group-hover:translate-x-1 group-hover:text-[#78d8ca]" />
                   </button>
                   {links.slice(1).map(([label, href], index) => (

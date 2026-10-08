@@ -7,19 +7,41 @@ export type Currency = "NGN" | "USD";
 type CurrencyContextValue = {
   currency: Currency;
   toggleCurrency: () => void;
+  rate: number;
 };
 
 const currencyStorageKey = "jolomi-site-currency";
+const fallbackRate = 1328.1192;
 const CurrencyContext = createContext<CurrencyContextValue | null>(null);
 
 export function CurrencyProvider({ children }: { children: ReactNode }) {
   const [currency, setCurrency] = useState<Currency>("NGN");
+  const [rate, setRate] = useState(fallbackRate);
 
   useEffect(() => {
     const savedCurrency = window.localStorage.getItem(currencyStorageKey);
     if (savedCurrency === "NGN" || savedCurrency === "USD") {
       setCurrency(savedCurrency);
     }
+
+    let active = true;
+    fetch("/api/currency", { cache: "no-store" })
+      .then(async (response) => {
+        if (!response.ok) throw new Error("Unable to load the currency rate.");
+        return (await response.json()) as { rate?: number };
+      })
+      .then((result) => {
+        if (active && Number.isFinite(result.rate ?? 0) && (result.rate ?? 0) > 0) {
+          setRate(result.rate as number);
+        }
+      })
+      .catch(() => {
+        if (active) setRate(fallbackRate);
+      });
+
+    return () => {
+      active = false;
+    };
   }, []);
 
   function toggleCurrency() {
@@ -31,7 +53,7 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <CurrencyContext.Provider value={{ currency, toggleCurrency }}>
+    <CurrencyContext.Provider value={{ currency, toggleCurrency, rate }}>
       {children}
     </CurrencyContext.Provider>
   );
@@ -43,6 +65,15 @@ export function useCurrency() {
     throw new Error("useCurrency must be used within CurrencyProvider.");
   }
   return currencyContext;
+}
+
+export function formatCurrencyAmount(amount: number, currency: Currency, rate: number) {
+  const convertedAmount = currency === "NGN" ? amount : amount / rate;
+  return new Intl.NumberFormat(currency === "NGN" ? "en-NG" : "en-US", {
+    style: "currency",
+    currency,
+    maximumFractionDigits: currency === "NGN" ? 0 : 2,
+  }).format(convertedAmount);
 }
 
 export function CurrencyToggle() {

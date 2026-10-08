@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import SiteChrome from "../site-chrome";
-import ProjectRequestLauncher from "./project-request-launcher";
 import ProjectGallery from "./project-gallery";
 
 export const metadata: Metadata = {
@@ -40,11 +39,11 @@ const projects = [
     stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "Flutter"],
   },
   // {
-  //   name: "Spa Elaris",
+  //   name: "Myspa",
   //   category: "Web & Mobile",
-  //   image: "/images/projects/spaelaris1-mckp.jpg",
+  //   image: "/images/projects/myspa.jpg",
   //   alt: "Spa Elaris wellness website",
-  //   href: "https://spaelaris.vercel.app",
+  //   href: "https://myspa.vercel.app",
   //   description:
   //     "A premium wellness & spa platform for customers to book appointments and explore services, treatments and packages through a polished digital experience.",
   //   stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "Flutter"],
@@ -153,7 +152,7 @@ const projects = [
 
 export default function ProjectsPage() {
   return (
-    <SiteChrome>
+    <SiteChrome projectRequestLauncher={false}>
       <main className="bg-[#f5f5f0] text-[#111111]">
         <section className="px-6 pb-12 pt-12 md:px-12 md:pb-20 md:pt-16 lg:px-16">
           <p className="text-lg font-bold uppercase tracking-[0.2em] text-[#751a1a]">
@@ -162,7 +161,6 @@ export default function ProjectsPage() {
         </section>
 
         <ProjectGallery projects={projects} />
-        <ProjectRequestLauncher />
       </main>
     </SiteChrome>
 

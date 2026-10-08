@@ -161,15 +161,29 @@ const selectedWork = [
 
 export default function AboutPage() {
   return (
-    <SiteChrome>
+    <SiteChrome headerMode="about">
       <main className="bg-[#f5f5f0] text-[#111111]">
         {/* HERO */}
-        <section className="px-6 pb-20 pt-12 md:px-12 md:pb-28 md:pt-16 lg:px-16">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#751a1a]">
-            About / Jolomi Dudu
-          </p>
+        <section>
+          <div
+            className="relative px-6 pt-[122px] text-white md:px-12 md:pt-24 lg:px-16"
+            style={{
+              backgroundImage:
+                "linear-gradient(90deg, rgba(13, 25, 25, 0.82), rgba(13, 25, 25, 0.34)), url('/office.jpg')",
+              backgroundSize: "cover",
+              backgroundPosition: "top center",
+            }}
+          >
+            <p className="text-xs font-bold uppercase tracking-[0.2em]">
+              About / Jolomi Dudu
+            </p>
+            <br></br>
 
-          <div className="mt-8 grid gap-10 md:grid-cols-[1.15fr_0.85fr] md:items-center md:gap-16">
+            <hr className="border-white/70"></hr>
+          </div>
+
+          <div className="px-6 pb-20 pt-8 md:px-12 md:pb-28 md:pt-8 lg:px-16">
+            <div className="grid gap-10 md:grid-cols-[1.15fr_0.85fr] md:items-center md:gap-16">
             <div>
               <h1 className="max-w-4xl text-3xl font-semibold leading-[0.96] tracking-[-0.05em] sm:text-6xl lg:text-7xl">
                 I lead technology, build digital systems, and turn ideas into
@@ -220,6 +234,7 @@ export default function AboutPage() {
                 </span>
               </div>
             </div>
+          </div>
           </div>
         </section>
 

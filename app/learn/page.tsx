@@ -3,7 +3,6 @@ import Link from "next/link";
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import SiteChrome from "../site-chrome";
 import LearningTrackSelector from "./learning-track-selector";
-import LearningRegistration from "./learning-registration";
 
 export const metadata: Metadata = {
   title: "Technology Mentorship & Training",
@@ -328,7 +327,7 @@ const audiences = [
 
 export default function LearnPage() {
   return (
-    <SiteChrome>
+    <SiteChrome learningRegistration projectRequestLauncher={false}>
       <main className="min-h-screen bg-[#dce9e3] text-[#111111]">
         {/* HERO */}
         <section className="px-6 pb-20 pt-16 md:px-12 md:pb-28 md:pt-24 lg:px-16">
@@ -683,8 +682,6 @@ export default function LearnPage() {
                 path together.
               </p>
             </div>
-
-            <LearningRegistration />
           </div>
         </section>
       </main>

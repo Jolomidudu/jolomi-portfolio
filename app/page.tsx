@@ -199,7 +199,8 @@ export default function Home() {
               {menuView === "main" ? (
                 <>
                   {[
-                    ["PROJECTS", "/projects"],
+                    ["HOME", "/"],
+                    
                   ].map(([label, href], index) => (
                     <a
                       key={href}
@@ -214,6 +215,7 @@ export default function Home() {
                       <ArrowUpRight aria-hidden="true" className="h-5 w-5 text-white/35 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#78d8ca]" />
                     </a>
                   ))}
+                  
                   <button
                     type="button"
                     onClick={() => setMenuView("about")}
@@ -226,7 +228,9 @@ export default function Home() {
                     <ChevronRight aria-hidden="true" className="h-6 w-6 text-white/35 transition-transform group-hover:translate-x-1 group-hover:text-[#78d8ca]" />
                   </button>
                   {[
+                    
                     ["SERVICES", "/services"],
+                    ["PROJECTS", "/projects"],
                     ["SKILLCRAFT", "/learn"],
                     ["MY BLOG", "/blog"],
                     ["CONTACT", "/contact"],
@@ -271,14 +275,6 @@ export default function Home() {
                 </>
               )}
             </nav>
-
-            <div className="mt-10 flex items-end justify-between border-t border-white/15 pt-5 text-xs uppercase tracking-[0.15em] text-white/45">
-              <span>Lagos / Nigeria</span>
-              <Link href="/services#booking" onClick={() => setMenuOpen(false)} className="inline-flex items-center gap-1 text-[#78d8ca]">
-                <span>Start a project</span>
-                <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
-              </Link>
-            </div>
           </div>
         )}
 
