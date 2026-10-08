@@ -152,12 +152,25 @@ const projects = [
 
 export default function ProjectsPage() {
   return (
-    <SiteChrome projectRequestLauncher={false}>
+    <SiteChrome headerMode="projects" projectRequestLauncher={false}>
       <main className="bg-[#f5f5f0] text-[#111111]">
-        <section className="px-6 pb-12 pt-12 md:px-12 md:pb-20 md:pt-16 lg:px-16">
-          <p className="text-lg font-bold uppercase tracking-[0.2em] text-[#751a1a]">
-            My CATALOG
-          </p>
+        <section>
+          <div
+            className="px-6 pt-[122px] text-white md:px-12 md:pt-24 lg:px-16"
+            style={{
+              backgroundImage:
+                "linear-gradient(90deg, rgba(13, 25, 25, 0.82), rgba(13, 25, 25, 0.34)), url('/office.jpg')",
+              backgroundSize: "cover",
+              backgroundPosition: "top center",
+            }}
+          >
+            <p className="text-lg font-bold uppercase tracking-[0.2em]">
+              My CATALOG
+            </p>
+            <br></br>
+            <hr className="border-white/70"></hr>
+          </div>
+          <div className="pb-12 md:pb-20" />
         </section>
 
         <ProjectGallery projects={projects} />

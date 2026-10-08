@@ -11,7 +11,7 @@ const links = [
   ["HOME", "/"],
   ["SERVICES", "/services"],
   ["PROJECTS", "/projects"],
-  ["SKILLCRAFT", "/learn"],
+  ["LEARNUP", "/learn"],
   ["BLOG", "/blog"],
   ["CONTACT", "/contact"],
 ] as const;
@@ -24,7 +24,7 @@ const aboutLinks = [
 
 type SiteChromeProps = {
   children: React.ReactNode;
-  headerMode?: "default" | "services" | "about";
+  headerMode?: "default" | "services" | "about" | "projects";
   projectRequestLauncher?: "header" | "circular" | false;
   learningRegistration?: boolean;
 };
@@ -39,7 +39,8 @@ export default function SiteChrome({
   const [menuView, setMenuView] = useState<"main" | "about">("main");
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [headerScrolled, setHeaderScrolled] = useState(false);
-  const isHeroHeader = headerMode === "services" || headerMode === "about";
+  const isHeroHeader =
+    headerMode === "services" || headerMode === "about" || headerMode === "projects";
   const headerIsTransparent = isHeroHeader && !headerScrolled;
 
   useEffect(() => {
@@ -54,7 +55,7 @@ export default function SiteChrome({
 
   return (
     <div className="min-h-screen">
-      <header className={`z-50 flex min-h-20 shrink-0 items-center justify-between px-6 pb-5 pt-[50px] transition-all duration-300 md:px-12 md:py-5 lg:px-16 ${isHeroHeader ? "fixed inset-x-0 top-0" : "sticky top-0"} ${menuOpen ? "bg-[#12211f] text-[#f5f5f0]" : headerIsTransparent ? "bg-transparent text-white" : "bg-[#f5f5f0] text-[#111111]"}`}>
+      <header className={`z-50 flex min-h-20 shrink-0 items-center justify-between px-6 pb-5 pt-[50px] transition-all duration-300 md:px-12 md:py-5 lg:px-16 ${isHeroHeader ? "fixed inset-x-0 top-0" : "sticky top-0"} ${menuOpen ? "bg-[#12211f] text-[#f5f5f0]" : headerIsTransparent ? "bg-transparent text-white" : headerMode === "projects" ? "bg-[#f5f5f0] text-[#111111]" : "bg-[#f5f5f0] text-[#111111]"}`}>
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center overflow-hidden rounded-full border border-[#12211f]/10 bg-white shadow-sm ring-1 ring-black/5" aria-label="Home">
             <img src="/jolo.jpg" alt="Jolomi Dudu" className="h-10 w-10 object-cover" />
@@ -107,7 +108,7 @@ export default function SiteChrome({
             <button type="button" aria-label="Close menu" onClick={() => { setMenuOpen(false); setMenuView("main"); }} className="absolute right-6 top-5 flex h-10 w-10 items-center justify-center rounded-full border border-white/35 text-2xl font-light text-[#f5f5f0]">×</button>
             <div className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#78d8ca]">
               <span className="h-2 w-2 rounded-full bg-[#78d8ca]" />
-              {menuView === "main" ? "Menu / Open to Collaboration" : "About / Explore"}
+              {menuView === "main" ? "Menu / Open to Collaboration" : "Get To Know Me"}
             </div>
 
             <nav className="min-h-0 flex-1 flex-col overflow-y-auto" aria-label="Mobile navigation">

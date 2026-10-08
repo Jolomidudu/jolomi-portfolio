@@ -138,7 +138,7 @@ export default function Home() {
             href="/learn"
             className="transition-opacity hover:opacity-50"
           >
-            SKILLCRAFT
+            LEARNUP
           </a>
 
           <Link
@@ -231,7 +231,7 @@ export default function Home() {
                     
                     ["SERVICES", "/services"],
                     ["PROJECTS", "/projects"],
-                    ["SKILLCRAFT", "/learn"],
+                    ["LEARNUP", "/learn"],
                     ["MY BLOG", "/blog"],
                     ["CONTACT", "/contact"],
                   ].map(([label, href], index) => (

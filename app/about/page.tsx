@@ -165,6 +165,7 @@ export default function AboutPage() {
       <main className="bg-[#f5f5f0] text-[#111111]">
         {/* HERO */}
         <section>
+          
           <div
             className="relative px-6 pt-[122px] text-white md:px-12 md:pt-24 lg:px-16"
             style={{
@@ -174,9 +175,10 @@ export default function AboutPage() {
               backgroundPosition: "top center",
             }}
           >
-            <p className="text-xs font-bold uppercase tracking-[0.2em]">
-              About / Jolomi Dudu
+            <p className="text-sm font-bold uppercase tracking-[0.2em]">
+              GET TO KNOW ME
             </p>
+            <br></br>
             <br></br>
 
             <hr className="border-white/70"></hr>
@@ -185,25 +187,39 @@ export default function AboutPage() {
           <div className="px-6 pb-20 pt-8 md:px-12 md:pb-28 md:pt-8 lg:px-16">
             <div className="grid gap-10 md:grid-cols-[1.15fr_0.85fr] md:items-center md:gap-16">
             <div>
-              <h1 className="max-w-4xl text-3xl font-semibold leading-[0.96] tracking-[-0.05em] sm:text-6xl lg:text-7xl">
-                I lead technology, build digital systems, and turn ideas into
-                reality.
+              <h1 className="max-w-4xl text-2xl font-semibold leading-[0.96] tracking-[-0.05em] sm:text-4xl lg:text-4xl">
+                <span className="font-semibold text-[#4f4f4f]">Hello & Welcome,</span>
+                
+                <br></br>
+                <br></br> 
+
+                <span className="font-semibold text-[#362727]">I'm Oritsejolomi Dudu (Itsekiri by tribe, From Warri, Delta State, Nigeria) </span>
+
+                <br></br>
+                <br></br>
+                
+                
+                
+                <span className="font-semibold text-[#4f4f4f]">I lead technology, build digital systems, and turn ideas into reality</span>
+                
               </h1>
 
-              <p className="mt-7 max-w-2xl text-lg leading-8 text-black/65">
+              
+
+              {/* <p className="mt-7 max-w-2xl text-lg font-semibold leading-8 text-[#6c1e1e]/85">
                 I&apos;m Oritsejolomi Dudu, a technology leader, software
                 engineer and technology consultant. I work across technology
                 strategy, ICT leadership, software engineering and digital
                 transformation — helping organizations build better systems,
                 teams and technology capabilities.
-              </p>
+              </p> */}
 
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link
                   href="/services"
                   className="inline-flex min-h-12 items-center bg-[#163d34] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#008c87]"
                 >
-                  MY SERVICE CATALOG
+                  VIEW SERVICES
                   <ArrowUpRight aria-hidden="true" className="ml-3 h-4 w-4" />
                 </Link>
 
@@ -211,7 +227,8 @@ export default function AboutPage() {
                   href="/projects"
                   className="inline-flex min-h-12 items-center border border-black/20 px-5 py-3 text-sm font-semibold transition-colors hover:border-[#008c87] hover:text-[#008c87]"
                 >
-                  MY PROJECTS
+                  VIEW CATALOG
+                  <ArrowUpRight aria-hidden="true" className="ml-3 h-4 w-4" />
                 </Link>
               </div>
             </div>
