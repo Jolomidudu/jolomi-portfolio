@@ -59,6 +59,31 @@ function safeEqual(left, right) {
   return leftBuffer.length === rightBuffer.length && timingSafeEqual(leftBuffer, rightBuffer);
 }
 
+async function notifyTelegram(message) {
+  const botToken = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+  if (!botToken || !chatId) return;
+
+  try {
+    const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chat_id: chatId, text: message, disable_web_page_preview: true }),
+      signal: AbortSignal.timeout(5000),
+    });
+    const result = await response.json().catch(() => null);
+    if (!response.ok || !result?.ok) {
+      throw new Error(`Telegram returned HTTP ${response.status}.`);
+    }
+  } catch (error) {
+    console.error("Telegram notification failed:", error);
+  }
+}
+
+function telegramField(value, maxLength = 120) {
+  return String(value).replace(/[\r\n\t]+/g, " ").replace(/\s+/g, " ").trim().slice(0, maxLength);
+}
+
 function hashPassword(password) {
   const salt = randomBytes(16).toString("hex");
   const hash = pbkdf2Sync(password, salt, 120000, 32, "sha256").toString("hex");
@@ -809,6 +834,14 @@ app.post("/api/enquiries", async (request, response) => {
         VALUES (${saved.id}, ${attachment.name}, ${attachment.mediaType}, ${attachment.sizeBytes}, ${attachment.data})
       `;
     }
+    await notifyTelegram([
+      "New project enquiry",
+      telegramField(`${enquiry.firstName} ${enquiry.lastName}`),
+      telegramField(enquiry.service),
+      telegramField(enquiry.email),
+      telegramField(`${enquiry.countryCode} ${enquiry.phone}`),
+      `Preferred start: ${telegramField(enquiry.startDate, 10)}`,
+    ].join("\n"));
     return response.status(201).json({ enquiry: saved });
   } catch (error) {
     if (saved?.id) {
@@ -1014,7 +1047,8 @@ app.post("/api/learning/payments/:reference/confirm", async (request, response) 
   try {
     const [payment] = await request.sql`
       SELECT p.id, p.amount, p.status AS "paymentStatus", e.id AS "enrollmentId",
-             e.payment_plan AS "paymentPlan", e.email, e.full_name AS "fullName"
+              e.payment_plan AS "paymentPlan", e.email, e.full_name AS "fullName",
+              e.track_title AS "trackTitle"
       FROM learning_enrollment_payments p
       JOIN learning_enrollments e ON e.id = p.enrollment_id
       WHERE p.reference = ${reference} AND e.id = ${enrollmentId}
@@ -1025,10 +1059,11 @@ app.post("/api/learning/payments/:reference/confirm", async (request, response) 
       return response.status(400).json({ error: "Verified payment does not match this enrollment." });
     }
 
-    await request.sql`
+    const [updatedPayment] = await request.sql`
       UPDATE learning_enrollment_payments
       SET status = 'succeeded', paid_at = COALESCE(paid_at, NOW())
-      WHERE id = ${payment.id} AND status IN ('pending', 'succeeded')
+      WHERE id = ${payment.id} AND status = 'pending'
+      RETURNING id
     `;
     await request.sql`
       UPDATE learning_enrollments
@@ -1037,6 +1072,16 @@ app.post("/api/learning/payments/:reference/confirm", async (request, response) 
     `;
 
     const accountResult = await ensureLearningAccount(Number(enrollmentId), payment.fullName || "Learner", payment.email);
+    if (updatedPayment) {
+      await notifyTelegram([
+        "Course payment received",
+        telegramField(payment.fullName || "Learner"),
+        `Program: ${telegramField(payment.trackTitle)}`,
+        `Payment plan: ${telegramField(payment.paymentPlan, 20)}`,
+        `Amount: NGN ${Number(payment.amount).toLocaleString("en-NG")}`,
+        `Reference: ${telegramField(reference, 80)}`,
+      ].join("\n"));
+    }
     return response.json({
       confirmed: true,
       enrollmentId,
