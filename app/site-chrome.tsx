@@ -138,7 +138,7 @@ export default function SiteChrome({
                   </button>
                   {aboutLinks.map(([label, href], index) => (
                     <Link key={href} href={href} onClick={() => { setMenuOpen(false); setMenuView("main"); }} className="group flex items-center justify-between border-b border-white/15 py-4 first:border-t hover:text-[#78d8ca]">
-                      <span className="flex items-center gap-4"><span className="text-xs text-white/35">0{index + 1}</span><span className="text-3xl font-semibold tracking-[-0.04em]">{label}</span></span>
+                      <span className="flex items-center gap-4"><span className="text-xs text-white/35">0{index + 1}</span><span className="text-2xl font-semibold tracking-[-0.04em]">{label}</span></span>
                       <ArrowUpRight aria-hidden="true" className="h-5 w-5 text-white/35 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#78d8ca]" />
                     </Link>
                   ))}
