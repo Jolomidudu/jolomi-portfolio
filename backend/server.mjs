@@ -62,7 +62,10 @@ function safeEqual(left, right) {
 async function notifyTelegram(message) {
   const botToken = process.env.TELEGRAM_BOT_TOKEN;
   const chatId = process.env.TELEGRAM_CHAT_ID;
-  if (!botToken || !chatId) return;
+  if (!botToken || !chatId) {
+    console.error("Telegram notification is not configured.");
+    return false;
+  }
 
   try {
     const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
@@ -75,8 +78,10 @@ async function notifyTelegram(message) {
     if (!response.ok || !result?.ok) {
       throw new Error(`Telegram returned HTTP ${response.status}.`);
     }
+    return true;
   } catch (error) {
     console.error("Telegram notification failed:", error);
+    return false;
   }
 }
 
@@ -474,6 +479,59 @@ app.post("/api/auth/login", (request, response) => {
 
   loginAttempts.delete(attemptKey);
   return response.json({ token: createSession(adminEmail), expiresIn: sessionLifetimeSeconds });
+});
+
+app.post("/api/learning/support", async (request, response) => {
+  const allowedTopics = new Set(["Account Issues ?", "Registration Issues ?", "Need Materials ?"]);
+  const topic = typeof request.body?.topic === "string" ? request.body.topic.trim() : "";
+  const description = typeof request.body?.description === "string"
+    ? request.body.description.trim().slice(0, 2000)
+    : "";
+  if (!allowedTopics.has(topic) || description.length < 10) {
+    return response.status(400).json({ error: "Choose a support topic and enter at least 10 characters." });
+  }
+  if (!process.env.TELEGRAM_BOT_TOKEN || !process.env.TELEGRAM_CHAT_ID) {
+    return response.status(503).json({ error: "Support messaging is not configured yet. Please try again later." });
+  }
+
+  const clientIp = (request.get("x-client-ip") || "unknown").slice(0, 64);
+  const clientKey = createHash("sha256").update(clientIp).digest("hex");
+  try {
+    const [rateLimit] = await request.sql`
+      INSERT INTO learning_support_rate_limits (client_key, window_started_at, request_count)
+      VALUES (${clientKey}, NOW(), 1)
+      ON CONFLICT (client_key) DO UPDATE
+      SET
+        window_started_at = CASE
+          WHEN learning_support_rate_limits.window_started_at <= NOW() - INTERVAL '10 minutes' THEN NOW()
+          ELSE learning_support_rate_limits.window_started_at
+        END,
+        request_count = CASE
+          WHEN learning_support_rate_limits.window_started_at <= NOW() - INTERVAL '10 minutes' THEN 1
+          ELSE LEAST(learning_support_rate_limits.request_count + 1, 4)
+        END
+      RETURNING request_count, window_started_at + INTERVAL '10 minutes' AS "windowEndsAt"
+    `;
+    if (rateLimit.request_count > 3) {
+      const retryAfter = Math.max(1, Math.ceil((new Date(rateLimit.windowEndsAt).getTime() - Date.now()) / 1000));
+      return response
+        .set("Retry-After", String(retryAfter))
+        .status(429)
+        .json({ error: "Too many support messages. Please try again in 10 minutes." });
+    }
+
+    const sent = await notifyTelegram([
+      "Learner help request",
+      `Topic: ${telegramField(topic, 40)}`,
+      "Message:",
+      telegramField(description, 2000),
+    ].join("\n"));
+    if (!sent) return response.status(503).json({ error: "Unable to send your message right now. Please try again later." });
+    return response.status(202).json({ sent: true });
+  } catch (error) {
+    console.error("Failed to submit learner support message:", error);
+    return response.status(500).json({ error: "Unable to send your message right now. Please try again later." });
+  }
 });
 
 app.post("/api/learning/login", async (request, response) => {
@@ -1402,6 +1460,17 @@ async function start() {
   await sql`
     CREATE INDEX IF NOT EXISTS project_enquiry_rate_limits_window_idx
     ON project_enquiry_rate_limits (window_started_at)
+  `;
+  await sql`
+    CREATE TABLE IF NOT EXISTS learning_support_rate_limits (
+      client_key TEXT PRIMARY KEY,
+      window_started_at TIMESTAMPTZ NOT NULL,
+      request_count INTEGER NOT NULL CHECK (request_count > 0)
+    )
+  `;
+  await sql`
+    CREATE INDEX IF NOT EXISTS learning_support_rate_limits_window_idx
+    ON learning_support_rate_limits (window_started_at)
   `;
   await sql`
     CREATE TABLE IF NOT EXISTS project_enquiry_attachments (

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ArrowUpRight, ChevronDown } from "lucide-react";
 import SiteChrome from "../site-chrome";
+import ContactFormModal from "./contact-form-modal";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -68,30 +69,20 @@ export default function ContactPage() {
                 </h1>
               </div>
 
-              <div className="max-w-md">
-                <p className="text-lg leading-8 text-black/60">
-                  Whether you need technology leadership, software engineering,
-                  consulting, digital transformation or practical technology
-                  training, start by telling me what you are trying to achieve.
-                </p>
-
-                <p className="mt-5 text-sm leading-6 text-black/45">
-                  You do not need a complete technical specification before
-                  reaching out. Start with the problem, opportunity or idea.
-                </p>
-              </div>
+             
             </div>
           </div>
         </section>
+        
 
         {/* CONTACT OPTIONS */}
-        <section className="bg-[#163d34] px-6 py-20 text-[#f5f5f0] md:px-12 md:py-28 lg:px-16">
+        <section className="bg-[#5a5a5a] px-6 py-20 text-[#f5f5f0] md:px-12 md:py-28 lg:px-16">
           <div className="mx-auto max-w-7xl">
             <div className="grid gap-px overflow-hidden border border-white/15 bg-white/15 md:grid-cols-2">
               {contactOptions.map((option) => (
                 <article
                   key={option.number}
-                  className="bg-[#163d34] p-7 md:p-10"
+                  className="bg-[#5a5a5a] p-7 md:p-10"
                 >
                   <span className="text-xs text-white/35">
                     {option.number}
@@ -101,7 +92,7 @@ export default function ContactPage() {
                     {option.title}
                   </h2>
 
-                  <p className="mt-4 max-w-xl text-sm leading-7 text-white/55">
+                  <p className="mt-4 max-w-xl text-md leading-7 text-white/85">
                     {option.description}
                   </p>
                 </article>
@@ -112,7 +103,7 @@ export default function ContactPage() {
 
         {/* MAIN CONTACT AREA */}
         <section className="px-6 py-20 md:px-12 md:py-28 lg:px-16">
-          <div className="mx-auto grid max-w-7xl gap-16 lg:grid-cols-[0.65fr_1.35fr] lg:gap-24">
+          <div className="mx-auto grid max-w-7xl gap-16 lg:grid-cols-1 lg:gap-24">
             {/* LEFT SIDE */}
             <aside>
               <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#008c87]">
@@ -202,23 +193,7 @@ export default function ContactPage() {
             </aside>
 
             {/* FORM */}
-            <div>
-              <div className="border-t border-black/15 pt-8">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#008c87]">
-                  Project / engagement enquiry
-                </p>
-
-                <h2 className="mt-4 text-3xl font-semibold tracking-tight md:text-4xl">
-                  Tell me about your project.
-                </h2>
-
-                <p className="mt-3 max-w-2xl text-sm leading-6 text-black/50">
-                  This form is designed to give enough context for the first
-                  conversation without making the enquiry unnecessarily
-                  complicated.
-                </p>
-              </div>
-
+            <ContactFormModal>
               <form
                 action="mailto:jollofdudu@gmail.com?subject=Website%20Enquiry"
                 method="post"
@@ -462,7 +437,7 @@ export default function ContactPage() {
                   </p>
                 </div>
               </form>
-            </div>
+            </ContactFormModal>
           </div>
         </section>
 
