@@ -9,6 +9,7 @@ type LearningTrack = {
   title: string;
   short: string;
   topics: string;
+  tools:string;
   timeline: string;
   frequency: string;
   total: string;
@@ -47,8 +48,8 @@ export default function LearningTrackSelector({ tracks }: { tracks: LearningTrac
 
       <article aria-live="polite" className="mt-6 bg-[#ebeaea] p-6 sm:p-8 md:p-9">
         <div className="flex items-start justify-between gap-5">
-          <span className="text-sm text-white/35">{selectedTrack.number}</span>
-          <span className="rounded-full border border-[#111111]/75 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-white/65">
+          <span className="text-sm text-[#111111]/85">{selectedTrack.number}</span>
+          <span className="rounded-full border border-[#111111]/75 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#111111]/85">
             {selectedTrack.timeline}
           </span>
         </div>
@@ -67,6 +68,14 @@ export default function LearningTrackSelector({ tracks }: { tracks: LearningTrac
             What you will work on
           </p>
           <p className="mt-3 text-sm leading-6 text-[#111111]/75">{selectedTrack.topics}</p>
+        </div>
+
+
+        <div className="mt-7 border-t border-[#111111]/80 pt-6">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#2d2d2d]">
+            Software/Tools you will us
+          </p>
+          <p className="mt-3 text-sm leading-6 text-[#111111]/75">{selectedTrack.tools}</p>
         </div>
 
         <div className="mt-7 grid gap-5 border-t border-[#111111]/80 pt-6 sm:grid-cols-2">

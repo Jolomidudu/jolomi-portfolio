@@ -20,6 +20,7 @@ const tracks = [
       "Learn to design, build and deploy modern software applications through real projects.",
     topics:
       "HTML, CSS, JavaScript, TypeScript, React, Next.js, APIs, databases, authentication, Git and deployment.",
+    tools: "Visual Studio Code, Git, GitHub, Node.js, PostgreSQL, Vercel",
     timeline: "8–16 weeks",
     frequency: "3 sessions per week(2-3 hours per session)",
     total: "₦600,000",
@@ -42,6 +43,7 @@ const tracks = [
       "Go from an idea to a working mobile application using practical development workflows.",
     topics:
       "Flutter, Dart, UI implementation, APIs, authentication, state management, databases, notifications and app deployment.",
+    tools: "Flutter, Dart, Android Studio, Visual Studio Code, Git, GitHub",
     timeline: "10–16 weeks",
     frequency: "3 sessions per week(2-3 hours per session)",
     total: "₦750,000",
@@ -64,6 +66,7 @@ const tracks = [
       "Turn raw data into useful insights, dashboards and decisions that businesses can act on.",
     topics:
       "Excel, SQL, Python, data cleaning, exploratory analysis, visualization, Power BI and business reporting.",
+    tools: "Microsoft Excel, PostgreSQL, Python, Jupyter Notebook, Power BI",
     timeline: "8–12 weeks",
     frequency: "3 sessions per week(2-3 hours per session)",
     total: "₦400,000",
@@ -87,6 +90,7 @@ const tracks = [
       "Understand how modern systems are protected and learn practical defensive security techniques.",
     topics:
       "Networking, Linux, security principles, threat modelling, vulnerability assessment, IAM, secure development, monitoring and incident response.",
+    tools: "Linux, Wireshark, Nmap, Burp Suite Community Edition, OWASP ZAP",
     timeline: "10–16 weeks",
     frequency: "3 sessions per week(2-3 hours per session)",
     total: "₦650,000",
@@ -110,6 +114,8 @@ const tracks = [
       "Learn how to turn user problems and product ideas into clear, usable digital experiences.",
     topics:
       "User research, information architecture, user flows, wireframes, Figma, prototyping, responsive design and design systems.",
+    tools:
+      "Figma, Sketch, Adobe XD",
     timeline: "6–10 weeks",
     frequency: "3 sessions per week(2-3 hours per session)",
     total: "₦350,000",
@@ -134,6 +140,7 @@ const tracks = [
       "Learn how modern software is deployed, monitored and maintained in production.",
     topics:
       "Linux, Git, CI/CD, Docker, cloud infrastructure, environments, deployment pipelines, monitoring, logging and infrastructure security.",
+    tools: "Linux, GitHub Actions, Docker, Terraform, AWS, Prometheus, Grafana",
     timeline: "10–16 weeks",
     frequency: "3 sessions per week(2-3 hours per session)",
     total: "₦700,000",
@@ -158,6 +165,7 @@ const tracks = [
       "Learn to think beyond individual applications and design reliable technology systems.",
     topics:
       "Requirements, system architecture, APIs, databases, infrastructure, scalability, reliability, security and technology decisions.",
+    tools: "Draw.io, PlantUML, Postman, PostgreSQL, Visual Studio Code",
     timeline: "8–12 weeks",
     frequency: "3 sessions per week(2-3 hours per session)",
     total: "₦550,000",
@@ -182,6 +190,7 @@ const tracks = [
       "Explore how software, electronics and physical systems work together to create intelligent devices.",
     topics:
       "Arduino, ESP32, sensors, actuators, embedded programming, electronics, IoT, automation and device communication.",
+    tools: "Arduino IDE, PlatformIO, Wokwi, MQTT Explorer, Visual Studio Code",
     timeline: "10–16 weeks",
     frequency: "3 sessions per week(2-3 hours per session)",
     total: "₦650,000",
@@ -206,6 +215,7 @@ const tracks = [
       "Develop the thinking required to lead technology teams, ICT functions and digital transformation initiatives.",
     topics:
       "IT strategy, technology roadmaps, ICT operations, governance, budgets, teams, vendors, project management, cybersecurity governance and digital transformation.",
+    tools: "Microsoft Project, Jira, Trello, Microsoft Excel, Power BI, ServiceNow",
     timeline: "6–10 weeks",
     frequency: "1–2 sessions per week",
     total: "₦450,000",
