@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import ProjectRequestLauncher from "./projects/project-request-launcher";
 import { CurrencyToggle } from "./currency-provider";
 import LearningRegistration from "./learn/learning-registration";
+import HomeAvatarLink from "./home-avatar-link";
 
 const links = [
   ["HOME", "/"],
@@ -57,9 +58,7 @@ export default function SiteChrome({
     <div className="min-h-screen">
       <header className={`z-50 flex min-h-20 shrink-0 items-center justify-between px-6 pb-5 pt-[50px] transition-all duration-300 md:px-12 md:py-5 lg:px-16 ${isHeroHeader ? "fixed inset-x-0 top-0" : "sticky top-0"} ${menuOpen ? "bg-[#12211f] text-[#f5f5f0]" : headerIsTransparent ? "bg-transparent text-white" : headerMode === "projects" ? "bg-[#f5f5f0] text-[#111111]" : "bg-[#f5f5f0] text-[#111111]"}`}>
         <div className="flex items-center gap-3">
-          <Link href="/" className="flex items-center overflow-hidden rounded-full border border-[#12211f]/10 bg-white shadow-sm ring-1 ring-black/5" aria-label="Home">
-            <img src="/jolo.jpg" alt="Jolomi Dudu" className="h-10 w-10 object-cover" />
-          </Link>
+          <HomeAvatarLink />
           <CurrencyToggle />
           {learningRegistration && <LearningRegistration variant="header" />}
           {projectRequestLauncher === "circular" && <ProjectRequestLauncher variant="circular" />}

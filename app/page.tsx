@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ArrowDown, ArrowLeft, ArrowUp, ArrowUpRight, ChevronDown, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import ProjectRequestLauncher from "./projects/project-request-launcher";
+import HomeAvatarLink from "./home-avatar-link";
 const homepageProjects = [
   {
     name: "Festyvibe",
@@ -85,17 +86,7 @@ export default function Home() {
       ====================================================== */}
       <nav className={`fixed inset-x-0 top-0 z-50 flex min-h-20 shrink-0 items-center justify-between px-6 pb-5 pt-[50px] transition-all duration-300 md:px-12 md:py-5 lg:px-16 ${menuOpen ? "bg-[#12211f] text-[#f5f5f0]" : headerScrolled ? "bg-[#f5f5f0] text-[#111111]" : "bg-transparent text-white"}`}>
 
-        <a
-          href="#"
-          className="flex items-center overflow-hidden rounded-full border border-[#12211f]/10 bg-white shadow-sm ring-1 ring-black/5"
-          aria-label="Home"
-        >
-          <img
-            src="/jolo.jpg"
-            alt="Jolomi Dudu"
-            className="h-10 w-10 object-cover"
-          />
-        </a>
+        <HomeAvatarLink />
 
         <div className={`hidden items-center gap-8 text-sm font-medium transition-colors md:flex ${headerScrolled ? "text-[#111111]" : "text-white"}`}>
           
