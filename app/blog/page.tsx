@@ -18,14 +18,14 @@ export default async function BlogPage() {
   return (
     <SiteChrome>
       <main
-        className="min-h-screen text-[#111111]"
-        style={{
-          backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.22)), url('${blogBackground.src}')`,
-          backgroundPosition: "center top",
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
-          backgroundAttachment: "fixed",
-        }}
+        className="min-h-screen bg-[#f5f5f5] text-[#111111]"
+        // style={{
+        //   backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.22)), url('${blogBackground.src}')`,
+        //   backgroundPosition: "center top",
+        //   backgroundRepeat: "no-repeat",
+        //   backgroundSize: "cover",
+        //   backgroundAttachment: "fixed",
+        // }}
       >
         <section className="px-6 pb-20 pt-20 md:px-12 md:pb-28 md:pt-28 lg:px-16">
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#ffffff]">The blog</p>
