@@ -171,6 +171,7 @@ export default function LearningRegistration({
           <span className="flex flex-col items-center text-[8px] font-semibold uppercase leading-[1.02] tracking-[0.08em]">
             <span>Start</span>
             <span>Up</span>
+            
           </span>
         ) : (
           <span className="flex flex-col items-center text-[10px] font-semibold uppercase leading-[1.05] tracking-[0.12em]">
@@ -200,7 +201,7 @@ export default function LearningRegistration({
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#008c87]">Program registration</p>
-                  <h2 id="learning-registration-title" className="mt-2 text-2xl font-semibold">Start learning</h2>
+                  <h2 id="learning-registration-title" className="mt-2 text-2xl font-semibold">Level Up</h2>
                 </div>
                 <button
                   type="button"

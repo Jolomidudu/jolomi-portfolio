@@ -163,7 +163,7 @@ export default function ProjectRequestLauncher({
           ? "hidden rounded-full bg-[#343434] px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#1f2937] md:block"
           : variant === "circular"
             ? "flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#343434] text-[10px] font-bold text-white shadow-sm transition-transform hover:scale-105 hover:bg-[#008e8a] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00A9A5]"
-            : "fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[#343434] text-sm font-bold text-white shadow-lg transition-transform hover:scale-105 hover:bg-[#008e8a] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#00A9A5]"}
+            : "fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[#d7f36a] text-sm font-bold text-white shadow-lg transition-transform hover:scale-105 hover:bg-[#008e8a] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#00A9A5]"}
       >
         {variant === "header" ? "Start a project" : "Start"}
       </button>

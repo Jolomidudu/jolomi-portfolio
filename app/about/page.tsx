@@ -194,14 +194,14 @@ export default function AboutPage() {
                 <br></br>
                 <br></br> 
 
-                <span className="font-semibold text-[#362727]">I'm Oritsejolomi Dudu (Itsekiri by tribe, From Warri, Delta State, Nigeria) </span>
+                <span className="font-semibold text-[#362727]">I'm Oritsejolomi Dudu </span>
 
                 <br></br>
                 <br></br>
                 
                 
                 
-                <span className="font-semibold text-[#4f4f4f]">I lead technology, build digital systems, and turn ideas into reality</span>
+                <span className="font-semibold text-[#4f4f4f]">A leader in the technology industry, builder of digital systems, and transformer of ideas into reality</span>
                 
               </h1>
 

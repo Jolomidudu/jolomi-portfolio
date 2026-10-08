@@ -5,7 +5,7 @@ import SiteChrome from "../site-chrome";
 import LearningTrackSelector from "./learning-track-selector";
 
 export const metadata: Metadata = {
-  title: "Technology Mentorship & Training",
+  title: "LearnUp",
   description:
     "Practical technology mentorship and professional training across software development, mobile apps, data analytics, cybersecurity, UI/UX, DevOps, systems engineering, robotics and technology leadership.",
 };

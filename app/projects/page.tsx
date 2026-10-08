@@ -165,7 +165,7 @@ export default function ProjectsPage() {
             }}
           >
             <p className="text-lg font-bold uppercase tracking-[0.2em]">
-              My CATALOG
+              My PROJECTS
             </p>
             <br></br>
             <hr className="border-white/70"></hr>
