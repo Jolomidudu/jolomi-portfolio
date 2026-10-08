@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowDownRight, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import SiteChrome from "../site-chrome";
 import LearningTrackSelector from "./learning-track-selector";
+import ProgramFeeInfo from "./program-fee-info";
 
 export const metadata: Metadata = {
   title: "LearnUp",
@@ -20,7 +21,7 @@ const tracks = [
     topics:
       "HTML, CSS, JavaScript, TypeScript, React, Next.js, APIs, databases, authentication, Git and deployment.",
     timeline: "8–16 weeks",
-    frequency: "2 sessions per week",
+    frequency: "3 sessions per week(2-3 hours per session)",
     total: "₦600,000",
     deposit: "₦180,000",
     monthly: "₦150,000 / month",
@@ -42,7 +43,7 @@ const tracks = [
     topics:
       "Flutter, Dart, UI implementation, APIs, authentication, state management, databases, notifications and app deployment.",
     timeline: "10–16 weeks",
-    frequency: "2 sessions per week",
+    frequency: "3 sessions per week(2-3 hours per session)",
     total: "₦750,000",
     deposit: "₦225,000",
     monthly: "₦190,000 / month",
@@ -64,7 +65,7 @@ const tracks = [
     topics:
       "Excel, SQL, Python, data cleaning, exploratory analysis, visualization, Power BI and business reporting.",
     timeline: "8–12 weeks",
-    frequency: "2 sessions per week",
+    frequency: "3 sessions per week(2-3 hours per session)",
     total: "₦400,000",
     deposit: "₦120,000",
     monthly: "₦135,000 / month",
@@ -87,7 +88,7 @@ const tracks = [
     topics:
       "Networking, Linux, security principles, threat modelling, vulnerability assessment, IAM, secure development, monitoring and incident response.",
     timeline: "10–16 weeks",
-    frequency: "2 sessions per week",
+    frequency: "3 sessions per week(2-3 hours per session)",
     total: "₦650,000",
     deposit: "₦195,000",
     monthly: "₦165,000 / month",
@@ -110,7 +111,7 @@ const tracks = [
     topics:
       "User research, information architecture, user flows, wireframes, Figma, prototyping, responsive design and design systems.",
     timeline: "6–10 weeks",
-    frequency: "2 sessions per week",
+    frequency: "3 sessions per week(2-3 hours per session)",
     total: "₦350,000",
     deposit: "₦105,000",
     monthly: "₦120,000 / month",
@@ -134,7 +135,7 @@ const tracks = [
     topics:
       "Linux, Git, CI/CD, Docker, cloud infrastructure, environments, deployment pipelines, monitoring, logging and infrastructure security.",
     timeline: "10–16 weeks",
-    frequency: "2 sessions per week",
+    frequency: "3 sessions per week(2-3 hours per session)",
     total: "₦700,000",
     deposit: "₦210,000",
     monthly: "₦175,000 / month",
@@ -158,7 +159,7 @@ const tracks = [
     topics:
       "Requirements, system architecture, APIs, databases, infrastructure, scalability, reliability, security and technology decisions.",
     timeline: "8–12 weeks",
-    frequency: "2 sessions per week",
+    frequency: "3 sessions per week(2-3 hours per session)",
     total: "₦550,000",
     deposit: "₦165,000",
     monthly: "₦185,000 / month",
@@ -182,7 +183,7 @@ const tracks = [
     topics:
       "Arduino, ESP32, sensors, actuators, embedded programming, electronics, IoT, automation and device communication.",
     timeline: "10–16 weeks",
-    frequency: "2 sessions per week",
+    frequency: "3 sessions per week(2-3 hours per session)",
     total: "₦650,000",
     deposit: "₦195,000",
     monthly: "₦165,000 / month",
@@ -341,11 +342,11 @@ export default function LearnPage() {
         >
           <div className="mb-12 border-t border-white/15 pt-10">
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#78d8ca]">
-              Learning tracks
+              GET TUTORED BY THE BEST BRAINS
             </p>
 
             <div className="mt-5 flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
-              <h2 className="max-w-4xl text-3xl font-semibold leading-[0.95] tracking-[-0.05em] md:text-5xl">
+              <h2 className="max-w-4xl text-2xl font-semibold leading-[0.95] tracking-[-0.05em] md:text-5xl">
                 Choose what you want to build your capability in.
               </h2>
 
@@ -358,16 +359,7 @@ export default function LearnPage() {
           </div>
 
           <LearningTrackSelector tracks={tracks} />
-
-          {/* PROGRAM FEE NOTE */}
-          <div className="mt-8 border-t border-white/10 pt-6">
-            <p className="max-w-4xl text-xs leading-6 text-white/40">
-              Program fees cover mentorship and training sessions. Hardware,
-              software subscriptions, certification examination fees,
-              cloud usage and other third-party services are separate where
-              applicable.
-            </p>
-          </div>
+          <ProgramFeeInfo />
         </section>
 
         {/* OUTCOMES */}
