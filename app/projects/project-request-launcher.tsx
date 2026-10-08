@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
+import { CalendarDays, FileText, Paperclip, Upload, X } from "lucide-react";
+import { useRef } from "react";
 import { projectServices } from "./project-services";
 import { useCurrency } from "../currency-provider";
 
@@ -41,13 +43,44 @@ const fieldClassName =
   "mt-2 w-full rounded-md border border-black/15 bg-white px-3 py-3 text-sm outline-none transition-colors focus:border-[#00A9A5]";
 const labelClassName = "block text-sm font-medium text-black/75";
 const secondaryButtonClassName =
-  "rounded-md border border-black/20 px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-black/5 disabled:cursor-not-allowed disabled:opacity-40";
+  "rounded-md border border-black/20 px-4 py-2.5 text-sm text-[#ff0000]/75 font-semibold transition-colors hover:bg-black/5 disabled:cursor-not-allowed disabled:opacity-40";
+const maxAttachmentCount = 3;
+const maxAttachmentSize = 2 * 1024 * 1024;
+const acceptedAttachmentExtensions = new Set([
+  ".pdf", ".doc", ".docx", ".txt", ".rtf", ".png", ".jpg", ".jpeg", ".webp", ".gif",
+]);
 
 function localDateString(date: Date) {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
+}
+
+function upcomingDateStrings(days: number) {
+  const start = new Date();
+  start.setHours(12, 0, 0, 0);
+
+  return Array.from({ length: days }, (_, offset) => {
+    const date = new Date(start);
+    date.setDate(start.getDate() + offset);
+    return localDateString(date);
+  });
+}
+
+function fileToBase64(file: File) {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result !== "string") {
+        reject(new Error("Unable to read this file."));
+        return;
+      }
+      resolve(reader.result.slice(reader.result.indexOf(",") + 1));
+    };
+    reader.onerror = () => reject(reader.error ?? new Error("Unable to read this file."));
+    reader.readAsDataURL(file);
+  });
 }
 
 type ProjectRequestLauncherProps = {
@@ -64,8 +97,12 @@ export default function ProjectRequestLauncher({
   const [request, setRequest] = useState<ProjectRequest>(initialRequest);
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [attachments, setAttachments] = useState<File[]>([]);
+  const [attachmentError, setAttachmentError] = useState("");
+  const dateInputRef = useRef<HTMLInputElement>(null);
   const { currency } = useCurrency();
   const minimumStartDate = localDateString(new Date());
+  const startDateOptions = upcomingDateStrings(45);
   const modalOpen = formOpen || confirmationOpen;
   const selectedService = projectServices.find(({ name }) => name === request.service);
   const selectedServicePrice = currency === "NGN" ? selectedService?.nigeria : selectedService?.international;
@@ -104,6 +141,32 @@ export default function ProjectRequestLauncher({
     setErrorMessage("");
   }
 
+  function addAttachments(files: FileList | null) {
+    if (!files?.length) return;
+
+    const nextAttachments: File[] = [];
+    let nextError = "";
+    for (const file of Array.from(files)) {
+      const extension = file.name.toLowerCase().match(/\.[^.]+$/)?.[0] ?? "";
+      if (!acceptedAttachmentExtensions.has(extension)) {
+        nextError = `${file.name} is not a supported file type.`;
+        continue;
+      }
+      if (file.size > maxAttachmentSize) {
+        nextError = `${file.name} exceeds the 2 MB per-file limit.`;
+        continue;
+      }
+      if (attachments.length + nextAttachments.length >= maxAttachmentCount) {
+        nextError = "You can attach a maximum of 3 files.";
+        break;
+      }
+      nextAttachments.push(file);
+    }
+
+    if (nextAttachments.length) setAttachments((current) => [...current, ...nextAttachments]);
+    setAttachmentError(nextError);
+  }
+
   function goToNextStep() {
     setErrorMessage("");
 
@@ -131,10 +194,14 @@ export default function ProjectRequestLauncher({
     setErrorMessage("");
 
     try {
+      const encodedAttachments = await Promise.all(attachments.map(async (file) => ({
+        name: file.name,
+        data: await fileToBase64(file),
+      })));
       const response = await fetch("/api/project-requests", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(request),
+        body: JSON.stringify({ ...request, attachments: encodedAttachments }),
       });
       const result = (await response.json()) as { error?: string };
 
@@ -162,11 +229,12 @@ export default function ProjectRequestLauncher({
         className={variant === "header"
           ? "hidden rounded-full bg-[#343434] px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#1f2937] md:block"
           : variant === "circular"
-            ? "flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#343434] text-[10px] font-bold text-white shadow-sm transition-transform hover:scale-105 hover:bg-[#008e8a] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00A9A5]"
+            ? "flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#cdf1b0] text-[10px] font-bold text-[#111111] shadow-sm transition-transform hover:scale-105 hover:bg-[#008e8a] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00A9A5]"
             : "fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[#d7f36a] text-sm font-bold text-white shadow-lg transition-transform hover:scale-105 hover:bg-[#008e8a] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#00A9A5]"}
       >
-        {variant === "header" ? "Start a project" : "Start"}
+        {variant === "header" ? "Start a project" : "START"}
       </button>
+      
 
       {formOpen && (
         <div
@@ -184,10 +252,10 @@ export default function ProjectRequestLauncher({
             <header className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#008e8a]">
-                  Project enquiry · Step {step} of 3
+                  Start A Project · Step {step} of 3
                 </p>
-                <h2 id="project-request-title" className="mt-2 text-2xl font-semibold">
-                  {step === 1 ? "Project details" : step === 2 ? "Your details" : "Review request"}
+                <h2 id="project-request-title" className="mt-2 text-2xl text-[#111111] font-semibold">
+                  {step === 1 ? "Project Details" : step === 2 ? "Your Details" : "Review Request"}
                 </h2>
               </div>
               <button
@@ -270,6 +338,54 @@ export default function ProjectRequestLauncher({
                     )}
                   </div>
 
+                  <div>
+                    <label htmlFor="project-attachments" className={`${labelClassName} mb-2 flex items-center gap-2`}>
+                      <Paperclip aria-hidden="true" className="h-4 w-4 text-[#008e8a]" />
+                      File Document/ NDA/ Images
+                    </label>
+                    <input
+                      id="project-attachments"
+                      type="file"
+                      multiple
+                      accept=".pdf,.doc,.docx,.txt,.rtf,.png,.jpg,.jpeg,.webp,.gif"
+                      disabled={attachments.length >= maxAttachmentCount}
+                      onChange={(event) => {
+                        addAttachments(event.target.files);
+                        event.target.value = "";
+                      }}
+                      className="sr-only"
+                    />
+                    <label
+                      htmlFor="project-attachments"
+                      className={`flex min-h-24 cursor-pointer flex-col items-center justify-center rounded-md border border-dashed border-black/20 bg-white px-4 py-4 text-center transition-colors hover:border-[#008e8a] hover:bg-[#008e8a]/[0.03] ${attachments.length >= maxAttachmentCount ? "cursor-not-allowed opacity-50" : ""}`}
+                    >
+                      <Upload aria-hidden="true" className="h-5 w-5 text-[#008e8a]" />
+                      <span className="mt-2 text-sm font-semibold">Choose documents or images</span>
+                      <span className="mt-1 text-xs text-black/50">Up to 3 files, 2 MB each</span>
+                    </label>
+
+                    {attachments.length > 0 && (
+                      <ul className="mt-2 space-y-2" aria-label="Selected files">
+                        {attachments.map((file, index) => (
+                          <li key={`${file.name}-${file.lastModified}`} className="flex items-center gap-3 rounded-md border border-black/10 bg-white px-3 py-2">
+                            <FileText aria-hidden="true" className="h-4 w-4 shrink-0 text-[#008e8a]" />
+                            <span className="min-w-0 flex-1 truncate text-sm">{file.name}</span>
+                            <span className="shrink-0 text-xs text-black/45">{(file.size / 1024).toFixed(0)} KB</span>
+                            <button
+                              type="button"
+                              aria-label={`Remove ${file.name}`}
+                              onClick={() => setAttachments((current) => current.filter((_, fileIndex) => fileIndex !== index))}
+                              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-black/50 transition-colors hover:bg-black/5 hover:text-black"
+                            >
+                              <X aria-hidden="true" className="h-4 w-4" />
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    {attachmentError && <p role="alert" className="mt-2 text-xs text-red-700">{attachmentError}</p>}
+                  </div>
+
                   <label className={labelClassName}>
                     Project description
                     <textarea
@@ -283,17 +399,75 @@ export default function ProjectRequestLauncher({
                     />
                   </label>
 
-                  <label className={labelClassName}>
-                    Preferred start date
+                  <div>
+                    <div className="flex items-center justify-between gap-3">
+                      <span className={labelClassName}>Preferred start date</span>
+                      <button
+                        type="button"
+                        aria-label="Open calendar date picker"
+                        onClick={() => {
+                          const dateInput = dateInputRef.current;
+                          if (!dateInput) return;
+                          if (typeof dateInput.showPicker === "function") {
+                            dateInput.showPicker();
+                          } else {
+                            dateInput.click();
+                          }
+                        }}
+                        className="flex h-10 w-12 shrink-0 items-center justify-center rounded-full border border-black/15 bg-white text-[#111111] transition-colors hover:border-[#008e8a] hover:text-[#008e8a] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00A9A5]"
+                      >
+                        <CalendarDays aria-hidden="true" className="h-5 w-5" />
+                      </button>
+                    </div>
+
+                    <div
+                      role="group"
+                      aria-label="Choose a preferred start date"
+                      className="-mx-5 mt-3 flex snap-x gap-2 overflow-x-auto px-5 pb-2 sm:-mx-8 sm:px-8"
+                    >
+                      {startDateOptions.map((date) => {
+                        const optionDate = new Date(`${date}T12:00:00`);
+                        const isSelected = request.startDate === date;
+
+                        return (
+                          <button
+                            key={date}
+                            type="button"
+                            aria-pressed={isSelected}
+                            aria-label={optionDate.toLocaleDateString("en", {
+                              weekday: "long",
+                              month: "long",
+                              day: "numeric",
+                              year: "numeric",
+                            })}
+                            onClick={() => updateRequest("startDate", date)}
+                            className={`flex min-w-[4.75rem] snap-start flex-col items-center justify-center gap-1 rounded-2xl border px-3 py-3 text-center transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00A9A5] ${isSelected ? "border-[#008e8a] bg-[#008e8a] text-white" : "border-black/10 bg-white text-[#111111] hover:border-[#008e8a]"}`}
+                          >
+                            <span className="text-xs font-medium opacity-75">
+                              {optionDate.toLocaleDateString("en", { weekday: "short" })}
+                            </span>
+                            <span className="text-2xl font-semibold leading-none">
+                              {optionDate.getDate()}
+                            </span>
+                            <span className="text-xs opacity-75">
+                              {optionDate.toLocaleDateString("en", { month: "short" })}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+
                     <input
-                      required
+                      ref={dateInputRef}
+                      tabIndex={-1}
+                      aria-label="Preferred start date"
                       type="date"
                       min={minimumStartDate}
                       value={request.startDate}
                       onChange={(event) => updateRequest("startDate", event.target.value)}
-                      className={fieldClassName}
+                      className="sr-only"
                     />
-                  </label>
+                  </div>
                 </div>
               )}
 

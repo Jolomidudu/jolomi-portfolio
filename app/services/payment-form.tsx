@@ -73,9 +73,10 @@ export default function PaymentForm({ services }: { services: Service[] }) {
 
   return (
     <>
-      <button type="button" onClick={() => setOpen(true)} aria-label="Pay" aria-haspopup="dialog" className="fixed bottom-[120px] right-6 z-40 flex h-11 w-11 items-center justify-center rounded-full bg-[#008c87] text-[0.625rem] font-bold text-white shadow-lg transition-transform hover:-translate-y-1 hover:bg-[#006e6a]">
-        PAY
+      <button type="button" onClick={() => setOpen(true)} aria-label="Pay" aria-haspopup="dialog" className="fixed bottom-[100px] right-6 z-40 flex h-11 w-11 items-center justify-center rounded-full bg-[#ffffff] text-[0.625rem] font-bold text-[#365132] shadow-lg transition-transform hover:-translate-y-1 hover:bg-[#006e6a]">
+       PAY ME
       </button>
+      
 
       {open && (
         <div className="fixed inset-0 z-[80] flex items-end justify-center bg-black/55 sm:items-center sm:p-6">

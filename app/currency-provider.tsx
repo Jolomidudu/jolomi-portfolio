@@ -86,9 +86,10 @@ export function CurrencyToggle() {
       aria-label={`Prices shown in ${currency}. Switch to ${nextCurrency}.`}
       title={`Switch prices to ${nextCurrency}`}
       onClick={toggleCurrency}
-      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#343434] text-xs font-bold text-white shadow-sm transition-colors hover:bg-[#1f2937] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#343434]"
+      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#ffffff] text-xs font-bold text-[#111111] shadow-sm transition-colors hover:bg-[#008e8a] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00A9A5]"
     >
       {currency === "NGN" ? "₦" : "$"}
     </button>
+    
   );
 }

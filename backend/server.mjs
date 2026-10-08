@@ -44,7 +44,10 @@ let sql;
 let learningTracks = [];
 
 app.disable("x-powered-by");
-app.use(express.json({ limit: "20kb" }));
+app.use((request, response, next) => {
+  const limit = request.method === "POST" && request.path === "/api/enquiries" ? "10mb" : "20kb";
+  express.json({ limit })(request, response, next);
+});
 app.use((request, _response, next) => {
   request.sql = sql;
   next();
@@ -217,6 +220,46 @@ function readProjectRequest(body) {
   return enquiry;
 }
 
+const projectAttachmentTypes = new Map([
+  [".pdf", "application/pdf"],
+  [".doc", "application/msword"],
+  [".docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"],
+  [".txt", "text/plain"],
+  [".rtf", "application/rtf"],
+  [".png", "image/png"],
+  [".jpg", "image/jpeg"],
+  [".jpeg", "image/jpeg"],
+  [".webp", "image/webp"],
+  [".gif", "image/gif"],
+]);
+const maxProjectAttachmentBytes = 2 * 1024 * 1024;
+
+function readProjectAttachments(input) {
+  if (input === undefined) return [];
+  if (!Array.isArray(input) || input.length > 3) return null;
+
+  const attachments = [];
+  for (const file of input) {
+    if (!file || typeof file.name !== "string" || typeof file.data !== "string") return null;
+
+    const extension = file.name.toLowerCase().match(/\.[^.]+$/)?.[0] ?? "";
+    const mediaType = projectAttachmentTypes.get(extension);
+    const encoded = file.data;
+    if (!mediaType || !encoded || encoded.length > Math.ceil(maxProjectAttachmentBytes / 3) * 4 + 4) return null;
+    if (!/^[A-Za-z0-9+/]*={0,2}$/.test(encoded) || encoded.length % 4 === 1) return null;
+
+    const data = Buffer.from(encoded, "base64");
+    if (!data.length || data.length > maxProjectAttachmentBytes) return null;
+    if (data.toString("base64").replace(/=+$/, "") !== encoded.replace(/=+$/, "")) return null;
+
+    const name = file.name.replace(/[\\/\0-\x1f\x7f]/g, "_").trim().slice(0, 180);
+    if (!name) return null;
+    attachments.push({ name, mediaType, sizeBytes: data.length, data: encoded });
+  }
+
+  return attachments;
+}
+
 function readBlogPost(body) {
   if (!body || typeof body !== "object" || Array.isArray(body)) return null;
 
@@ -370,16 +413,21 @@ app.post("/api/auth/login", (request, response) => {
   const attemptKey = `${clientIp}:${email}`;
   const now = Date.now();
   const previousAttempts = loginAttempts.get(attemptKey);
-  if (previousAttempts && previousAttempts.resetAt > now && previousAttempts.count >= 5) {
+  if (previousAttempts && previousAttempts.resetAt > now && previousAttempts.count >= 4) {
     return response.status(429).json({ error: "Too many sign-in attempts. Try again in 15 minutes." });
   }
   const attempts = previousAttempts && previousAttempts.resetAt > now
     ? previousAttempts
     : { count: 0, resetAt: now + 15 * 60 * 1000 };
-  attempts.count += 1;
-  loginAttempts.set(attemptKey, attempts);
 
   if (!safeEqual(email, adminEmail) || !safeEqual(password, adminPassword)) {
+    attempts.count += 1;
+    if (attempts.count >= 4) {
+      attempts.resetAt = now + 15 * 60 * 1000;
+      loginAttempts.set(attemptKey, attempts);
+      return response.status(429).json({ error: "Too many sign-in attempts. Try again in 15 minutes." });
+    }
+    loginAttempts.set(attemptKey, attempts);
     return response.status(401).json({ error: "Email or password is incorrect." });
   }
 
@@ -658,10 +706,12 @@ app.post("/api/learning/progress", async (request, response) => {
 
 app.post("/api/enquiries", async (request, response) => {
   const enquiry = readProjectRequest(request.body);
-  if (!enquiry) return response.status(400).json({ error: "Please check the project enquiry details." });
+  const attachments = readProjectAttachments(request.body?.attachments);
+  if (!enquiry || !attachments) return response.status(400).json({ error: "Please check the project enquiry details and attachments." });
 
+  let saved;
   try {
-    const [saved] = await request.sql`
+    [saved] = await request.sql`
       INSERT INTO project_enquiries (
         service, description, start_date, first_name, last_name,
         email, country_code, phone
@@ -672,8 +722,21 @@ app.post("/api/enquiries", async (request, response) => {
       )
       RETURNING id, created_at AS "createdAt", status
     `;
+    for (const attachment of attachments) {
+      await request.sql`
+        INSERT INTO project_enquiry_attachments (enquiry_id, name, media_type, size_bytes, data)
+        VALUES (${saved.id}, ${attachment.name}, ${attachment.mediaType}, ${attachment.sizeBytes}, ${attachment.data})
+      `;
+    }
     return response.status(201).json({ enquiry: saved });
   } catch (error) {
+    if (saved?.id) {
+      try {
+        await request.sql`DELETE FROM project_enquiries WHERE id = ${saved.id}`;
+      } catch (rollbackError) {
+        console.error("Failed to roll back incomplete project enquiry:", rollbackError);
+      }
+    }
     console.error("Failed to save project enquiry:", error);
     return response.status(500).json({ error: "We couldn't save your enquiry. Please try again." });
   }
@@ -686,7 +749,12 @@ app.get("/api/enquiries", requireAdmin, async (request, response) => {
         id, service, description, start_date AS "startDate",
         first_name AS "firstName", last_name AS "lastName", email,
         country_code AS "countryCode", phone, status,
-        created_at AS "createdAt"
+        created_at AS "createdAt",
+        COALESCE((
+          SELECT json_agg(json_build_object('id', attachment.id::text, 'name', attachment.name, 'sizeBytes', attachment.size_bytes))
+          FROM project_enquiry_attachments AS attachment
+          WHERE attachment.enquiry_id = project_enquiries.id
+        ), '[]'::json) AS attachments
       FROM project_enquiries
       ORDER BY created_at DESC
       LIMIT 200
@@ -708,7 +776,12 @@ app.get("/api/enquiries/:id", requireAdmin, async (request, response) => {
         id, service, description, start_date AS "startDate",
         first_name AS "firstName", last_name AS "lastName", email,
         country_code AS "countryCode", phone, status,
-        created_at AS "createdAt"
+        created_at AS "createdAt",
+        COALESCE((
+          SELECT json_agg(json_build_object('id', attachment.id::text, 'name', attachment.name, 'sizeBytes', attachment.size_bytes))
+          FROM project_enquiry_attachments AS attachment
+          WHERE attachment.enquiry_id = project_enquiries.id
+        ), '[]'::json) AS attachments
       FROM project_enquiries
       WHERE id = ${id}
       LIMIT 1
@@ -718,6 +791,35 @@ app.get("/api/enquiries/:id", requireAdmin, async (request, response) => {
   } catch (error) {
     console.error("Failed to load project enquiry:", error);
     return response.status(500).json({ error: "Unable to load this enquiry." });
+  }
+});
+
+app.get("/api/enquiries/:id/attachments/:attachmentId", requireAdmin, requireInternalKey, async (request, response) => {
+  const { id, attachmentId } = request.params;
+  if (!/^\d+$/.test(id) || !/^\d+$/.test(attachmentId)) {
+    return response.status(400).json({ error: "Invalid attachment request." });
+  }
+
+  try {
+    const [attachment] = await request.sql`
+      SELECT name, media_type AS "mediaType", data
+      FROM project_enquiry_attachments
+      WHERE id = ${attachmentId} AND enquiry_id = ${id}
+      LIMIT 1
+    `;
+    if (!attachment) return response.status(404).json({ error: "Attachment not found." });
+
+    const filename = encodeURIComponent(attachment.name);
+    return response
+      .set("Content-Type", attachment.mediaType)
+      .set("Content-Length", String(attachment.sizeBytes))
+      .set("Content-Disposition", `attachment; filename*=UTF-8''${filename}`)
+      .set("Cache-Control", "private, no-store")
+      .set("X-Content-Type-Options", "nosniff")
+      .send(Buffer.from(attachment.data, "base64"));
+  } catch (error) {
+    console.error("Failed to load project enquiry attachment:", error);
+    return response.status(500).json({ error: "Unable to load this attachment." });
   }
 });
 
@@ -1130,6 +1232,17 @@ async function start() {
       country_code TEXT NOT NULL,
       phone TEXT NOT NULL,
       status TEXT NOT NULL DEFAULT 'new',
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  await sql`
+    CREATE TABLE IF NOT EXISTS project_enquiry_attachments (
+      id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+      enquiry_id BIGINT NOT NULL REFERENCES project_enquiries(id) ON DELETE CASCADE,
+      name TEXT NOT NULL,
+      media_type TEXT NOT NULL,
+      size_bytes INTEGER NOT NULL,
+      data TEXT NOT NULL,
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
   `;

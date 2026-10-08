@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import EnquiryPortal from "./enquiry-portal";
 
 export const metadata: Metadata = {
-  title: "Portal",
+  title: "Admin",
   robots: { index: false, follow: false },
 };
 
