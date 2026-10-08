@@ -60,9 +60,9 @@ export default function ForgotPasswordPage() {
               <p className="mt-4 max-w-md text-base leading-7 text-white/70">
                 Send a password assistance request and learner support will help verify your account and restore access.
               </p>
-              <div className="mt-8 border-l-2 border-[#d7f36a] bg-white/5 px-4 py-3 text-sm leading-6 text-white/75">
+              {/* <div className="mt-8 border-l-2 border-[#d7f36a] bg-white/5 px-4 py-3 text-sm leading-6 text-white/75">
                 For account security, we&apos;ll confirm your request without revealing whether an email address has a learner account.
-              </div>
+              </div> */}
             </section>
 
             <section className="px-6 py-8 sm:px-8 sm:py-10">
