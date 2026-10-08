@@ -36,7 +36,7 @@ export default function PaymentForm({ services }: { services: Service[] }) {
   }, [open]);
 
   const selectedService = services.find((service) => service.id === serviceId);
-  const depositAmount = selectedService ? Math.round(selectedService.startingAmount * 0.45) : 0;
+  const depositAmount = selectedService ? Math.round(selectedService.startingAmount * 0.65) : 0;
   const customAmountValue = Number(customAmount);
   const customAmountIsValid = Number.isSafeInteger(customAmountValue) && customAmountValue >= 100;
   const paymentAmount = paymentType === "deposit" ? depositAmount : customAmountIsValid ? customAmountValue : 0;
@@ -115,7 +115,7 @@ export default function PaymentForm({ services }: { services: Service[] }) {
                       ))}
                     </select>
                   </label>
-                  <p className="pb-3 text-sm text-black/60">45% of Selected Service Fee: <strong className="text-[#008c87]">₦{depositAmount.toLocaleString()}</strong></p>
+                  <p className="pb-3 text-sm text-black/60">65% of Selected Service Fee: <strong className="text-[#008c87]">₦{depositAmount.toLocaleString()}</strong></p>
                 </div>
               ) : (
                 <label className="mt-5 block text-sm font-medium">

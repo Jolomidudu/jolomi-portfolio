@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import SiteChrome from "../../site-chrome";
 import { projectServices } from "../../projects/project-services";
 import ServicePrice from "../../projects/service-price";
+import PaymentForm from "../payment-form";
 
 type ServicePageProps = {
   params: Promise<{ slug: string }>;
@@ -37,7 +38,7 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
   if (!service) notFound();
 
   return (
-    <SiteChrome>
+    <SiteChrome projectRequestLauncher="circular">
       <main className="min-h-screen bg-[#f5f5f0] text-[#111111]">
         <section className="px-6 pb-16 pt-12 md:px-12 md:pb-24 md:pt-20 lg:px-16">
           <Link href="/services" className="inline-flex items-center gap-2 rounded-lg bg-[#343434] px-4 py-2.5 text-xs font-semibold text-white transition-colors hover:bg-[#1f2937]">
@@ -85,6 +86,7 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
           </div>
         </section>
       </main>
+      <PaymentForm services={[{ id: service.slug, title: service.name, startingAmount: service.startingAmount }]} />
     </SiteChrome>
   );
 }
