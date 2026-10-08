@@ -39,7 +39,6 @@ export default function SiteChrome({
   const [menuView, setMenuView] = useState<"main" | "about">("main");
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [headerScrolled, setHeaderScrolled] = useState(false);
-  const isServicesHeader = headerMode === "services";
   const isHeroHeader = headerMode === "services" || headerMode === "about";
   const headerIsTransparent = isHeroHeader && !headerScrolled;
 
@@ -115,18 +114,19 @@ export default function SiteChrome({
               {menuView === "main" ? (
                 <>
                   <Link href="/" onClick={() => setMenuOpen(false)} className="group flex items-center justify-between border-y border-white/15 py-4 hover:text-[#78d8ca]">
-                    <span className="flex items-center gap-4"><span className="text-xs text-white/35">01</span><span className="text-3xl font-semibold tracking-[-0.04em]">HOME</span></span>
+                    <span className="flex items-center gap-4"><span className="text-xs text-white/35">01</span><span className="text-2xl font-semibold tracking-[-0.04em]">HOME</span></span>
 
                     
                     <ArrowUpRight aria-hidden="true" className="h-5 w-5 text-white/35 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#78d8ca]" />
                   </Link>
+
                   <button type="button" onClick={() => setMenuView("about")} className="group flex w-full items-center justify-between border-b border-white/15 py-4 text-left hover:text-[#78d8ca]">
-                    <span className="flex items-center gap-4"><span className="text-xs font-normal text-white/35">02</span><span className="text-3xl font-semibold tracking-[-0.04em]">ABOUT</span></span>
+                    <span className="flex items-center gap-4"><span className="text-xs font-normal text-white/35">02</span><span className="text-2xl font-semibold tracking-[-0.04em]">ABOUT</span></span>
                     <ChevronRight aria-hidden="true" className="h-6 w-6 text-white/35 transition-transform group-hover:translate-x-1 group-hover:text-[#78d8ca]" />
                   </button>
                   {links.slice(1).map(([label, href], index) => (
                     <Link key={href} href={href} onClick={() => setMenuOpen(false)} className="group flex items-center justify-between border-b border-white/15 py-4 hover:text-[#78d8ca]">
-                      <span className="flex items-center gap-4"><span className="text-xs text-white/35">0{index + 3}</span><span className="text-3xl font-semibold tracking-[-0.04em]">{label}</span></span>
+                      <span className="flex items-center gap-4"><span className="text-xs text-white/35">0{index + 3}</span><span className="text-2xl font-semibold tracking-[-0.04em]">{label}</span></span>
                       <ArrowUpRight aria-hidden="true" className="h-5 w-5 text-white/35 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#78d8ca]" />
                     </Link>
                   ))}
