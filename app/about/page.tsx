@@ -175,11 +175,12 @@ export default function AboutPage() {
               backgroundPosition: "top center",
             }}
           >
-            <p className="text-sm font-bold uppercase tracking-[0.2em]">
-              GET TO KNOW ME
+            <p className="text-2xl font-bold uppercase tracking-[0.2em]">
+              ABOUT ME
             </p>
             <br></br>
             <br></br>
+            
 
             <hr className="border-white/70"></hr>
           </div>
@@ -187,7 +188,7 @@ export default function AboutPage() {
           <div className="px-6 pb-20 pt-8 md:px-12 md:pb-28 md:pt-8 lg:px-16">
             <div className="grid gap-10 md:grid-cols-[1.15fr_0.85fr] md:items-center md:gap-16">
             <div>
-              <h1 className="max-w-4xl text-2xl font-semibold leading-[0.96] tracking-[-0.05em] sm:text-4xl lg:text-4xl">
+              <h1 className="max-w-4xl text-3xl font-semibold leading-[0.96] tracking-[-0.05em] sm:text-4xl lg:text-4xl">
                 <span className="font-semibold text-[#4f4f4f]">Hello & Welcome,</span>
                 
                 <br></br>
@@ -227,7 +228,7 @@ export default function AboutPage() {
                   href="/projects"
                   className="inline-flex min-h-12 items-center border border-black/20 px-5 py-3 text-sm font-semibold transition-colors hover:border-[#008c87] hover:text-[#008c87]"
                 >
-                  VIEW CATALOG
+                  VIEW PROJECTS
                   <ArrowUpRight aria-hidden="true" className="ml-3 h-4 w-4" />
                 </Link>
               </div>
