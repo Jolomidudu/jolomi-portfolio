@@ -10,6 +10,8 @@ type PaymentFailurePageProps = {
   searchParams: Promise<{
     type?: string | string[];
     payment?: string | string[];
+    reason?: string | string[];
+    reference?: string | string[];
   }>;
 };
 
@@ -17,6 +19,8 @@ export default async function PaymentFailurePage({ searchParams }: PaymentFailur
   const params = await searchParams;
   const isLearning = params.type === "learning";
   const hasPaymentFailure = params.payment === "failed";
+  const paymentNeedsSupport = isLearning && params.reason === "confirmation";
+  const paymentReference = typeof params.reference === "string" ? params.reference : "";
 
   return (
     <div className="min-h-screen bg-[#f5f5f0] text-[#111111]">
@@ -47,10 +51,15 @@ export default async function PaymentFailurePage({ searchParams }: PaymentFailur
                 <span className="mt-1 block text-[#f7d9d0]">not completed.</span>
               </h1>
               <p className="mt-4 max-w-md text-base leading-7 text-white/70">
-                {isLearning
-                  ? "Your payment was not confirmed. No charge has been applied to your account, and you can retry your enrollment securely from the learning page."
+                {paymentNeedsSupport
+                  ? "Paystack confirmed the payment, but we could not activate your enrollment. Please do not pay again yet; contact support with your payment reference so we can resolve it."
+                  : isLearning
+                    ? "Paystack did not confirm a successful payment. If your bank shows a debit, check your Paystack transaction status before trying again."
                   : "Your payment did not go through. You can try again securely or contact me directly for assistance."}
               </p>
+              {paymentNeedsSupport && paymentReference && (
+                <p className="mt-4 break-all font-mono text-xs text-white/55">Reference: {paymentReference}</p>
+              )}
             </div>
 
             <div className="flex flex-col justify-between gap-6 bg-[#f0eddf] px-6 py-7 sm:px-9 sm:py-7">
@@ -62,8 +71,10 @@ export default async function PaymentFailurePage({ searchParams }: PaymentFailur
                   {isLearning ? "Your program is still pending." : "Let’s fix this together."}
                 </h2>
                 <p className="mt-3 text-sm leading-6 text-black/60">
-                  {isLearning
-                    ? "Please retry the payment from the learning registration flow. If your card is declined or the session expired, you can start again and complete the enrollment securely."
+                  {paymentNeedsSupport
+                    ? "Your payment may have been collected even though enrollment setup did not finish. Contact support before making another payment."
+                    : isLearning
+                      ? "If your bank shows no debit and Paystack marks the transaction as failed, you can retry from the learning registration flow."
                     : "You can retry the payment or get in touch if you need help with a different payment method."}
                 </p>
               </div>
@@ -78,11 +89,13 @@ export default async function PaymentFailurePage({ searchParams }: PaymentFailur
               )}
 
               <div className="flex flex-col gap-3 sm:flex-row">
-                <Link href={isLearning ? "/learn" : "/services"} className="inline-flex min-h-14 flex-1 items-center justify-center bg-[#163d34] px-5 py-4 text-sm font-semibold text-white transition-colors hover:bg-[#00A9A5]">
-                  {isLearning ? "Retry learning payment" : "Try payment again"}
-                </Link>
-                <Link href={isLearning ? "/learn/login" : "/contact"} className="inline-flex min-h-14 flex-1 items-center justify-center border border-black/15 px-5 py-4 text-sm font-semibold text-[#163d34] hover:bg-black/5">
-                  {isLearning ? "Go to sign in" : "Contact support"}
+                {!paymentNeedsSupport && (
+                  <Link href={isLearning ? "/learn" : "/services"} className="inline-flex min-h-14 flex-1 items-center justify-center bg-[#163d34] px-5 py-4 text-sm font-semibold text-white transition-colors hover:bg-[#00A9A5]">
+                    {isLearning ? "Retry learning payment" : "Try payment again"}
+                  </Link>
+                )}
+                <Link href={isLearning && !paymentNeedsSupport ? "/learn/login" : "/contact"} className="inline-flex min-h-14 flex-1 items-center justify-center border border-black/15 px-5 py-4 text-sm font-semibold text-[#163d34] hover:bg-black/5">
+                  {isLearning && !paymentNeedsSupport ? "Go to sign in" : "Contact support"}
                 </Link>
               </div>
             </div>
