@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
-import { CalendarDays, FileText, Paperclip, Upload, X } from "lucide-react";
+import { BadgeCheck, CalendarDays, FileText, Paperclip, Upload, X } from "lucide-react";
 import { useRef } from "react";
 import { projectServices } from "./project-services";
 import { useCurrency } from "../currency-provider";
@@ -41,11 +41,12 @@ const initialRequest: ProjectRequest = {
 
 const fieldClassName =
   "mt-2 w-full rounded-md border border-black/15 bg-white px-3 py-3 text-sm outline-none transition-colors focus:border-[#00A9A5]";
-const labelClassName = "block text-sm font-medium text-black/75";
+const labelClassName = "block text-md font-bold text-[#323e32]/85";
 const secondaryButtonClassName =
   "rounded-md border border-black/20 px-4 py-2.5 text-xs text-[#ff0000]/75 font-semibold transition-colors hover:bg-black/5 disabled:cursor-not-allowed disabled:opacity-40";
 const maxAttachmentCount = 3;
 const maxAttachmentSize = 2 * 1024 * 1024;
+
 const acceptedAttachmentExtensions = new Set([
   ".pdf", ".doc", ".docx", ".txt", ".rtf", ".png", ".jpg", ".jpeg", ".webp", ".gif",
 ]);
@@ -297,9 +298,10 @@ export default function ProjectRequestLauncher({
                           {selectedService?.name ?? "Choose a service"}
                         </span>
                         {selectedServicePrice && (
-                          <span className="mt-1 block text-xs font-normal text-black/55">
+                          <span className="mt-1 block text-xs font-normal text-[#0a5e14]/85">
                             Starting at {selectedServicePrice}
                           </span>
+                          
                         )}
                       </span>
                       <span aria-hidden="true" className="shrink-0 text-base text-black/45">
@@ -625,15 +627,16 @@ export default function ProjectRequestLauncher({
             aria-labelledby="project-confirmed-title"
             className="w-full max-w-lg rounded-t-xl border border-black/10 bg-[#f5f5f0] px-6 pb-8 pt-7 shadow-2xl sm:rounded-xl sm:p-9"
           >
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#00A9A5]/10 text-2xl font-semibold text-[#008e8a]" aria-hidden="true">
-              ✓
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#00A9A5]/10" aria-hidden="true">
+              <BadgeCheck className="h-7 w-7 text-[#008e8a]" />
             </div>
-            <h2 id="project-confirmed-title" className="mt-5 text-2xl font-semibold">
-              Project Confirmed
+            <h2 id="project-confirmed-title" className="mt-5 text-2xl text-[#195919] font-semibold">
+              Request Confirmed
             </h2>
-            <p className="mt-2 text-sm leading-6 text-black/60">
-              Your project request has been saved. I will have a look at your request within 24hrs, send a detail quote and schedule a call to discuss the details and commencement steps.
+            <p className="mt-2 text-sm font-semibold leading-6 text-black/90">
+              Your project request has shipped to my VIP inbox. I will have a look at your request within the next 6hrs, schedule a call or message across to you, after which I will generate a detailed quote/invoice, send to you and then you make use of the invoice-id for payment and project commencement.
             </p>
+            
             <button
               type="button"
               onClick={() => {
@@ -641,10 +644,11 @@ export default function ProjectRequestLauncher({
                 setStep(1);
                 setRequest(initialRequest);
               }}
-              className="mt-7 w-full rounded-md bg-[#111111] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#333333]"
+              className="mt-7 w-full rounded-md bg-[#195919] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#333333]"
             >
               Close
             </button>
+            
           </section>
         </div>
       )}

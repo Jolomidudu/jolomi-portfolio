@@ -68,7 +68,7 @@ export default async function PaymentSuccessPage({ searchParams }: PaymentSucces
                     : accountCreated
                       ? "Paystack has verified your payment and your learning account is ready. Sign in with the email used for registration and the temporary password assigned to your learner profile."
                       : "Paystack has verified your payment and your program registration is received. Tutor assignment and your learning schedule will be confirmed separately."
-                  : "Paystack has verified your payment. Thank you for choosing to work with me; I&apos;ll be in touch about the next steps."}
+                  : "Paystack has verified your payment. Thank you for choosing to work with me."}
               </p>
             </div>
 

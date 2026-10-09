@@ -11,6 +11,7 @@ type RegistrationForm = {
   fullName: string;
   email: string;
   phone: string;
+  countryCode: string;
   country: string;
   timeZone: string;
   isAdult: boolean;
@@ -28,6 +29,17 @@ type RegistrationForm = {
   acceptedPrivacy: boolean;
 };
 
+const countryCodes = [
+  "+234",
+  "+233",
+  "+254",
+  "+27",
+  "+44",
+  "+1",
+  "+61",
+  "+91",
+] as const;
+
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 const steps = ["Program", "Your details", "Your goals", "Schedule", "Review"];
 const initialForm: RegistrationForm = {
@@ -36,6 +48,7 @@ const initialForm: RegistrationForm = {
   fullName: "",
   email: "",
   phone: "",
+  countryCode: "+234",
   country: "",
   timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone || "Africa/Lagos",
   isAdult: true,
@@ -117,6 +130,11 @@ export default function LearningRegistration({
     const currentForm = event.currentTarget;
     if (!currentForm.reportValidity()) return;
 
+    if (step === 1 && !/^\d{10}$/.test(form.phone)) {
+      setErrorMessage("Please enter a valid 10-digit phone number.");
+      return;
+    }
+
     if (step < steps.length - 1) {
       setStep((current) => current + 1);
       setErrorMessage("");
@@ -126,10 +144,15 @@ export default function LearningRegistration({
     setIsSubmitting(true);
     setErrorMessage("");
     try {
+      const { countryCode, phone, ...payload } = form;
       const registrationResponse = await fetch("/api/learning/enrollments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, requestId }),
+        body: JSON.stringify({
+          ...payload,
+          requestId,
+          phone: `${countryCode}${phone}`,
+        }),
       });
       const registrationResult = await registrationResponse.json() as {
         enrollment?: { id: string };
@@ -299,10 +322,37 @@ export default function LearningRegistration({
                     Email address
                     <input required type="email" maxLength={254} autoComplete="email" value={form.email} onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))} className="mt-2 w-full border border-black/20 bg-white px-4 py-3 outline-none focus:border-[#008c87]" />
                   </label>
-                  <label className="text-sm font-medium">
-                    Phone or WhatsApp
-                    <input required type="tel" maxLength={30} autoComplete="tel" value={form.phone} onChange={(event) => setForm((current) => ({ ...current, phone: event.target.value }))} className="mt-2 w-full border border-black/20 bg-white px-4 py-3 outline-none focus:border-[#008c87]" />
-                  </label>
+                  <fieldset className="sm:col-span-2">
+                    <legend className="text-sm font-medium">Phone or WhatsApp</legend>
+                    <div className="mt-2 grid grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)] gap-2">
+                      <select
+                        aria-label="Country calling code"
+                        value={form.countryCode}
+                        onChange={(event) => setForm((current) => ({ ...current, countryCode: event.target.value }))}
+                        className="w-full border border-black/20 bg-white px-4 py-3 text-sm outline-none focus:border-[#008c87]"
+                      >
+                        {countryCodes.map((code) => (
+                          <option key={code} value={code}>{code}</option>
+                        ))}
+                      </select>
+                      <input
+                        required
+                        type="tel"
+                        inputMode="numeric"
+                        pattern="[0-9]*"
+                        maxLength={10}
+                        minLength={10}
+                        autoComplete="tel-national"
+                        value={form.phone}
+                        onChange={(event) => setForm((current) => ({
+                          ...current,
+                          phone: event.target.value.replace(/\D/g, "").slice(0, 10),
+                        }))}
+                        className="w-full border border-black/20 bg-white px-4 py-3 outline-none focus:border-[#008c87]"
+                        placeholder="10-digit number"
+                      />
+                    </div>
+                  </fieldset>
                   <label className="text-sm font-medium">
                     Country
                     <input required maxLength={100} autoComplete="country-name" value={form.country} onChange={(event) => setForm((current) => ({ ...current, country: event.target.value }))} className="mt-2 w-full border border-black/20 bg-white px-4 py-3 outline-none focus:border-[#008c87]" />
@@ -415,6 +465,7 @@ export default function LearningRegistration({
                     <div className="flex flex-wrap justify-between gap-2 py-3 text-sm"><dt className="text-black/50">Program</dt><dd className="font-medium">{selectedTrack.title}</dd></div>
                     <div className="flex flex-wrap justify-between gap-2 py-3 text-sm"><dt className="text-black/50">Duration</dt><dd className="font-medium">{selectedTrack.duration}</dd></div>
                     <div className="flex flex-wrap justify-between gap-2 py-3 text-sm"><dt className="text-black/50">Learner</dt><dd className="font-medium">{form.fullName} · {form.email}</dd></div>
+                    <div className="flex flex-wrap justify-between gap-2 py-3 text-sm"><dt className="text-black/50">Phone</dt><dd className="font-medium">{form.countryCode} {form.phone}</dd></div>
                     <div className="flex flex-wrap justify-between gap-2 py-3 text-sm"><dt className="text-black/50">Availability</dt><dd className="font-medium">{form.preferredDays.join(", ")} · {form.preferredTime}</dd></div>
                     <div className="flex flex-wrap justify-between gap-2 py-3 text-sm"><dt className="text-black/50">Format</dt><dd className="font-medium capitalize">{form.learningFormat}</dd></div>
                     <div className="flex flex-wrap justify-between gap-2 py-3 text-sm"><dt className="text-black/50">Payment</dt><dd className="font-medium">{form.paymentPlan === "full" ? "Full program fee" : "Program deposit"}</dd></div>
