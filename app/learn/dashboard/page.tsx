@@ -238,6 +238,15 @@ export default function LearningDashboardPage() {
                 </span>
               </div>
 
+              {user.enrollment.status === "awaiting_balance" && (
+                <div className="mt-5 rounded-2xl border border-[#d7f36a] bg-[#f5f7d1] p-4 text-sm text-[#163d34]">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#547067]">Deposit received</p>
+                  <p className="mt-2 leading-6 text-[#163d34]/80">
+                    Your deposit has been received. Please arrange the remaining balance before your learning start date, and keep an eye on your learning dashboard for the next enrollment updates.
+                  </p>
+                </div>
+              )}
+
               <dl className="mt-8 grid gap-x-8 gap-y-6 border-t border-black/10 pt-6 sm:grid-cols-2 lg:grid-cols-3">
                 <div>
                   <dt className="text-xs font-semibold uppercase tracking-[0.12em] text-black/45">Experience level</dt>

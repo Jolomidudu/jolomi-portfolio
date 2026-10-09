@@ -110,14 +110,22 @@ function generateLearnerPassword() {
   return randomBytes(12).toString("base64url").replace(/[-_]/g, "").slice(0, 12);
 }
 
+function getLearningSessionSecret() {
+  const secret = process.env.LEARNING_SESSION_SECRET || process.env.PORTAL_SESSION_SECRET;
+  return typeof secret === "string" && secret.trim().length > 0 ? secret : null;
+}
+
 function createLearnerSession(account) {
+  const sessionSecret = getLearningSessionSecret();
+  if (!sessionSecret) return null;
+
   const payload = Buffer.from(JSON.stringify({
     id: account.id,
     email: account.email,
     fullName: account.full_name ?? account.fullName,
     expiresAt: Math.floor(Date.now() / 1000) + 60 * 60 * 12,
   })).toString("base64url");
-  const signature = createHmac("sha256", process.env.LEARNING_SESSION_SECRET || process.env.PORTAL_SESSION_SECRET || "jolomi-learning-dev-secret")
+  const signature = createHmac("sha256", sessionSecret)
     .update(payload)
     .digest("base64url");
   return `${payload}.${signature}`;
@@ -125,10 +133,13 @@ function createLearnerSession(account) {
 
 function getLearnerSession(token) {
   if (typeof token !== "string") return null;
+  const sessionSecret = getLearningSessionSecret();
+  if (!sessionSecret) return null;
+
   const [payload, signature, extra] = token.split(".");
   if (!payload || !signature || extra) return null;
 
-  const expected = createHmac("sha256", process.env.LEARNING_SESSION_SECRET || process.env.PORTAL_SESSION_SECRET || "jolomi-learning-dev-secret")
+  const expected = createHmac("sha256", sessionSecret)
     .update(payload)
     .digest("base64url");
   if (!safeEqual(signature, expected)) return null;
@@ -718,7 +729,39 @@ app.post("/api/learning/login", async (request, response) => {
     return response.status(400).json({ error: "Enter your learning email and password." });
   }
 
+  const clientIp = (request.get("x-client-ip") || "unknown").slice(0, 64);
+  const clientKey = createHash("sha256").update(clientIp).digest("hex");
+
   try {
+    const [rateLimit] = await request.sql`
+      INSERT INTO learning_login_rate_limits (client_key, window_started_at, request_count)
+      VALUES (${clientKey}, NOW(), 1)
+      ON CONFLICT (client_key) DO UPDATE
+      SET
+        window_started_at = CASE
+          WHEN learning_login_rate_limits.window_started_at <= NOW() - INTERVAL '10 minutes' THEN NOW()
+          ELSE learning_login_rate_limits.window_started_at
+        END,
+        request_count = CASE
+          WHEN learning_login_rate_limits.window_started_at <= NOW() - INTERVAL '10 minutes' THEN 1
+          ELSE LEAST(learning_login_rate_limits.request_count + 1, 6)
+        END
+      RETURNING request_count, window_started_at + INTERVAL '10 minutes' AS "windowEndsAt"
+    `;
+
+    if (rateLimit.request_count > 5) {
+      const retryAfter = Math.max(1, Math.ceil((new Date(rateLimit.windowEndsAt).getTime() - Date.now()) / 1000));
+      return response
+        .set("Retry-After", String(retryAfter))
+        .status(429)
+        .json({ error: "Too many sign-in attempts. Please try again in 10 minutes." });
+    }
+
+    const sessionSecret = getLearningSessionSecret();
+    if (!sessionSecret) {
+      return response.status(503).json({ error: "The learning session is not configured yet. Please contact support." });
+    }
+
     const [account] = await request.sql`
       SELECT id, full_name AS "fullName", email, password_hash AS "passwordHash", status
       FROM learning_accounts
@@ -730,8 +773,13 @@ app.post("/api/learning/login", async (request, response) => {
       return response.status(401).json({ error: "Your learning email or password is incorrect." });
     }
 
+    const token = createLearnerSession(account);
+    if (!token) {
+      return response.status(503).json({ error: "The learning session is not configured yet. Please contact support." });
+    }
+
     return response.json({
-      token: createLearnerSession(account),
+      token,
       expiresIn: 60 * 60 * 12,
       user: {
         id: account.id,
@@ -742,6 +790,73 @@ app.post("/api/learning/login", async (request, response) => {
   } catch (error) {
     console.error("Failed to sign in learner account:", error);
     return response.status(500).json({ error: "The learning portal is unavailable. Please try again later." });
+  }
+});
+
+app.post("/api/learning/reset-password", async (request, response) => {
+  const email = typeof request.body?.email === "string" ? request.body.email.trim().toLowerCase() : "";
+  if (!email) {
+    return response.status(400).json({ error: "Enter the email address tied to your learning account." });
+  }
+
+  const clientIp = (request.get("x-client-ip") || "unknown").slice(0, 64);
+  const clientKey = createHash("sha256").update(clientIp).digest("hex");
+
+  try {
+    const [rateLimit] = await request.sql`
+      INSERT INTO learning_support_rate_limits (client_key, window_started_at, request_count)
+      VALUES (${clientKey}, NOW(), 1)
+      ON CONFLICT (client_key) DO UPDATE
+      SET
+        window_started_at = CASE
+          WHEN learning_support_rate_limits.window_started_at <= NOW() - INTERVAL '10 minutes' THEN NOW()
+          ELSE learning_support_rate_limits.window_started_at
+        END,
+        request_count = CASE
+          WHEN learning_support_rate_limits.window_started_at <= NOW() - INTERVAL '10 minutes' THEN 1
+          ELSE LEAST(learning_support_rate_limits.request_count + 1, 4)
+        END
+      RETURNING request_count, window_started_at + INTERVAL '10 minutes' AS "windowEndsAt"
+    `;
+
+    if (rateLimit.request_count > 3) {
+      const retryAfter = Math.max(1, Math.ceil((new Date(rateLimit.windowEndsAt).getTime() - Date.now()) / 1000));
+      return response
+        .set("Retry-After", String(retryAfter))
+        .status(429)
+        .json({ error: "Too many password reset attempts. Please try again in 10 minutes." });
+    }
+
+    const [account] = await request.sql`
+      SELECT id, email, password_hash AS "passwordHash"
+      FROM learning_accounts
+      WHERE email = ${email}
+      LIMIT 1
+    `;
+
+    if (!account) {
+      return response.status(200).json({
+        sent: true,
+        message: "If that email is connected to a learner account, a temporary password has been created.",
+      });
+    }
+
+    const temporaryPassword = generateLearnerPassword();
+    await request.sql`
+      UPDATE learning_accounts
+      SET password_hash = ${hashPassword(temporaryPassword)}, updated_at = NOW()
+      WHERE id = ${account.id}
+    `;
+
+    return response.status(200).json({
+      sent: true,
+      temporaryPassword,
+      email: account.email,
+      message: "A new temporary password has been generated for this learner account.",
+    });
+  } catch (error) {
+    console.error("Failed to reset learner password:", error);
+    return response.status(500).json({ error: "Unable to reset your password right now. Please try again later." });
   }
 });
 
@@ -810,6 +925,18 @@ app.get("/api/learning/progress", async (request, response) => {
   if (!session) return response.status(401).json({ error: "Please sign in again." });
 
   try {
+    const [account] = await request.sql`
+      SELECT a.id, e.status AS "enrollmentStatus"
+      FROM learning_accounts a
+      JOIN learning_enrollments e ON e.id = a.enrollment_id
+      WHERE a.id = ${Number(session.id)}
+      LIMIT 1
+    `;
+    if (!account) return response.status(401).json({ error: "Your learning account could not be found." });
+    if (account.enrollmentStatus === "awaiting_balance") {
+      return response.status(403).json({ error: "Your course access is paused until the remaining balance is paid." });
+    }
+
     const entries = await request.sql`
       SELECT p.id, p.topic, p.reflection, p.created_at AS "createdAt"
       FROM learning_progress_entries p
@@ -832,6 +959,18 @@ app.get("/api/learning/items", async (request, response) => {
   if (!session) return response.status(401).json({ error: "Please sign in again." });
 
   try {
+    const [account] = await request.sql`
+      SELECT a.id, e.status AS "enrollmentStatus"
+      FROM learning_accounts a
+      JOIN learning_enrollments e ON e.id = a.enrollment_id
+      WHERE a.id = ${Number(session.id)}
+      LIMIT 1
+    `;
+    if (!account) return response.status(401).json({ error: "Your learning account could not be found." });
+    if (account.enrollmentStatus === "awaiting_balance") {
+      return response.status(403).json({ error: "Your course access is paused until the remaining balance is paid." });
+    }
+
     const rows = await request.sql`
       SELECT i.id, i.track_id AS "trackId", i.type, i.title, i.description,
              i.resource_url AS "resourceUrl", i.due_date AS "dueDate", i.created_at AS "createdAt",
@@ -877,6 +1016,17 @@ app.patch("/api/learning/items/:id/completion", async (request, response) => {
   }
 
   try {
+    const [account] = await request.sql`
+      SELECT a.id, e.status AS "enrollmentStatus"
+      FROM learning_accounts a
+      JOIN learning_enrollments e ON e.id = a.enrollment_id
+      WHERE a.id = ${Number(session.id)}
+      LIMIT 1
+    `;
+    if (!account) return response.status(401).json({ error: "Your learning account could not be found." });
+    if (account.enrollmentStatus === "awaiting_balance") {
+      return response.status(403).json({ error: "Your course access is paused until the remaining balance is paid." });
+    }
     if (request.body.completed) {
       const [completion] = await request.sql`
         INSERT INTO learning_item_completions (item_id, account_id)
@@ -911,6 +1061,23 @@ app.post("/api/learning/assignments", async (request, response) => {
   const token = authorization.startsWith("Bearer ") ? authorization.slice(7) : "";
   const session = getLearnerSession(token);
   if (!session) return response.status(401).json({ error: "Please sign in again." });
+
+  try {
+    const [account] = await request.sql`
+      SELECT a.id, e.status AS "enrollmentStatus"
+      FROM learning_accounts a
+      JOIN learning_enrollments e ON e.id = a.enrollment_id
+      WHERE a.id = ${Number(session.id)}
+      LIMIT 1
+    `;
+    if (!account) return response.status(401).json({ error: "Your learning account could not be found." });
+    if (account.enrollmentStatus === "awaiting_balance") {
+      return response.status(403).json({ error: "Your course access is paused until the remaining balance is paid." });
+    }
+  } catch (error) {
+    console.error("Failed to verify learner payment status:", error);
+    return response.status(500).json({ error: "Unable to validate your access right now." });
+  }
 
   const itemId = typeof request.body?.itemId === "string" || typeof request.body?.itemId === "number"
     ? String(request.body.itemId)
@@ -956,6 +1123,23 @@ app.post("/api/learning/progress", async (request, response) => {
   const token = authorization.startsWith("Bearer ") ? authorization.slice(7) : "";
   const session = getLearnerSession(token);
   if (!session) return response.status(401).json({ error: "Please sign in again." });
+
+  try {
+    const [account] = await request.sql`
+      SELECT a.id, e.status AS "enrollmentStatus"
+      FROM learning_accounts a
+      JOIN learning_enrollments e ON e.id = a.enrollment_id
+      WHERE a.id = ${Number(session.id)}
+      LIMIT 1
+    `;
+    if (!account) return response.status(401).json({ error: "Your learning account could not be found." });
+    if (account.enrollmentStatus === "awaiting_balance") {
+      return response.status(403).json({ error: "Your course access is paused until the remaining balance is paid." });
+    }
+  } catch (error) {
+    console.error("Failed to verify learner payment status:", error);
+    return response.status(500).json({ error: "Unable to validate your access right now." });
+  }
 
   const topic = typeof request.body?.topic === "string" ? request.body.topic.trim().slice(0, 120) : "";
   const reflection = typeof request.body?.reflection === "string" ? request.body.reflection.trim().slice(0, 1200) : "";
@@ -1255,6 +1439,27 @@ app.post("/api/learning/enrollments/:id/payments", async (request, response) => 
     if (enrollment.status === "enrolled") return response.status(409).json({ error: "This enrollment is already paid in full." });
 
     const track = learningTracks.find(({ id }) => id === enrollment.trackId);
+    if (!track) return response.status(404).json({ error: "This learning track could not be found." });
+
+    const [succeededPayment] = await request.sql`
+      SELECT id, payment_plan AS "paymentPlan", amount, status
+      FROM learning_enrollment_payments
+      WHERE enrollment_id = ${enrollmentId} AND status = 'succeeded'
+      ORDER BY paid_at DESC NULLS LAST, id DESC
+      LIMIT 1
+    `;
+    if (succeededPayment) {
+      const remainingBalance = enrollment.paymentPlan === "deposit" ? Math.max(0, track.totalAmount - track.depositAmount) : 0;
+      return response.status(409).json({
+        error: enrollment.paymentPlan === "deposit"
+          ? "This enrollment already has a successful deposit payment. Please complete the remaining balance before continuing."
+          : "This enrollment already has a successful payment.",
+        status: enrollment.paymentPlan === "deposit" ? "awaiting_balance" : "enrolled",
+        paymentPlan: enrollment.paymentPlan,
+        remainingBalance,
+      });
+    }
+
     const amount = enrollment.paymentPlan === "full" ? track.totalAmount : track.depositAmount;
     const [payment] = await request.sql`
       INSERT INTO learning_enrollment_payments (enrollment_id, reference, amount, payment_plan)
@@ -1282,7 +1487,7 @@ app.post("/api/learning/payments/:reference/confirm", async (request, response) 
     const [payment] = await request.sql`
       SELECT p.id, p.amount, p.status AS "paymentStatus", e.id AS "enrollmentId",
               e.payment_plan AS "paymentPlan", e.email, e.full_name AS "fullName",
-              e.track_title AS "trackTitle"
+              e.track_id AS "trackId", e.track_title AS "trackTitle"
       FROM learning_enrollment_payments p
       JOIN learning_enrollments e ON e.id = p.enrollment_id
       WHERE p.reference = ${reference} AND e.id = ${enrollmentId}
@@ -1306,6 +1511,8 @@ app.post("/api/learning/payments/:reference/confirm", async (request, response) 
     `;
 
     const accountResult = await ensureLearningAccount(Number(enrollmentId), payment.fullName || "Learner", payment.email);
+    const track = learningTracks.find(({ id }) => id === payment.trackId) ?? null;
+    const balanceDue = payment.paymentPlan === "deposit" && track ? Math.max(0, track.totalAmount - track.depositAmount) : 0;
     if (updatedPayment) {
       await notifyTelegram([
         "Course payment received",
@@ -1322,6 +1529,12 @@ app.post("/api/learning/payments/:reference/confirm", async (request, response) 
       accountCreated: accountResult.isNew,
       account: accountResult.account,
       temporaryPassword: accountResult.password,
+      paymentPlan: payment.paymentPlan,
+      balanceDue,
+      enrollmentStatus: payment.paymentPlan === "full" ? "enrolled" : "awaiting_balance",
+      nextStep: payment.paymentPlan === "deposit"
+        ? "Your deposit has been received. Please arrange the remaining balance before your course begins."
+        : "Your full payment has been received and your learning account is active.",
     });
   } catch (error) {
     console.error("Failed to confirm learning payment:", error);
@@ -1747,7 +1960,7 @@ app.delete("/api/admin/blog/:id", requireAdmin, async (request, response) => {
 });
 
 async function start() {
-  const requiredVariables = ["DATABASE_URL", "RAILWAY_INTERNAL_API_KEY", "PORTAL_ADMIN_EMAIL", "PORTAL_ADMIN_PASSWORD", "PORTAL_SESSION_SECRET"];
+  const requiredVariables = ["DATABASE_URL", "RAILWAY_INTERNAL_API_KEY", "PORTAL_ADMIN_EMAIL", "PORTAL_ADMIN_PASSWORD", "PORTAL_SESSION_SECRET", "LEARNING_SESSION_SECRET"];
   const missingVariables = requiredVariables.filter((name) => !process.env[name]);
   if (missingVariables.length) throw new Error(`Missing required environment variables: ${missingVariables.join(", ")}`);
 
@@ -1800,8 +2013,19 @@ async function start() {
     )
   `;
   await sql`
+    CREATE TABLE IF NOT EXISTS learning_login_rate_limits (
+      client_key TEXT PRIMARY KEY,
+      window_started_at TIMESTAMPTZ NOT NULL,
+      request_count INTEGER NOT NULL CHECK (request_count > 0)
+    )
+  `;
+  await sql`
     CREATE INDEX IF NOT EXISTS learning_support_rate_limits_window_idx
     ON learning_support_rate_limits (window_started_at)
+  `;
+  await sql`
+    CREATE INDEX IF NOT EXISTS learning_login_rate_limits_window_idx
+    ON learning_login_rate_limits (window_started_at)
   `;
   await sql`
     CREATE TABLE IF NOT EXISTS project_enquiry_attachments (

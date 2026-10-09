@@ -7,7 +7,14 @@ export const metadata: Metadata = {
 };
 
 type PaymentSuccessPageProps = {
-  searchParams: Promise<{ reference?: string | string[]; type?: string | string[]; accountCreated?: string | string[] }>;
+  searchParams: Promise<{
+    reference?: string | string[];
+    type?: string | string[];
+    accountCreated?: string | string[];
+    temporaryPassword?: string | string[];
+    paymentPlan?: string | string[];
+    balanceDue?: string | string[];
+  }>;
 };
 
 export default async function PaymentSuccessPage({ searchParams }: PaymentSuccessPageProps) {
@@ -15,6 +22,17 @@ export default async function PaymentSuccessPage({ searchParams }: PaymentSucces
   const reference = typeof params.reference === "string" ? params.reference : undefined;
   const isLearning = params.type === "learning";
   const accountCreated = typeof params.accountCreated === "string" ? params.accountCreated === "1" : false;
+  const temporaryPassword = typeof params.temporaryPassword === "string" ? params.temporaryPassword : undefined;
+  const paymentPlan = typeof params.paymentPlan === "string" ? params.paymentPlan : undefined;
+  const balanceDueValue = typeof params.balanceDue === "string" ? Number(params.balanceDue) : undefined;
+  const isDepositPlan = isLearning && paymentPlan === "deposit";
+  const formattedBalanceDue = typeof balanceDueValue === "number" && Number.isFinite(balanceDueValue)
+    ? new Intl.NumberFormat("en-NG", {
+      style: "currency",
+      currency: "NGN",
+      maximumFractionDigits: 0,
+    }).format(balanceDueValue)
+    : null;
 
   return (
     <div className="min-h-screen bg-[#f5f5f0] text-[#111111]">
@@ -45,9 +63,11 @@ export default async function PaymentSuccessPage({ searchParams }: PaymentSucces
               </h1>
               <p className="mt-4 max-w-md text-base leading-7 text-white/70">
                 {isLearning
-                  ? accountCreated
-                    ? "Paystack has verified your payment and your learning account is ready. Sign in with the email used for registration and the temporary password assigned to your learner profile."
-                    : "Paystack has verified your payment and your program registration is received. Tutor assignment and your learning schedule will be confirmed separately."
+                  ? isDepositPlan
+                    ? "Paystack has verified your deposit. Your learner account is ready, and the remaining balance must be settled before your learning schedule begins."
+                    : accountCreated
+                      ? "Paystack has verified your payment and your learning account is ready. Sign in with the email used for registration and the temporary password assigned to your learner profile."
+                      : "Paystack has verified your payment and your program registration is received. Tutor assignment and your learning schedule will be confirmed separately."
                   : "Paystack has verified your payment. Thank you for choosing to work with me; I&apos;ll be in touch about the next steps."}
               </p>
             </div>
@@ -58,17 +78,37 @@ export default async function PaymentSuccessPage({ searchParams }: PaymentSucces
                 <h2 className="mt-3 text-2xl font-semibold leading-tight">{isLearning ? "Your learning journey is getting started." : "A good next step starts here."}</h2>
                 <p className="mt-3 text-sm leading-6 text-black/60">
                   {isLearning
-                    ? accountCreated
-                      ? "Your learner profile is active. Use the login page to continue into your learning dashboard and track your course progress."
-                      : "Keep your payment reference for your records. We will follow up about tutor assignment and scheduling."
+                    ? isDepositPlan
+                      ? "Your deposit is confirmed. Please arrange the remaining balance before your start date, then continue into the learner dashboard to monitor your course and assignments."
+                      : accountCreated
+                        ? "Your learner profile is active. Use the login page to continue into your learning dashboard and track your course progress."
+                        : "Keep your payment reference for your records. We will follow up about tutor assignment and scheduling."
                     : "Take a look through the services and find what you'd like to build next."}
                 </p>
               </div>
+
+              {isLearning && isDepositPlan && formattedBalanceDue && (
+                <div className="rounded-2xl border border-[#d7f36a] bg-[#f4f8d1] p-4 text-sm text-[#163d34]">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#547067]">Remaining balance</p>
+                  <p className="mt-2 text-2xl font-bold tracking-[-0.04em]">{formattedBalanceDue}</p>
+                  <p className="mt-2 text-xs leading-5 text-[#163d34]/75">This balance should be completed before your learning program begins. You can use your learner dashboard to keep track of your progress and next steps.</p>
+                </div>
+              )}
 
               {reference && (
                 <div className="border-y border-[#163d34]/15 py-4">
                   <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-black/45">Transaction reference</p>
                   <p className="mt-2 break-all font-mono text-xs text-[#163d34]">{reference}</p>
+                </div>
+              )}
+
+              {isLearning && accountCreated && temporaryPassword && (
+                <div className="rounded-2xl border border-[#163d34]/15 bg-[#f7f7f2] p-4">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#547067]">Temporary password</p>
+                  <p className="mt-2 break-all font-mono text-lg font-semibold text-[#163d34]">{temporaryPassword}</p>
+                  <p className="mt-2 text-xs leading-5 text-black/60">
+                    Use this to sign in once, then change it after you access your learning dashboard.
+                  </p>
                 </div>
               )}
 

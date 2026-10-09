@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import tracks from "../../backend/learning-tracks.json";
-import { formatCurrencyAmount, useCurrency } from "../currency-provider";
 
 type PaymentPlan = "deposit" | "full";
 type RegistrationForm = {
@@ -62,7 +61,6 @@ export default function LearningRegistration({
   variant = "floating",
 }: LearningRegistrationProps) {
   const router = useRouter();
-  const { currency, rate } = useCurrency();
   const [isOpen, setIsOpen] = useState(false);
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<RegistrationForm>(initialForm);
@@ -75,7 +73,11 @@ export default function LearningRegistration({
 
   const selectedTrack = tracks.find(({ id }) => id === form.trackId) ?? tracks[0];
   const paymentAmount = form.paymentPlan === "full" ? selectedTrack.totalAmount : selectedTrack.depositAmount;
-  const formattedAmount = (amount: number) => formatCurrencyAmount(amount, currency, rate);
+  const formattedAmount = (amount: number) => new Intl.NumberFormat("en-NG", {
+    style: "currency",
+    currency: "NGN",
+    maximumFractionDigits: 0,
+  }).format(amount);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -282,7 +284,7 @@ export default function LearningRegistration({
                     </div>
                   </fieldset>
                   <div className="border-l-2 border-[#008c87] bg-white/70 px-4 py-3 text-sm leading-6 text-black/65">
-                    {selectedTrack.duration} · {selectedTrack.shortTitle} · Checkout is securely handled by Paystack.
+                    {selectedTrack.duration} · {selectedTrack.shortTitle} · Checkout is securely handled by Paystack in NGN. Other currency displays are estimates.
                   </div>
                 </div>
               )}

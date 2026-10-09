@@ -1,6 +1,6 @@
 
 import type { Metadata } from "next";
-import { ArrowDownRight, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import SiteChrome from "../site-chrome";
 
 export const metadata: Metadata = {
@@ -48,11 +48,14 @@ const sections = [
           <li>Preferred project timeline</li>
           <li>Messages and other information included in your enquiry</li>
           <li>Information you provide when scheduling a meeting</li>
+          <li>Learning program details, goals and enrollment preferences</li>
+          <li>Payment details required to verify or process a transaction</li>
+          <li>Guardian or parent details for learners under the age of 18</li>
         </ul>
 
         <p className="mt-4">
           You are not required to provide information that is not necessary
-          for the purpose of your enquiry.
+          for the purpose of your enquiry or enrollment.
         </p>
       </>
     ),
@@ -129,17 +132,44 @@ const sections = [
     ),
   },
   {
-    title: "6. Third-party services",
+    title: "6. Learning and payment information",
+    content: (
+      <>
+        <p>
+          For learning enrollments, the website may collect the information
+          needed to manage a learner profile, such as the learner&apos;s name,
+          email address, learning goals, program preferences, country,
+          communication preferences, and payment-related information required
+          to confirm enrollment and maintain access to course resources.
+        </p>
+
+        <p className="mt-4">
+          Payments are processed through a secure third-party payment provider.
+          Payment references, confirmation status and transaction amounts may
+          be retained so that enrollment and account access can be verified and
+          support or refunds can be handled appropriately.
+        </p>
+
+        <p className="mt-4">
+          Temporary passwords may be generated for learner account access when
+          necessary. These should be changed after sign-in, and access should
+          be kept secure and private.
+        </p>
+      </>
+    ),
+  },
+  {
+    title: "7. Third-party services",
     content: (
       <>
         <p>
           Some website functions may rely on third-party services to provide
-          functionality such as scheduling, hosting, communication, analytics
-          or other technical services.
+          functionality such as scheduling, hosting, communication, analytics,
+          payment processing, or other technical services.
         </p>
 
         <p className="mt-4">
-          For example, meeting scheduling may be provided through Calendly.
+          For example, payment processing may be handled through Paystack.
           When you use a third-party service, information may be processed
           according to that provider&apos;s own privacy policy and terms.
         </p>
@@ -153,7 +183,7 @@ const sections = [
     ),
   },
   {
-    title: "7. Cookies",
+    title: "8. Cookies",
     content: (
       <>
         <p>
@@ -176,7 +206,7 @@ const sections = [
     ),
   },
   {
-    title: "8. How information is protected",
+    title: "9. How information is protected",
     content: (
       <>
         <p>
@@ -196,15 +226,15 @@ const sections = [
     ),
   },
   {
-    title: "9. How long information is retained",
+    title: "10. How long information is retained",
     content: (
       <>
         <p>
           Personal information is retained only for as long as reasonably
           necessary for the purpose for which it was collected, including
           responding to enquiries, managing professional engagements,
-          maintaining appropriate business records and meeting applicable
-          legal or contractual obligations.
+          maintaining appropriate business records, supporting learning
+          access and meeting applicable legal or contractual obligations.
         </p>
 
         <p className="mt-4">
@@ -216,7 +246,7 @@ const sections = [
     ),
   },
   {
-    title: "10. Your privacy rights",
+    title: "11. Your privacy rights",
     content: (
       <>
         <p>
@@ -241,7 +271,7 @@ const sections = [
     ),
   },
   {
-    title: "11. International visitors",
+    title: "12. International visitors",
     content: (
       <>
         <p>
@@ -259,19 +289,23 @@ const sections = [
     ),
   },
   {
-    title: "12. Children",
+    title: "13. Children and guardian consent",
     content: (
       <p>
         This website is intended primarily for professional and general
         audiences. It is not intentionally designed to collect personal
-        information from children. If you believe a child has provided
-        personal information through the website, please contact me so that
-        the information can be reviewed and, where appropriate, removed.
+        information from children without appropriate consent. For learners
+        under the age of 18, a parent or legal guardian must provide consent,
+        contact information and any required enrollment details before a
+        learning account is created. If you believe a child has provided
+        personal information through the website without appropriate consent,
+        please contact me so that the information can be reviewed and, where
+        appropriate, removed.
       </p>
     ),
   },
   {
-    title: "13. Changes to this policy",
+    title: "14. Changes to this policy",
     content: (
       <p>
         This Privacy Policy may be updated from time to time to reflect
@@ -282,7 +316,7 @@ const sections = [
     ),
   },
   {
-    title: "14. Contact",
+    title: "15. Contact",
     content: (
       <>
         <p>

@@ -1,15 +1,34 @@
 import { NextResponse } from "next/server";
 import { callRailway } from "../../portal/railway";
 
-function redirect(request: Request, result: "success" | "failed", reference?: string, isLearning = false, accountCreated = false) {
-  const url = new URL(result === "success" ? "/payment/success" : isLearning ? "/learn" : "/services", request.url);
+function redirect(
+  request: Request,
+  result: "success" | "failed",
+  reference?: string,
+  isLearning = false,
+  accountCreated = false,
+  temporaryPassword?: string,
+  paymentPlan?: string,
+  balanceDue?: number,
+) {
+  const url = new URL(result === "success" ? "/payment/success" : "/payment/failure", request.url);
   if (result === "success" && reference) {
     url.searchParams.set("reference", reference);
     if (isLearning) {
       url.searchParams.set("type", "learning");
       url.searchParams.set("accountCreated", accountCreated ? "1" : "0");
+      if (paymentPlan) {
+        url.searchParams.set("paymentPlan", paymentPlan);
+      }
+      if (typeof balanceDue === "number" && Number.isFinite(balanceDue) && balanceDue > 0) {
+        url.searchParams.set("balanceDue", String(balanceDue));
+      }
+      if (temporaryPassword) {
+        url.searchParams.set("temporaryPassword", temporaryPassword);
+      }
     }
   } else if (result === "failed") {
+    if (isLearning) url.searchParams.set("type", "learning");
     url.searchParams.set("payment", result);
   }
   return NextResponse.redirect(url);
@@ -42,7 +61,19 @@ export async function GET(request: Request) {
       });
       const confirmationData = await confirmation.json().catch(() => ({}));
       if (!confirmation.ok) return redirect(request, "failed", undefined, true);
-      return redirect(request, "success", reference, isLearning, Boolean(confirmationData?.accountCreated || confirmationData?.account));
+      const accountCreated = Boolean(confirmationData?.accountCreated || confirmationData?.account);
+      const paymentPlan = typeof confirmationData?.paymentPlan === "string" ? confirmationData.paymentPlan : undefined;
+      const balanceDue = typeof confirmationData?.balanceDue === "number" ? confirmationData.balanceDue : undefined;
+      return redirect(
+        request,
+        "success",
+        reference,
+        isLearning,
+        accountCreated,
+        typeof confirmationData?.temporaryPassword === "string" ? confirmationData.temporaryPassword : undefined,
+        paymentPlan,
+        balanceDue,
+      );
     }
 
     return redirect(request, "success", reference, isLearning);
