@@ -28,7 +28,7 @@ export default async function BlogPage() {
         // }}
       >
         <section className="px-6 pb-20 pt-20 md:px-12 md:pb-28 md:pt-28 lg:px-16">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#ffffff]">The blog</p>
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#102d0a]">The blog</p>
           <div className="mt-6 grid gap-10 lg:grid-cols-[1fr_0.65fr] lg:items-end">
             <h1 className="max-w-4xl text-3xl text-[#111111] font-semibold leading-[0.9] tracking-[-0.06em] md:text-5xl">
               Catch tips, tricks and insights related to the world of technology, business, lifestyle and finance.</h1>
@@ -36,6 +36,7 @@ export default async function BlogPage() {
             Start Your Read Now</p>
           </div>
         </section>
+        
 
         <section className="px-6 pb-24 md:px-12 md:pb-32 lg:px-16">
           <div className="grid gap-x-10 gap-y-16 md:grid-cols-2">

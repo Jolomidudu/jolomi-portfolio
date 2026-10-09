@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { notFound } from "next/navigation";
 import SiteChrome from "../../site-chrome";
 import { getPublishedPost, seededPosts } from "../posts";
+import BlogEngagement from "./blog-engagement";
 
 export const dynamic = "force-dynamic";
 
@@ -45,9 +47,31 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             <p className="mt-6 max-w-2xl text-lg leading-8 text-black/60">{post.description}</p>
           </header>
 
+          {post.images && post.images.length > 0 && (
+            <div className={`mt-10 grid gap-4 ${post.images.length > 1 ? "sm:grid-cols-2" : "grid-cols-1"}`}>
+              {post.images.map((image) => (
+                <Image
+                  key={image.id}
+                  src={`/api/blog/${encodeURIComponent(post.slug)}/images/${encodeURIComponent(image.id)}`}
+                  alt={image.name}
+                  width={1400}
+                  height={875}
+                  unoptimized
+                  className="h-auto max-h-[38rem] w-full object-cover"
+                />
+              ))}
+            </div>
+          )}
+
           <div className="mx-auto mt-10 max-w-2xl space-y-6 text-base leading-8 text-black/75 md:mt-14 md:text-lg md:leading-9">
             {post.content.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
           </div>
+
+          <BlogEngagement
+            slug={post.slug}
+            initialViewsCount={post.viewsCount ?? 0}
+            initialLikesCount={post.likesCount ?? 0}
+          />
 
           <footer className="mt-16 flex flex-col gap-4 border-t border-black/15 pt-6 sm:flex-row sm:items-center sm:justify-between">
             <Link href="/blog" className="text-sm font-semibold underline decoration-[#00A9A5] underline-offset-4">More from the blog</Link>

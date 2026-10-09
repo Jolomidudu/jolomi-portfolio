@@ -8,6 +8,16 @@ export type BlogPost = {
 	title: string;
 	description: string;
 	content: string[];
+	images?: BlogImage[];
+	viewsCount?: number;
+	likesCount?: number;
+};
+
+export type BlogImage = {
+	id: string;
+	name: string;
+	mediaType: string;
+	sizeBytes: number;
 };
 
 type StoredBlogPost = Omit<BlogPost, "content"> & { content: string | string[] };
@@ -20,6 +30,9 @@ function normalizePost(post: StoredBlogPost): BlogPost {
 		content: Array.isArray(post.content)
 			? post.content
 			: post.content.split(/\n\s*\n/).filter(Boolean),
+		images: post.images ?? [],
+		viewsCount: post.viewsCount ?? 0,
+		likesCount: post.likesCount ?? 0,
 	};
 }
 

@@ -10,11 +10,24 @@ type BlogPost = {
   description: string;
   content: string;
   status: "draft" | "published";
+  images: BlogImage[];
   createdAt: string;
   updatedAt: string;
 };
 
-type PostForm = Omit<BlogPost, "id" | "createdAt" | "updatedAt">;
+type BlogImage = {
+  id: string;
+  name: string;
+  mediaType: string;
+  sizeBytes: number;
+};
+
+type PendingBlogImage = {
+  file: File;
+  preview: string;
+};
+
+type PostForm = Omit<BlogPost, "id" | "createdAt" | "updatedAt" | "images">;
 
 const categories = [
   "Technology",
@@ -64,9 +77,26 @@ function formatDate(value: string) {
   return new Intl.DateTimeFormat(undefined, { dateStyle: "medium" }).format(date);
 }
 
+function readImageAsDataUrl(file: File) {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => typeof reader.result === "string"
+      ? resolve(reader.result)
+      : reject(new Error("Unable to read this image."));
+    reader.onerror = () => reject(reader.error ?? new Error("Unable to read this image."));
+    reader.readAsDataURL(file);
+  });
+}
+
+const maxBlogImageCount = 2;
+const maxBlogImageSize = 2 * 1024 * 1024;
+const allowedBlogImageExtensions = new Set([".jpg", ".jpeg", ".png", ".webp", ".gif"]);
+
 export default function BlogManager() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [form, setForm] = useState<PostForm>(emptyForm);
+  const [retainedImages, setRetainedImages] = useState<BlogImage[]>([]);
+  const [pendingImages, setPendingImages] = useState<PendingBlogImage[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [slugWasEdited, setSlugWasEdited] = useState(false);
@@ -103,6 +133,8 @@ export default function BlogManager() {
 
   function startNewPost() {
     setForm(emptyForm);
+    setRetainedImages([]);
+    setPendingImages([]);
     setSelectedId(null);
     setIsCreating(true);
     setSlugWasEdited(false);
@@ -112,10 +144,44 @@ export default function BlogManager() {
 
   function selectPost(post: BlogPost) {
     setForm(toForm(post));
+    setRetainedImages(post.images ?? []);
+    setPendingImages([]);
     setSelectedId(post.id);
     setIsCreating(false);
     setErrorMessage("");
     setNotice("");
+  }
+
+  async function addImages(files: FileList | null) {
+    if (!files?.length) return;
+    const selectedFiles = Array.from(files);
+    if (selectedFiles.length + retainedImages.length + pendingImages.length > maxBlogImageCount) {
+      setErrorMessage("A blog post can have at most two images.");
+      return;
+    }
+
+    for (const file of selectedFiles) {
+      const extension = file.name.toLowerCase().match(/\.[^.]+$/)?.[0] ?? "";
+      if (!allowedBlogImageExtensions.has(extension)) {
+        setErrorMessage("Use a JPG, PNG, WEBP or GIF image.");
+        return;
+      }
+      if (file.size > maxBlogImageSize) {
+        setErrorMessage("Each image must be 2 MB or smaller.");
+        return;
+      }
+    }
+
+    try {
+      const additions = await Promise.all(selectedFiles.map(async (file) => ({
+        file,
+        preview: await readImageAsDataUrl(file),
+      })));
+      setPendingImages((current) => [...current, ...additions]);
+      setErrorMessage("");
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : "Unable to read this image.");
+    }
   }
 
   async function savePost(event: FormEvent<HTMLFormElement>) {
@@ -128,7 +194,14 @@ export default function BlogManager() {
       const response = await fetch(isCreating ? "/api/portal/blog" : `/api/portal/blog/${selectedId}`, {
         method: isCreating ? "POST" : "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          ...form,
+          retainedImageIds: retainedImages.map(({ id }) => id),
+          images: pendingImages.map(({ file, preview }) => ({
+            name: file.name,
+            data: preview.split(",", 2)[1],
+          })),
+        }),
       });
       const result = await response.json() as { post?: BlogPost; error?: string };
       if (!response.ok || !result.post) throw new Error(result.error ?? "Unable to save this post.");
@@ -137,6 +210,8 @@ export default function BlogManager() {
       setPosts((current) => [savedPost, ...current.filter(({ id }) => id !== savedPost.id)]);
       setSelectedId(savedPost.id);
       setForm(toForm(savedPost));
+      setRetainedImages(savedPost.images ?? []);
+      setPendingImages([]);
       setIsCreating(false);
       setNotice(savedPost.status === "published" ? "Post published." : "Draft saved.");
     } catch (error) {
@@ -158,6 +233,8 @@ export default function BlogManager() {
       if (!response.ok) throw new Error(result.error ?? "Unable to delete this post.");
       setPosts((current) => current.filter(({ id }) => id !== selectedId));
       setForm(emptyForm);
+      setRetainedImages([]);
+      setPendingImages([]);
       setSelectedId(null);
       setIsCreating(false);
       setNotice("Post deleted.");
@@ -321,6 +398,62 @@ export default function BlogManager() {
                   className="mt-2 w-full resize-y rounded-md border border-black/15 bg-white px-3 py-3 leading-7 outline-none focus:border-[#00A9A5]"
                 />
               </label>
+              <div className="sm:col-span-2">
+                <div className="flex items-baseline justify-between gap-3">
+                  <p className="text-sm font-medium">Post images</p>
+                  <span className="text-xs text-black/45">{retainedImages.length + pendingImages.length} / {maxBlogImageCount}</span>
+                </div>
+                <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                  {retainedImages.map((image) => (
+                    <div key={image.id} className="relative border border-black/10 bg-white p-2">
+                      <img
+                        src={`/api/portal/blog/${selectedId}/images/${image.id}`}
+                        alt={image.name}
+                        className="aspect-[16/10] w-full object-cover"
+                      />
+                      <p className="mt-2 truncate pr-9 text-xs text-black/60">{image.name}</p>
+                      <button
+                        type="button"
+                        onClick={() => setRetainedImages((current) => current.filter(({ id }) => id !== image.id))}
+                        aria-label={`Remove ${image.name}`}
+                        className="absolute right-3 top-3 bg-white px-2 py-1 text-xs font-semibold text-red-800 shadow-sm"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ))}
+                  {pendingImages.map(({ file, preview }, index) => (
+                    <div key={`${file.name}-${index}`} className="relative border border-black/10 bg-white p-2">
+                      <img src={preview} alt={file.name} className="aspect-[16/10] w-full object-cover" />
+                      <p className="mt-2 truncate pr-9 text-xs text-black/60">{file.name}</p>
+                      <button
+                        type="button"
+                        onClick={() => setPendingImages((current) => current.filter((_, currentIndex) => currentIndex !== index))}
+                        aria-label={`Remove ${file.name}`}
+                        className="absolute right-3 top-3 bg-white px-2 py-1 text-xs font-semibold text-red-800 shadow-sm"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                {retainedImages.length + pendingImages.length < maxBlogImageCount && (
+                  <label className="mt-3 inline-flex cursor-pointer items-center border border-black/15 px-3 py-2 text-sm font-medium transition-colors hover:border-[#00A9A5]">
+                    Add image
+                    <input
+                      type="file"
+                      accept=".jpg,.jpeg,.png,.webp,.gif"
+                      multiple
+                      className="sr-only"
+                      onChange={(event) => {
+                        void addImages(event.target.files);
+                        event.target.value = "";
+                      }}
+                    />
+                  </label>
+                )}
+                <p className="mt-2 text-xs text-black/45">JPG, PNG, WEBP or GIF. Maximum 2 MB each.</p>
+              </div>
             </div>
 
             {errorMessage && <p role="alert" className="text-sm text-red-700">{errorMessage}</p>}

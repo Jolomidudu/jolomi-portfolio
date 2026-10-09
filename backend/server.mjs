@@ -45,7 +45,10 @@ let learningTracks = [];
 
 app.disable("x-powered-by");
 app.use((request, response, next) => {
-  const limit = request.method === "POST" && request.path === "/api/enquiries" ? "10mb" : "20kb";
+  const isProjectEnquiry = request.method === "POST" && request.path === "/api/enquiries";
+  const isBlogWrite = ["POST", "PATCH"].includes(request.method)
+    && (request.path === "/api/admin/blog" || /^\/api\/admin\/blog\/\d+$/.test(request.path));
+  const limit = isProjectEnquiry ? "10mb" : isBlogWrite ? "7mb" : "20kb";
   express.json({ limit })(request, response, next);
 });
 app.use((request, _response, next) => {
@@ -334,6 +337,77 @@ function readBlogPost(body) {
   return post;
 }
 
+const blogImageTypes = new Map([
+  [".jpg", "image/jpeg"],
+  [".jpeg", "image/jpeg"],
+  [".png", "image/png"],
+  [".webp", "image/webp"],
+  [".gif", "image/gif"],
+]);
+const maxBlogImageBytes = 2 * 1024 * 1024;
+
+function readBlogImages(input) {
+  if (input === undefined) return [];
+  if (!Array.isArray(input) || input.length > 2) return null;
+
+  const images = [];
+  for (const file of input) {
+    if (!file || typeof file.name !== "string" || typeof file.data !== "string") return null;
+    const extension = file.name.toLowerCase().match(/\.[^.]+$/)?.[0] ?? "";
+    const mediaType = blogImageTypes.get(extension);
+    const encoded = file.data;
+    if (!mediaType || !encoded || encoded.length > Math.ceil(maxBlogImageBytes / 3) * 4 + 4) return null;
+    if (!/^[A-Za-z0-9+/]*={0,2}$/.test(encoded) || encoded.length % 4 === 1) return null;
+
+    const data = Buffer.from(encoded, "base64");
+    if (!data.length || data.length > maxBlogImageBytes) return null;
+    if (data.toString("base64").replace(/=+$/, "") !== encoded.replace(/=+$/, "")) return null;
+
+    const name = file.name.replace(/[\\/\0-\x1f\x7f]/g, "_").trim().slice(0, 180);
+    if (!name) return null;
+    images.push({ name, mediaType, sizeBytes: data.length, data: encoded });
+  }
+  return images;
+}
+
+function readRetainedBlogImageIds(input) {
+  if (input === undefined) return [];
+  if (!Array.isArray(input) || input.length > 2) return null;
+  if (input.some((id) => typeof id !== "string" || !/^\d+$/.test(id))) return null;
+  return [...new Set(input)];
+}
+
+async function replaceBlogImages(postId, retainedIds, images) {
+  const existingImages = await sql`
+    SELECT id::text AS id FROM blog_post_images WHERE post_id = ${postId}
+  `;
+  const existingIds = new Set(existingImages.map(({ id }) => id));
+  if (retainedIds.some((id) => !existingIds.has(id))) return false;
+
+  for (const { id } of existingImages) {
+    if (!retainedIds.includes(id)) {
+      await sql`DELETE FROM blog_post_images WHERE id = ${id} AND post_id = ${postId}`;
+    }
+  }
+  for (const image of images) {
+    await sql`
+      INSERT INTO blog_post_images (post_id, name, media_type, size_bytes, data)
+      VALUES (${postId}, ${image.name}, ${image.mediaType}, ${image.sizeBytes}, ${image.data})
+    `;
+  }
+  return true;
+}
+
+function sendBlogImage(response, image) {
+  return response
+    .set("Content-Type", image.mediaType)
+    .set("Content-Length", String(image.sizeBytes))
+    .set("Content-Disposition", `inline; filename*=UTF-8''${encodeURIComponent(image.name)}`)
+    .set("Cache-Control", "public, max-age=3600")
+    .set("X-Content-Type-Options", "nosniff")
+    .send(Buffer.from(image.data, "base64"));
+}
+
 function readLearningItem(body) {
   if (!body || typeof body !== "object" || Array.isArray(body)) return null;
 
@@ -438,6 +512,12 @@ function readLearningRegistration(body) {
 
 const blogPostFields = `
   id, slug, category, title, description, content, status,
+  views_count AS "viewsCount", likes_count AS "likesCount",
+  COALESCE((
+    SELECT json_agg(json_build_object('id', image.id::text, 'name', image.name, 'mediaType', image.media_type, 'sizeBytes', image.size_bytes) ORDER BY image.id)
+    FROM blog_post_images AS image
+    WHERE image.post_id = blog_posts.id
+  ), '[]'::json) AS images,
   created_at AS "createdAt", updated_at AS "updatedAt"
 `;
 
@@ -1280,6 +1360,101 @@ app.get("/api/blog/:slug", async (request, response) => {
   }
 });
 
+app.get("/api/blog/:slug/images/:imageId", async (request, response) => {
+  const { slug, imageId } = request.params;
+  if (!/^\d+$/.test(imageId)) return response.status(400).json({ error: "Invalid image ID." });
+
+  try {
+    const [image] = await sql`
+      SELECT image.name, image.media_type AS "mediaType", image.size_bytes AS "sizeBytes", image.data
+      FROM blog_post_images AS image
+      JOIN blog_posts AS post ON post.id = image.post_id
+      WHERE post.slug = ${slug} AND post.status = 'published' AND image.id = ${imageId}
+      LIMIT 1
+    `;
+    if (!image) return response.status(404).json({ error: "Blog image not found." });
+    return sendBlogImage(response, image);
+  } catch (error) {
+    console.error("Failed to load public blog image:", error);
+    return response.status(500).json({ error: "Unable to load this blog image." });
+  }
+});
+
+app.get("/api/blog/:slug/engagement", async (request, response) => {
+  const visitorId = typeof request.query.visitorId === "string" ? request.query.visitorId : "";
+  if (!/^[a-zA-Z0-9_-]{16,80}$/.test(visitorId)) {
+    return response.status(400).json({ error: "Invalid reader ID." });
+  }
+
+  try {
+    const [post] = await sql`
+      SELECT id, views_count AS "viewsCount", likes_count AS "likesCount"
+      FROM blog_posts
+      WHERE slug = ${request.params.slug} AND status = 'published'
+      LIMIT 1
+    `;
+    if (!post) return response.status(404).json({ error: "Blog post not found." });
+    const [like] = await sql`
+      SELECT 1 FROM blog_post_likes WHERE post_id = ${post.id} AND visitor_id = ${visitorId} LIMIT 1
+    `;
+    return response.json({ ...post, isLiked: Boolean(like) });
+  } catch (error) {
+    console.error("Failed to load blog engagement:", error);
+    return response.status(500).json({ error: "Unable to load blog engagement." });
+  }
+});
+
+app.post("/api/blog/:slug/engagement", async (request, response) => {
+  const visitorId = typeof request.body?.visitorId === "string" ? request.body.visitorId : "";
+  const action = request.body?.action;
+  if (!/^[a-zA-Z0-9_-]{16,80}$/.test(visitorId) || !["view", "like", "unlike"].includes(action)) {
+    return response.status(400).json({ error: "Invalid engagement request." });
+  }
+
+  try {
+    const [post] = await sql`
+      SELECT id FROM blog_posts WHERE slug = ${request.params.slug} AND status = 'published' LIMIT 1
+    `;
+    if (!post) return response.status(404).json({ error: "Blog post not found." });
+
+    if (action === "view") {
+      const [newView] = await sql`
+        INSERT INTO blog_post_views (post_id, visitor_id)
+        VALUES (${post.id}, ${visitorId})
+        ON CONFLICT DO NOTHING
+        RETURNING post_id
+      `;
+      if (newView) await sql`UPDATE blog_posts SET views_count = views_count + 1 WHERE id = ${post.id}`;
+    } else if (action === "like") {
+      const [newLike] = await sql`
+        INSERT INTO blog_post_likes (post_id, visitor_id)
+        VALUES (${post.id}, ${visitorId})
+        ON CONFLICT DO NOTHING
+        RETURNING post_id
+      `;
+      if (newLike) await sql`UPDATE blog_posts SET likes_count = likes_count + 1 WHERE id = ${post.id}`;
+    } else {
+      const [removedLike] = await sql`
+        DELETE FROM blog_post_likes WHERE post_id = ${post.id} AND visitor_id = ${visitorId}
+        RETURNING post_id
+      `;
+      if (removedLike) await sql`UPDATE blog_posts SET likes_count = GREATEST(likes_count - 1, 0) WHERE id = ${post.id}`;
+    }
+
+    const [counts] = await sql`
+      SELECT views_count AS "viewsCount", likes_count AS "likesCount"
+      FROM blog_posts WHERE id = ${post.id}
+    `;
+    const [like] = await sql`
+      SELECT 1 FROM blog_post_likes WHERE post_id = ${post.id} AND visitor_id = ${visitorId} LIMIT 1
+    `;
+    return response.json({ ...counts, isLiked: Boolean(like) });
+  } catch (error) {
+    console.error("Failed to update blog engagement:", error);
+    return response.status(500).json({ error: "Unable to update blog engagement." });
+  }
+});
+
 app.get("/api/admin/blog", requireAdmin, async (_request, response) => {
   try {
     const posts = await sql`
@@ -1291,6 +1466,27 @@ app.get("/api/admin/blog", requireAdmin, async (_request, response) => {
   } catch (error) {
     console.error("Failed to load admin blog posts:", error);
     return response.status(500).json({ error: "Unable to load blog posts." });
+  }
+});
+
+app.get("/api/admin/blog/:id/images/:imageId", requireAdmin, async (request, response) => {
+  const { id, imageId } = request.params;
+  if (!/^\d+$/.test(id) || !/^\d+$/.test(imageId)) {
+    return response.status(400).json({ error: "Invalid blog image request." });
+  }
+
+  try {
+    const [image] = await sql`
+      SELECT name, media_type AS "mediaType", size_bytes AS "sizeBytes", data
+      FROM blog_post_images
+      WHERE post_id = ${id} AND id = ${imageId}
+      LIMIT 1
+    `;
+    if (!image) return response.status(404).json({ error: "Blog image not found." });
+    return sendBlogImage(response, image);
+  } catch (error) {
+    console.error("Failed to load admin blog image:", error);
+    return response.status(500).json({ error: "Unable to load this blog image." });
   }
 });
 
@@ -1464,16 +1660,32 @@ app.delete("/api/admin/learning-items/:id", requireAdmin, async (request, respon
 
 app.post("/api/admin/blog", requireAdmin, async (request, response) => {
   const post = readBlogPost(request.body);
-  if (!post) return response.status(400).json({ error: "Check the blog post fields and try again." });
+  const images = readBlogImages(request.body?.images);
+  const retainedImageIds = readRetainedBlogImageIds(request.body?.retainedImageIds);
+  if (!post || !images || !retainedImageIds || retainedImageIds.length) {
+    return response.status(400).json({ error: "Check the blog post fields and images, then try again." });
+  }
 
+  let created;
   try {
-    const [created] = await sql`
+    [created] = await sql`
       INSERT INTO blog_posts (slug, category, title, description, content, status)
       VALUES (${post.slug}, ${post.category}, ${post.title}, ${post.description}, ${post.content}, ${post.status})
       RETURNING ${sql.unsafe(blogPostFields)}
     `;
-    return response.status(201).json({ post: created });
+    await replaceBlogImages(created.id, retainedImageIds, images);
+    const [postWithImages] = await sql`
+      SELECT ${sql.unsafe(blogPostFields)} FROM blog_posts WHERE id = ${created.id}
+    `;
+    return response.status(201).json({ post: postWithImages });
   } catch (error) {
+    if (created?.id) {
+      try {
+        await sql`DELETE FROM blog_posts WHERE id = ${created.id}`;
+      } catch (cleanupError) {
+        console.error("Failed to roll back incomplete blog post:", cleanupError);
+      }
+    }
     if (error?.code === "23505") return response.status(409).json({ error: "That blog URL is already in use." });
     console.error("Failed to create blog post:", error);
     return response.status(500).json({ error: "Unable to save this blog post." });
@@ -1483,9 +1695,20 @@ app.post("/api/admin/blog", requireAdmin, async (request, response) => {
 app.patch("/api/admin/blog/:id", requireAdmin, async (request, response) => {
   if (!/^\d+$/.test(request.params.id)) return response.status(400).json({ error: "Invalid blog post ID." });
   const post = readBlogPost(request.body);
-  if (!post) return response.status(400).json({ error: "Check the blog post fields and try again." });
+  const images = readBlogImages(request.body?.images);
+  const retainedImageIds = readRetainedBlogImageIds(request.body?.retainedImageIds);
+  if (!post || !images || !retainedImageIds || images.length + retainedImageIds.length > 2) {
+    return response.status(400).json({ error: "Check the blog post fields and images, then try again." });
+  }
 
   try {
+    const existingImages = await sql`
+      SELECT id::text AS id FROM blog_post_images WHERE post_id = ${request.params.id}
+    `;
+    const existingImageIds = new Set(existingImages.map(({ id }) => id));
+    if (retainedImageIds.some((imageId) => !existingImageIds.has(imageId))) {
+      return response.status(400).json({ error: "One of the selected images no longer belongs to this post." });
+    }
     const [updated] = await sql`
       UPDATE blog_posts
       SET slug = ${post.slug}, category = ${post.category}, title = ${post.title},
@@ -1495,7 +1718,12 @@ app.patch("/api/admin/blog/:id", requireAdmin, async (request, response) => {
       RETURNING ${sql.unsafe(blogPostFields)}
     `;
     if (!updated) return response.status(404).json({ error: "Blog post not found." });
-    return response.json({ post: updated });
+    const retainedImagesAreValid = await replaceBlogImages(updated.id, retainedImageIds, images);
+    if (!retainedImagesAreValid) return response.status(400).json({ error: "One of the selected images no longer belongs to this post." });
+    const [postWithImages] = await sql`
+      SELECT ${sql.unsafe(blogPostFields)} FROM blog_posts WHERE id = ${updated.id}
+    `;
+    return response.json({ post: postWithImages });
   } catch (error) {
     if (error?.code === "23505") return response.status(409).json({ error: "That blog URL is already in use." });
     console.error("Failed to update blog post:", error);
@@ -1597,6 +1825,35 @@ async function start() {
       status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'published')),
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
       updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  await sql`ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS views_count INTEGER NOT NULL DEFAULT 0`;
+  await sql`ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS likes_count INTEGER NOT NULL DEFAULT 0`;
+  await sql`
+    CREATE TABLE IF NOT EXISTS blog_post_images (
+      id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+      post_id BIGINT NOT NULL REFERENCES blog_posts(id) ON DELETE CASCADE,
+      name TEXT NOT NULL,
+      media_type TEXT NOT NULL,
+      size_bytes INTEGER NOT NULL,
+      data TEXT NOT NULL,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  await sql`
+    CREATE TABLE IF NOT EXISTS blog_post_likes (
+      post_id BIGINT NOT NULL REFERENCES blog_posts(id) ON DELETE CASCADE,
+      visitor_id TEXT NOT NULL,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      PRIMARY KEY (post_id, visitor_id)
+    )
+  `;
+  await sql`
+    CREATE TABLE IF NOT EXISTS blog_post_views (
+      post_id BIGINT NOT NULL REFERENCES blog_posts(id) ON DELETE CASCADE,
+      visitor_id TEXT NOT NULL,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      PRIMARY KEY (post_id, visitor_id)
     )
   `;
   await sql`
