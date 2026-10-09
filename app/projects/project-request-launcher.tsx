@@ -360,9 +360,10 @@ export default function ProjectRequestLauncher({
                       className={`flex min-h-24 cursor-pointer flex-col items-center justify-center rounded-md border border-dashed border-black/20 bg-white px-4 py-4 text-center transition-colors hover:border-[#008e8a] hover:bg-[#008e8a]/[0.03] ${attachments.length >= maxAttachmentCount ? "cursor-not-allowed opacity-50" : ""}`}
                     >
                       <Upload aria-hidden="true" className="h-5 w-5 text-[#008e8a]" />
-                      <span className="mt-2 text-sm text-[#008e8a] font-semibold">Choose documents or images</span>
+                      <span className="mt-2 text-sm text-[#334342] font-semibold">Choose documents or images</span>
                       <span className="mt-1 text-xs text-black/50">Up to 3 files, 2 MB each</span>
                     </label>
+                    
 
                     {attachments.length > 0 && (
                       <ul className="mt-2 space-y-2" aria-label="Selected files">
