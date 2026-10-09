@@ -13,6 +13,7 @@ The API runs on Railway and stores project requests in Neon Postgres. The Next.j
    - `PORTAL_ADMIN_EMAIL`: your portal sign-in email.
    - `PORTAL_ADMIN_PASSWORD`: a unique password of at least 16 characters.
    - `PORTAL_SESSION_SECRET`: a separate random secret with at least 32 characters.
+   - `LEARNING_SESSION_SECRET`: a separate random secret with at least 32 characters for learner sessions.
    - `TELEGRAM_BOT_TOKEN`: the token for a private notification bot.
    - `TELEGRAM_CHAT_ID`: the private chat or group ID where notifications should be sent.
 
@@ -30,12 +31,21 @@ In Vercel **Project Settings → Environment Variables**, add:
 
 - `RAILWAY_API_URL`: the Railway public origin, for example `https://your-api.up.railway.app` (no trailing slash).
 - `RAILWAY_INTERNAL_API_KEY`: the same value configured on Railway.
+- `PORTAL_SESSION_SECRET`: the same value configured on Railway for portal auth.
+- `LEARNING_SESSION_SECRET`: the same value configured on Railway for learner auth.
 - `PAYSTACK_SECRET_KEY`: the Paystack secret key used to verify payments and webhook signatures.
 
 Redeploy the Vercel app after saving the variables. The private portal is at `/portal` on the Vercel site.
 
 In the Paystack dashboard, configure the webhook URL as `https://your-site.example/api/payments/webhook` and subscribe to `charge.success`. Replace the example host with the deployed Vercel domain. The existing customer callback remains enabled; both paths use the same idempotent confirmation, so a payment sends only one Telegram alert.
 
-For local development, add the same two server-only variables to the repository root `.env.local` and restart `npm run dev`. Do not prefix either variable with `NEXT_PUBLIC_` or commit `.env.local`.
+For local development, add the same server-only variables to the repository root `.env.local` and restart `npm run dev`. Include at least:
+
+- `RAILWAY_API_URL`
+- `RAILWAY_INTERNAL_API_KEY`
+- `PORTAL_SESSION_SECRET`
+- `LEARNING_SESSION_SECRET`
+
+Do not prefix any of them with `NEXT_PUBLIC_` or commit `.env.local`.
 
 Remove any old `RESEND_API_KEY` and `RESEND_FROM_EMAIL` variables from Vercel; the app no longer sends enquiries by email. EmailJS was not added to the app. The shared Railway key and admin credentials must never use `NEXT_PUBLIC_` variable names.

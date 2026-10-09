@@ -1,7 +1,9 @@
 export async function callRailway(path: string, init: RequestInit = {}) {
   const baseUrl = process.env.RAILWAY_API_URL?.replace(/\/$/, "");
   const internalKey = process.env.RAILWAY_INTERNAL_API_KEY;
-  if (!baseUrl || !internalKey) throw new Error("Railway API is not configured.");
+  if (!baseUrl || !internalKey) {
+    throw new Error("Railway API is not configured. Add RAILWAY_API_URL and RAILWAY_INTERNAL_API_KEY to the server environment.");
+  }
 
   return fetch(`${baseUrl}${path}`, {
     ...init,

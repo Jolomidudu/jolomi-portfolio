@@ -1960,9 +1960,18 @@ app.delete("/api/admin/blog/:id", requireAdmin, async (request, response) => {
 });
 
 async function start() {
-  const requiredVariables = ["DATABASE_URL", "RAILWAY_INTERNAL_API_KEY", "PORTAL_ADMIN_EMAIL", "PORTAL_ADMIN_PASSWORD", "PORTAL_SESSION_SECRET", "LEARNING_SESSION_SECRET"];
+  const requiredVariables = ["DATABASE_URL", "RAILWAY_INTERNAL_API_KEY", "PORTAL_ADMIN_EMAIL", "PORTAL_ADMIN_PASSWORD", "PORTAL_SESSION_SECRET"];
   const missingVariables = requiredVariables.filter((name) => !process.env[name]);
   if (missingVariables.length) throw new Error(`Missing required environment variables: ${missingVariables.join(", ")}`);
+
+  if (!process.env.LEARNING_SESSION_SECRET && process.env.PORTAL_SESSION_SECRET) {
+    console.warn("LEARNING_SESSION_SECRET is not configured; falling back to PORTAL_SESSION_SECRET for learning sessions.");
+    process.env.LEARNING_SESSION_SECRET = process.env.PORTAL_SESSION_SECRET;
+  }
+
+  if (!process.env.LEARNING_SESSION_SECRET) {
+    throw new Error("Missing required environment variables: LEARNING_SESSION_SECRET");
+  }
 
   sql = neon(process.env.DATABASE_URL);
   learningTracks = JSON.parse(await readFile(new URL("./learning-tracks.json", import.meta.url), "utf8"));
