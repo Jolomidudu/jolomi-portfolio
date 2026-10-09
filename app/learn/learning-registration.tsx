@@ -462,15 +462,16 @@ export default function LearningRegistration({
               {step === 4 && (
                 <div className="space-y-5">
                   <dl className="divide-y divide-black/10 border-y border-black/10">
-                    <div className="flex flex-wrap justify-between gap-2 py-3 text-sm"><dt className="text-black/50">Program</dt><dd className="font-medium">{selectedTrack.title}</dd></div>
-                    <div className="flex flex-wrap justify-between gap-2 py-3 text-sm"><dt className="text-black/50">Duration</dt><dd className="font-medium">{selectedTrack.duration}</dd></div>
-                    <div className="flex flex-wrap justify-between gap-2 py-3 text-sm"><dt className="text-black/50">Learner</dt><dd className="font-medium">{form.fullName} · {form.email}</dd></div>
-                    <div className="flex flex-wrap justify-between gap-2 py-3 text-sm"><dt className="text-black/50">Phone</dt><dd className="font-medium">{form.countryCode} {form.phone}</dd></div>
-                    <div className="flex flex-wrap justify-between gap-2 py-3 text-sm"><dt className="text-black/50">Availability</dt><dd className="font-medium">{form.preferredDays.join(", ")} · {form.preferredTime}</dd></div>
-                    <div className="flex flex-wrap justify-between gap-2 py-3 text-sm"><dt className="text-black/50">Format</dt><dd className="font-medium capitalize">{form.learningFormat}</dd></div>
-                    <div className="flex flex-wrap justify-between gap-2 py-3 text-sm"><dt className="text-black/50">Payment</dt><dd className="font-medium">{form.paymentPlan === "full" ? "Full program fee" : "Program deposit"}</dd></div>
+                    <div className="flex flex-wrap justify-between gap-2 py-3 text-sm"><dt className="text-[#24381e]/80">Program</dt><dd className="font-medium">{selectedTrack.title}</dd></div>
+                    <div className="flex flex-wrap justify-between gap-2 py-3 text-sm"><dt className="text-[#24381e]/80">Duration</dt><dd className="font-medium">{selectedTrack.duration}</dd></div>
+                    <div className="flex flex-wrap justify-between gap-2 py-3 text-sm"><dt className="text-[#24381e]/80">Learner</dt><dd className="font-medium">{form.fullName} · {form.email}</dd></div>
+                    <div className="flex flex-wrap justify-between gap-2 py-3 text-sm"><dt className="text-[#24381e]/80">Phone</dt><dd className="font-medium">{form.countryCode} {form.phone}</dd></div>
+                    <div className="flex flex-wrap justify-between gap-2 py-3 text-sm"><dt className="text-[#24381e]/80">Availability</dt><dd className="font-medium">{form.preferredDays.join(", ")} · {form.preferredTime}</dd></div>
+                    <div className="flex flex-wrap justify-between gap-2 py-3 text-sm"><dt className="text-[#24381e]/80">Format</dt><dd className="font-medium capitalize">{form.learningFormat}</dd></div>
+                    <div className="flex flex-wrap justify-between gap-2 py-3 text-sm"><dt className="text-[#24381e]/80">Payment</dt><dd className="font-medium">{form.paymentPlan === "full" ? "Full program fee" : "Program deposit"}</dd></div>
                     <div className="flex flex-wrap justify-between gap-2 py-4 text-sm"><dt className="font-semibold">Due securely at checkout</dt><dd className="text-lg font-semibold text-[#007d79]">{formattedAmount(paymentAmount)}</dd></div>
                   </dl>
+                  
                   <label className="flex items-start gap-3 text-sm leading-6">
                     <input required type="checkbox" checked={form.acceptedTerms} onChange={(event) => setForm((current) => ({ ...current, acceptedTerms: event.target.checked }))} className="mt-1 h-4 w-4 accent-[#008c87]" />
                     <span>I understand the selected program, payment amount, and that tutor assignment and session scheduling will be confirmed after registration.</span>
@@ -479,7 +480,7 @@ export default function LearningRegistration({
                     <input required type="checkbox" checked={form.acceptedPrivacy} onChange={(event) => setForm((current) => ({ ...current, acceptedPrivacy: event.target.checked }))} className="mt-1 h-4 w-4 accent-[#008c87]" />
                     <span>I consent to using these details to arrange my learning program. See the <a href="/privacy" target="_blank" rel="noreferrer" className="font-semibold underline underline-offset-2">privacy policy</a>.</span>
                   </label>
-                  <p className="text-xs leading-5 text-black/50">Your registration is saved before checkout. Enrollment is confirmed only after Paystack verifies the payment.</p>
+                  <p className="text-xs leading-5 text-[#24381e]/70">Your registration is saved before checkout. Enrollment is confirmed only after Paystack verifies the payment.</p>
                 </div>
               )}
 
