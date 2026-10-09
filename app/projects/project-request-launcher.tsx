@@ -361,7 +361,7 @@ export default function ProjectRequestLauncher({
                     >
                       <Upload aria-hidden="true" className="h-5 w-5 text-[#008e8a]" />
                       <span className="mt-2 text-sm text-[#334342] font-semibold">Choose documents or images</span>
-                      <span className="mt-1 text-xs text-black/50">Up to 3 files, 2 MB each</span>
+                      <span className="mt-1 text-xs text-black/80">Up to 3 files, 2 MB each</span>
                     </label>
                     
 
