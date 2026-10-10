@@ -5,7 +5,7 @@ import { ArrowUpRight } from "lucide-react";
 import SiteChrome from "../site-chrome";
 
 export const metadata: Metadata = {
-  title: "Who i am",
+  title: "About",
   description:
     "Meet Jolomi Dudu, a technology leader, software engineer and technology consultant working across technology strategy, ICT leadership, software engineering and digital transformation.",
 };

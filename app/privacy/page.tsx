@@ -4,7 +4,7 @@ import { ArrowUpRight } from "lucide-react";
 import SiteChrome from "../site-chrome";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Jolomi Dudu",
+  title: "Policy",
   description:
     "Privacy information explaining how Jolomi Dudu collects, uses and protects personal information submitted through this website.",
 };
