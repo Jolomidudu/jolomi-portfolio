@@ -1863,6 +1863,103 @@ app.get("/api/admin/learning-enrollments", requireAdmin, async (_request, respon
   }
 });
 
+app.post("/api/admin/learning-enrollments/delete", requireAdmin, async (request, response) => {
+  const requestedIds = request.body?.ids;
+  if (!Array.isArray(requestedIds) || requestedIds.length === 0 || requestedIds.length > 50
+    || requestedIds.some((id) => typeof id !== "string" || !/^\d+$/.test(id))) {
+    return response.status(400).json({ error: "Select between 1 and 50 valid registrations." });
+  }
+  const ids = [...new Set(requestedIds)];
+  if (ids.length !== requestedIds.length) {
+    return response.status(400).json({ error: "The selection contains duplicate registrations. Refresh and try again." });
+  }
+
+  const idFilter = (query) => query`e.id::text IN (
+    SELECT jsonb_array_elements_text(${JSON.stringify(ids)}::jsonb)
+  )`;
+  const isDeletable = (query) => query`
+    e.status = 'pending_payment'
+    AND NOT EXISTS (
+      SELECT 1 FROM learning_accounts a WHERE a.enrollment_id = e.id
+    )
+    AND NOT EXISTS (
+      SELECT 1 FROM learning_enrollment_payments p
+      WHERE p.enrollment_id = e.id AND p.status = 'succeeded'
+    )
+    AND NOT EXISTS (
+      SELECT 1 FROM learning_enrollment_payments p
+      WHERE p.enrollment_id = e.id
+        AND p.status = 'pending'
+        AND p.created_at > NOW() - INTERVAL '24 hours'
+    )
+  `;
+
+  try {
+    const eligible = await sql`
+      SELECT e.id::text AS id
+      FROM learning_enrollments e
+      WHERE ${idFilter(sql)} AND ${isDeletable(sql)}
+    `;
+    if (eligible.length !== ids.length) {
+      return response.status(409).json({
+        error: "One or more selected registrations are paid, enrolled, linked to a learner account, or have a recent pending checkout. Refresh the list and select only abandoned unpaid registrations.",
+      });
+    }
+
+    const [, , , , deleted] = await sql.transaction([
+      sql`
+        SELECT e.id
+        FROM learning_enrollments e
+        WHERE ${idFilter(sql)}
+        FOR UPDATE
+      `,
+      sql`
+        SELECT p.id
+        FROM learning_enrollment_payments p
+        WHERE p.enrollment_id::text IN (
+          SELECT jsonb_array_elements_text(${JSON.stringify(ids)}::jsonb)
+        )
+        FOR UPDATE
+      `,
+      sql`
+        UPDATE learning_enrollments e
+        SET status = CASE
+          WHEN (
+            SELECT count(*)
+            FROM learning_enrollments e
+            WHERE ${idFilter(sql)} AND ${isDeletable(sql)}
+          ) = jsonb_array_length(${JSON.stringify(ids)}::jsonb)
+          THEN e.status
+          ELSE 'delete_guard_violation'
+        END
+        WHERE ${idFilter(sql)}
+      `,
+      sql`
+        DELETE FROM learning_enrollment_payments p
+        USING learning_enrollments e
+        WHERE p.enrollment_id = e.id AND ${idFilter(sql)}
+      `,
+      sql`
+        DELETE FROM learning_enrollments e
+        WHERE ${idFilter(sql)}
+        RETURNING e.id::text AS id
+      `,
+    ]);
+    if (deleted.length !== ids.length) {
+      return response.status(409).json({ error: "The registrations changed while being deleted. Refresh the list and try again." });
+    }
+    return response.json({ deletedIds: deleted.map(({ id }) => id) });
+  } catch (error) {
+    if (error?.code === "23514") {
+      return response.status(409).json({
+        error: "One or more selected registrations are paid, enrolled, linked to a learner account, or have a recent pending checkout. Refresh the list and select only abandoned unpaid registrations.",
+      });
+    }
+    console.error("Failed to delete unpaid learning registrations:", error);
+    return response.status(500).json({ error: "Unable to delete these registrations." });
+  }
+});
+
 app.get("/api/admin/learning-submissions", requireAdmin, async (_request, response) => {
   try {
     const submissions = await sql`

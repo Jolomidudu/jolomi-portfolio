@@ -131,9 +131,14 @@ export default function LearningManager() {
   const [submissionError, setSubmissionError] = useState("");
   const [learnerError, setLearnerError] = useState("");
   const [registrationError, setRegistrationError] = useState("");
+  const [registrationNotice, setRegistrationNotice] = useState("");
   const [registrationSearch, setRegistrationSearch] = useState("");
   const [registrationFilter, setRegistrationFilter] = useState("all");
   const [isLoadingRegistrations, setIsLoadingRegistrations] = useState(true);
+  const [selectedRegistrationIds, setSelectedRegistrationIds] = useState<string[]>([]);
+  const [isDeletingRegistrations, setIsDeletingRegistrations] = useState(false);
+  const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false);
+  const [deleteConfirmationText, setDeleteConfirmationText] = useState("");
   const [notice, setNotice] = useState("");
 
   useEffect(() => {
@@ -317,6 +322,32 @@ export default function LearningManager() {
     }
   }
 
+  async function deleteSelectedRegistrations() {
+    if (deleteConfirmationText !== "DELETE" || selectedRegistrationIds.length === 0 || isDeletingRegistrations) return;
+    setIsDeletingRegistrations(true);
+    setRegistrationError("");
+    setRegistrationNotice("");
+    try {
+      const response = await fetch("/api/portal/learning-enrollments/delete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ids: selectedRegistrationIds }),
+      });
+      const result = await response.json() as { deletedIds?: string[]; error?: string };
+      if (!response.ok || !result.deletedIds) throw new Error(result.error ?? "Unable to delete the selected registrations.");
+      const deletedIds = new Set(result.deletedIds);
+      setRegistrations((current) => current.filter(({ id }) => !deletedIds.has(id)));
+      setSelectedRegistrationIds([]);
+      setRegistrationNotice(`${deletedIds.size} unpaid registration${deletedIds.size === 1 ? "" : "s"} and its payment attempts deleted.`);
+      setIsDeleteConfirmationOpen(false);
+      setDeleteConfirmationText("");
+    } catch (error) {
+      setRegistrationError(error instanceof Error ? error.message : "Unable to delete the selected registrations.");
+    } finally {
+      setIsDeletingRegistrations(false);
+    }
+  }
+
   const selectedItem = items.find(({ id }) => id === selectedId);
   const selectedSubmission = submissions.find(({ id }) => id === selectedSubmissionId);
   const selectedLearner = learners.find(({ accountId }) => accountId === selectedLearnerId);
@@ -327,6 +358,20 @@ export default function LearningManager() {
       .includes(normalizedRegistrationSearch);
     return matchesSearch && (registrationFilter === "all" || registration.status === registrationFilter);
   });
+  const canDeleteRegistration = (registration: EnrollmentRecord) => registration.status === "pending_payment"
+    && registration.accountStatus === null
+    && !registration.payments.some(({ status }) => status === "succeeded")
+    && !registration.payments.some((payment) => {
+      if (payment.status !== "pending") return false;
+      const createdAt = new Date(payment.createdAt).getTime();
+      return !Number.isFinite(createdAt) || Date.now() - createdAt < 24 * 60 * 60 * 1000;
+    });
+  const deletableFilteredIds = filteredRegistrations.filter(canDeleteRegistration).map(({ id }) => id);
+  const selectedDeletableIds = selectedRegistrationIds.filter((id) => {
+    const registration = registrations.find(({ id: registrationId }) => registrationId === id);
+    return registration ? canDeleteRegistration(registration) : false;
+  });
+  const selectedDeletableRegistrations = registrations.filter(({ id }) => selectedDeletableIds.includes(id));
 
   return (
     <div className="min-h-[calc(100vh-73px)]">
@@ -353,9 +398,16 @@ export default function LearningManager() {
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#008e8a]">Enrollment overview</p>
                 <h2 className="mt-2 text-2xl font-semibold">Registrations and payments</h2>
               </div>
-              <button type="button" onClick={() => { setIsLoadingRegistrations(true); setRegistrationError(""); void fetch("/api/portal/learning-enrollments", { cache: "no-store" }).then(async (response) => { const result = await response.json() as { registrations?: EnrollmentRecord[]; error?: string }; if (!response.ok) throw new Error(result.error ?? "Unable to refresh registrations."); setRegistrations(result.registrations ?? []); }).catch((error) => setRegistrationError(error instanceof Error ? error.message : "Unable to refresh registrations.")).finally(() => setIsLoadingRegistrations(false)); }} className="min-h-10 border border-black/15 px-3 py-2 text-sm font-medium transition-colors hover:bg-black/5">
-                Refresh
-              </button>
+              <div className="flex flex-wrap items-center gap-2">
+                {selectedDeletableIds.length > 0 && (
+                  <button type="button" onClick={() => { setDeleteConfirmationText(""); setIsDeleteConfirmationOpen(true); }} className="min-h-10 border border-red-200 px-3 py-2 text-sm font-semibold text-red-700 transition-colors hover:bg-red-50">
+                    Delete selected ({selectedDeletableIds.length})
+                  </button>
+                )}
+                <button type="button" onClick={() => { setIsLoadingRegistrations(true); setRegistrationError(""); void fetch("/api/portal/learning-enrollments", { cache: "no-store" }).then(async (response) => { const result = await response.json() as { registrations?: EnrollmentRecord[]; error?: string }; if (!response.ok) throw new Error(result.error ?? "Unable to refresh registrations."); setRegistrations(result.registrations ?? []); setSelectedRegistrationIds([]); }).catch((error) => setRegistrationError(error instanceof Error ? error.message : "Unable to refresh registrations.")).finally(() => setIsLoadingRegistrations(false)); }} className="min-h-10 border border-black/15 px-3 py-2 text-sm font-medium transition-colors hover:bg-black/5">
+                  Refresh
+                </button>
+              </div>
             </div>
 
             <dl className="grid gap-4 border-b border-black/10 py-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -381,13 +433,41 @@ export default function LearningManager() {
               </label>
             </div>
 
+            {deletableFilteredIds.length > 0 && (
+              <label className="flex w-fit items-center gap-2 py-3 text-sm font-medium text-black/60">
+                <input
+                  type="checkbox"
+                  checked={deletableFilteredIds.every((id) => selectedRegistrationIds.includes(id))}
+                  onChange={(event) => setSelectedRegistrationIds((current) => event.target.checked
+                    ? [...new Set([...current, ...deletableFilteredIds])]
+                    : current.filter((id) => !deletableFilteredIds.includes(id)))}
+                  className="h-4 w-4 accent-[#a12626]"
+                />
+                Select all eligible in this view ({deletableFilteredIds.length})
+              </label>
+            )}
+
             {registrationError && <p role="alert" className="mt-4 text-sm text-red-700">{registrationError}</p>}
+            {registrationNotice && <p role="status" className="mt-4 text-sm text-[#007d79]">{registrationNotice}</p>}
             {isLoadingRegistrations ? <p className="py-8 text-sm text-black/50">Loading registrations...</p> : filteredRegistrations.length ? (
               <ul className="divide-y divide-black/10">
                 {filteredRegistrations.map((registration) => (
                   <li key={registration.id} className="py-6">
                     <article className="grid gap-5 xl:grid-cols-[minmax(220px,1.1fr)_minmax(180px,0.9fr)_minmax(200px,0.9fr)_minmax(250px,1.2fr)]">
                       <div>
+                        {canDeleteRegistration(registration) && (
+                          <label className="mb-3 flex w-fit items-center gap-2 text-xs font-medium text-black/55">
+                            <input
+                              type="checkbox"
+                              checked={selectedRegistrationIds.includes(registration.id)}
+                              onChange={(event) => setSelectedRegistrationIds((current) => event.target.checked
+                                ? [...new Set([...current, registration.id])]
+                                : current.filter((id) => id !== registration.id))}
+                              className="h-4 w-4 accent-[#a12626]"
+                            />
+                            Select unpaid registration
+                          </label>
+                        )}
                         <div className="flex flex-wrap items-center gap-2">
                           <h3 className="font-semibold">{registration.fullName}</h3>
                           <span className="border border-black/10 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.08em]">{formatStatus(registration.status)}</span>
@@ -434,6 +514,34 @@ export default function LearningManager() {
             ) : !registrationError ? (
               <p className="py-8 text-sm text-black/50">{registrations.length ? "No registrations match these filters." : "No registrations yet."}</p>
             ) : null}
+
+            {isDeleteConfirmationOpen && (
+              <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-5" role="presentation">
+                <section role="dialog" aria-modal="true" aria-labelledby="delete-registration-title" className="w-full max-w-lg border border-black/10 bg-white p-6 shadow-2xl sm:p-8">
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-red-700">Permanent deletion</p>
+                  <h3 id="delete-registration-title" className="mt-2 text-2xl font-semibold">Delete {selectedDeletableIds.length} selected registration{selectedDeletableIds.length === 1 ? "" : "s"}?</h3>
+                  <p className="mt-3 text-sm leading-6 text-black/65">This removes the registration and its payment attempts from Railway. Only unpaid registrations without learner accounts and without a pending checkout from the last 24 hours can be deleted. Paid or enrolled learners, including Local Tester, are protected.</p>
+                  <ul className="mt-4 max-h-36 divide-y divide-black/10 overflow-y-auto border-y border-black/10 text-sm">
+                    {selectedDeletableRegistrations.map((registration) => (
+                      <li key={registration.id} className="py-2">
+                        <span className="block font-semibold">{registration.fullName}</span>
+                        <span className="block break-all text-xs text-black/55">{registration.email}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <label className="mt-5 block text-sm font-medium">
+                    Type DELETE to confirm
+                    <input autoComplete="off" value={deleteConfirmationText} onChange={(event) => setDeleteConfirmationText(event.target.value)} className="mt-2 w-full border border-black/15 px-3 py-3 outline-none focus:border-red-600" />
+                  </label>
+                  <div className="mt-6 flex flex-wrap justify-end gap-3">
+                    <button type="button" disabled={isDeletingRegistrations} onClick={() => setIsDeleteConfirmationOpen(false)} className="min-h-10 border border-black/15 px-4 py-2 text-sm font-semibold hover:bg-black/5 disabled:opacity-50">Cancel</button>
+                    <button type="button" disabled={deleteConfirmationText !== "DELETE" || selectedDeletableIds.length === 0 || isDeletingRegistrations} onClick={() => void deleteSelectedRegistrations()} className="min-h-10 bg-red-700 px-4 py-2 text-sm font-semibold text-white hover:bg-red-800 disabled:cursor-not-allowed disabled:opacity-50">
+                      {isDeletingRegistrations ? "Deleting..." : "Delete registrations"}
+                    </button>
+                  </div>
+                </section>
+              </div>
+            )}
           </div>
         </section>
       ) : activePanel === "content" ? (
