@@ -44,6 +44,34 @@ type LearnerAssignment = {
   assignedAt: string | null;
 };
 
+type EnrollmentPayment = {
+  reference: string;
+  amount: number | string;
+  paymentPlan: string;
+  status: "pending" | "succeeded" | "failed";
+  createdAt: string;
+  paidAt: string | null;
+};
+
+type EnrollmentRecord = {
+  id: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  country: string;
+  trackId: string;
+  trackTitle: string;
+  paymentPlan: string;
+  status: "pending_payment" | "awaiting_balance" | "enrolled";
+  preferredStart: string;
+  registeredAt: string;
+  accountStatus: string | null;
+  payments: EnrollmentPayment[];
+  totalAmount: number | null;
+  paidAmount: number;
+  balanceDue: number | null;
+};
+
 const emptyForm: ItemForm = {
   trackId: tracks[0].id,
   type: "resource",
@@ -70,14 +98,24 @@ function trackName(trackId: string) {
   return tracks.find((track) => track.id === trackId)?.title ?? "Unknown track";
 }
 
+function formatNaira(amount: number | null) {
+  if (amount === null) return "Unknown";
+  return new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN", maximumFractionDigits: 0 }).format(amount);
+}
+
+function formatStatus(status: string) {
+  return status.replaceAll("_", " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
 export default function LearningManager() {
   const [items, setItems] = useState<LearningItem[]>([]);
   const [submissions, setSubmissions] = useState<AssignmentSubmission[]>([]);
   const [learners, setLearners] = useState<LearnerAssignment[]>([]);
+  const [registrations, setRegistrations] = useState<EnrollmentRecord[]>([]);
   const [form, setForm] = useState<ItemForm>(emptyForm);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [selectedSubmissionId, setSelectedSubmissionId] = useState<string | null>(null);
-  const [activePanel, setActivePanel] = useState<"content" | "submissions" | "tutors">("content");
+  const [activePanel, setActivePanel] = useState<"content" | "submissions" | "tutors" | "enrollments">("content");
   const [feedback, setFeedback] = useState("");
   const [reviewOutcome, setReviewOutcome] = useState<"reviewed" | "needs_revision">("reviewed");
   const [selectedLearnerId, setSelectedLearnerId] = useState<string | null>(null);
@@ -92,6 +130,10 @@ export default function LearningManager() {
   const [errorMessage, setErrorMessage] = useState("");
   const [submissionError, setSubmissionError] = useState("");
   const [learnerError, setLearnerError] = useState("");
+  const [registrationError, setRegistrationError] = useState("");
+  const [registrationSearch, setRegistrationSearch] = useState("");
+  const [registrationFilter, setRegistrationFilter] = useState("all");
+  const [isLoadingRegistrations, setIsLoadingRegistrations] = useState(true);
   const [notice, setNotice] = useState("");
 
   useEffect(() => {
@@ -136,6 +178,18 @@ export default function LearningManager() {
         setTutorNotes(rows[0]?.tutorNotes ?? "");
       } catch (error) {
         if (active) setLearnerError(error instanceof Error ? error.message : "Unable to load learners.");
+      }
+
+      try {
+        const response = await fetch("/api/portal/learning-enrollments", { cache: "no-store" });
+        const result = await response.json() as { registrations?: EnrollmentRecord[]; error?: string };
+        if (!active) return;
+        if (!response.ok) throw new Error(result.error ?? "Unable to load registrations and payments.");
+        setRegistrations(result.registrations ?? []);
+      } catch (error) {
+        if (active) setRegistrationError(error instanceof Error ? error.message : "Unable to load registrations and payments.");
+      } finally {
+        if (active) setIsLoadingRegistrations(false);
       }
     }
     void loadItems();
@@ -266,6 +320,13 @@ export default function LearningManager() {
   const selectedItem = items.find(({ id }) => id === selectedId);
   const selectedSubmission = submissions.find(({ id }) => id === selectedSubmissionId);
   const selectedLearner = learners.find(({ accountId }) => accountId === selectedLearnerId);
+  const normalizedRegistrationSearch = registrationSearch.trim().toLowerCase();
+  const filteredRegistrations = registrations.filter((registration) => {
+    const matchesSearch = `${registration.fullName} ${registration.email} ${registration.phone} ${registration.trackTitle} ${registration.payments.map(({ reference }) => reference).join(" ")}`
+      .toLowerCase()
+      .includes(normalizedRegistrationSearch);
+    return matchesSearch && (registrationFilter === "all" || registration.status === registrationFilter);
+  });
 
   return (
     <div className="min-h-[calc(100vh-73px)]">
@@ -279,9 +340,103 @@ export default function LearningManager() {
         <button type="button" onClick={() => setActivePanel("tutors")} aria-pressed={activePanel === "tutors"} className={`border-b-2 px-3 py-3 text-sm font-medium ${activePanel === "tutors" ? "border-[#00A9A5] text-[#007d79]" : "border-transparent text-black/50 hover:text-black"}`}>
           Tutors <span className="ml-1 text-xs text-black/45">{learners.length}</span>
         </button>
+        <button type="button" onClick={() => setActivePanel("enrollments")} aria-pressed={activePanel === "enrollments"} className={`border-b-2 px-3 py-3 text-sm font-medium ${activePanel === "enrollments" ? "border-[#00A9A5] text-[#007d79]" : "border-transparent text-black/50 hover:text-black"}`}>
+          Enrollments <span className="ml-1 text-xs text-black/45">{registrations.length}</span>
+        </button>
       </nav>
 
-      {activePanel === "content" ? (
+      {activePanel === "enrollments" ? (
+        <section className="p-5 sm:p-8">
+          <div className="mx-auto max-w-7xl">
+            <div className="flex flex-wrap items-end justify-between gap-4 border-b border-black/10 pb-5">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#008e8a]">Enrollment overview</p>
+                <h2 className="mt-2 text-2xl font-semibold">Registrations and payments</h2>
+              </div>
+              <button type="button" onClick={() => { setIsLoadingRegistrations(true); setRegistrationError(""); void fetch("/api/portal/learning-enrollments", { cache: "no-store" }).then(async (response) => { const result = await response.json() as { registrations?: EnrollmentRecord[]; error?: string }; if (!response.ok) throw new Error(result.error ?? "Unable to refresh registrations."); setRegistrations(result.registrations ?? []); }).catch((error) => setRegistrationError(error instanceof Error ? error.message : "Unable to refresh registrations.")).finally(() => setIsLoadingRegistrations(false)); }} className="min-h-10 border border-black/15 px-3 py-2 text-sm font-medium transition-colors hover:bg-black/5">
+                Refresh
+              </button>
+            </div>
+
+            <dl className="grid gap-4 border-b border-black/10 py-5 sm:grid-cols-2 lg:grid-cols-4">
+              <div><dt className="text-xs font-semibold uppercase tracking-[0.1em] text-black/45">All registrations</dt><dd className="mt-1 text-2xl font-semibold">{registrations.length}</dd></div>
+              <div><dt className="text-xs font-semibold uppercase tracking-[0.1em] text-black/45">Awaiting payment</dt><dd className="mt-1 text-2xl font-semibold">{registrations.filter(({ status }) => status === "pending_payment").length}</dd></div>
+              <div><dt className="text-xs font-semibold uppercase tracking-[0.1em] text-black/45">Deposit / balance due</dt><dd className="mt-1 text-2xl font-semibold">{registrations.filter(({ status }) => status === "awaiting_balance").length}</dd></div>
+              <div><dt className="text-xs font-semibold uppercase tracking-[0.1em] text-black/45">Enrolled</dt><dd className="mt-1 text-2xl font-semibold">{registrations.filter(({ status }) => status === "enrolled").length}</dd></div>
+            </dl>
+
+            <div className="flex flex-col gap-3 border-b border-black/10 py-4 sm:flex-row">
+              <label className="flex-1 text-sm font-medium">
+                Search registrations
+                <input type="search" value={registrationSearch} onChange={(event) => setRegistrationSearch(event.target.value)} placeholder="Name, email, phone, program, payment reference" className="mt-1 w-full border border-black/15 bg-white px-3 py-2.5 outline-none focus:border-[#00A9A5]" />
+              </label>
+              <label className="text-sm font-medium sm:w-56">
+                Enrollment status
+                <select value={registrationFilter} onChange={(event) => setRegistrationFilter(event.target.value)} className="mt-1 w-full border border-black/15 bg-white px-3 py-2.5 outline-none focus:border-[#00A9A5]">
+                  <option value="all">All statuses</option>
+                  <option value="pending_payment">Awaiting payment</option>
+                  <option value="awaiting_balance">Deposit paid / balance due</option>
+                  <option value="enrolled">Enrolled</option>
+                </select>
+              </label>
+            </div>
+
+            {registrationError && <p role="alert" className="mt-4 text-sm text-red-700">{registrationError}</p>}
+            {isLoadingRegistrations ? <p className="py-8 text-sm text-black/50">Loading registrations...</p> : filteredRegistrations.length ? (
+              <ul className="divide-y divide-black/10">
+                {filteredRegistrations.map((registration) => (
+                  <li key={registration.id} className="py-6">
+                    <article className="grid gap-5 xl:grid-cols-[minmax(220px,1.1fr)_minmax(180px,0.9fr)_minmax(200px,0.9fr)_minmax(250px,1.2fr)]">
+                      <div>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <h3 className="font-semibold">{registration.fullName}</h3>
+                          <span className="border border-black/10 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.08em]">{formatStatus(registration.status)}</span>
+                        </div>
+                        <a href={`mailto:${registration.email}`} className="mt-2 block break-all text-sm text-[#007d79] underline underline-offset-2">{registration.email}</a>
+                        <a href={`tel:${registration.phone}`} className="mt-1 block text-sm text-black/60">{registration.phone}</a>
+                        <p className="mt-2 text-xs text-black/45">Registered {new Intl.DateTimeFormat(undefined, { dateStyle: "medium", timeStyle: "short" }).format(new Date(registration.registeredAt))}</p>
+                      </div>
+
+                      <dl className="space-y-3 text-sm">
+                        <div><dt className="text-xs font-semibold uppercase tracking-[0.08em] text-black/45">Program</dt><dd className="mt-1">{registration.trackTitle}</dd></div>
+                        <div><dt className="text-xs font-semibold uppercase tracking-[0.08em] text-black/45">Payment option</dt><dd className="mt-1">{formatStatus(registration.paymentPlan)}</dd></div>
+                        <div><dt className="text-xs font-semibold uppercase tracking-[0.08em] text-black/45">Preferred start</dt><dd className="mt-1">{registration.preferredStart || "Not provided"}</dd></div>
+                      </dl>
+
+                      <dl className="space-y-3 text-sm">
+                        <div><dt className="text-xs font-semibold uppercase tracking-[0.08em] text-black/45">Program fee</dt><dd className="mt-1">{formatNaira(registration.totalAmount)}</dd></div>
+                        <div><dt className="text-xs font-semibold uppercase tracking-[0.08em] text-black/45">Paid</dt><dd className="mt-1 font-semibold">{formatNaira(registration.paidAmount)}</dd></div>
+                        <div><dt className="text-xs font-semibold uppercase tracking-[0.08em] text-black/45">Balance due</dt><dd className="mt-1">{formatNaira(registration.balanceDue)}</dd></div>
+                        <div><dt className="text-xs font-semibold uppercase tracking-[0.08em] text-black/45">Learner account</dt><dd className="mt-1">{registration.accountStatus === "active" ? registration.status === "enrolled" ? "Active access" : "Created; access paused" : "Not created"}</dd></div>
+                      </dl>
+
+                      <div>
+                        <h4 className="text-xs font-semibold uppercase tracking-[0.08em] text-black/45">Payment attempts ({registration.payments.length})</h4>
+                        {registration.payments.length ? (
+                          <ul className="mt-2 space-y-3">
+                            {registration.payments.map((payment) => (
+                              <li key={payment.reference} className="border-l-2 border-[#00A9A5]/40 pl-3 text-sm">
+                                <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
+                                  <span className="font-medium">{formatNaira(Number(payment.amount))}</span>
+                                  <span className="text-xs font-semibold uppercase text-black/55">{formatStatus(payment.status)} · {formatStatus(payment.paymentPlan)}</span>
+                                </div>
+                                <p className="mt-1 break-all font-mono text-[11px] text-black/45">{payment.reference}</p>
+                                <p className="mt-1 text-xs text-black/45">{payment.paidAt ? `Paid ${new Intl.DateTimeFormat(undefined, { dateStyle: "medium", timeStyle: "short" }).format(new Date(payment.paidAt))}` : `Started ${new Intl.DateTimeFormat(undefined, { dateStyle: "medium", timeStyle: "short" }).format(new Date(payment.createdAt))}`}</p>
+                              </li>
+                            ))}
+                          </ul>
+                        ) : <p className="mt-2 text-sm text-black/50">No payment attempt yet.</p>}
+                      </div>
+                    </article>
+                  </li>
+                ))}
+              </ul>
+            ) : !registrationError ? (
+              <p className="py-8 text-sm text-black/50">{registrations.length ? "No registrations match these filters." : "No registrations yet."}</p>
+            ) : null}
+          </div>
+        </section>
+      ) : activePanel === "content" ? (
       <div className="grid min-h-[calc(100vh-125px)] lg:grid-cols-[minmax(280px,0.8fr)_minmax(0,1.5fr)]">
       <section className="border-b border-black/10 bg-white lg:border-b-0 lg:border-r">
         <div className="flex items-center justify-between gap-3 border-b border-black/10 p-4 sm:p-5">

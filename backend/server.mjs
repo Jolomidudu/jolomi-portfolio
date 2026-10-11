@@ -1820,6 +1820,49 @@ app.get("/api/admin/learning-items", requireAdmin, async (_request, response) =>
   }
 });
 
+app.get("/api/admin/learning-enrollments", requireAdmin, async (_request, response) => {
+  try {
+    const rows = await sql`
+      SELECT e.id::text AS id, e.full_name AS "fullName", e.email, e.phone,
+             e.country, e.track_id AS "trackId", e.track_title AS "trackTitle",
+             e.payment_plan AS "paymentPlan", e.status, e.preferred_start AS "preferredStart",
+             e.created_at AS "registeredAt", a.status AS "accountStatus",
+             COALESCE(
+               json_agg(json_build_object(
+                 'reference', p.reference,
+                 'amount', p.amount,
+                 'paymentPlan', p.payment_plan,
+                 'status', p.status,
+                 'createdAt', p.created_at,
+                 'paidAt', p.paid_at
+               ) ORDER BY p.created_at DESC) FILTER (WHERE p.id IS NOT NULL),
+               '[]'::json
+             ) AS payments
+      FROM learning_enrollments e
+      LEFT JOIN learning_enrollment_payments p ON p.enrollment_id = e.id
+      LEFT JOIN learning_accounts a ON a.enrollment_id = e.id
+      GROUP BY e.id, a.id
+      ORDER BY e.created_at DESC
+    `;
+    const registrations = rows.map((row) => {
+      const track = learningTracks.find(({ id }) => id === row.trackId);
+      const paidAmount = row.payments
+        .filter((payment) => payment.status === "succeeded")
+        .reduce((total, payment) => total + Number(payment.amount), 0);
+      return {
+        ...row,
+        totalAmount: track?.totalAmount ?? null,
+        paidAmount,
+        balanceDue: track ? Math.max(0, track.totalAmount - paidAmount) : null,
+      };
+    });
+    return response.json({ registrations });
+  } catch (error) {
+    console.error("Failed to load learning registrations:", error);
+    return response.status(500).json({ error: "Unable to load learning registrations." });
+  }
+});
+
 app.get("/api/admin/learning-submissions", requireAdmin, async (_request, response) => {
   try {
     const submissions = await sql`
