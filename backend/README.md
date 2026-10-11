@@ -14,6 +14,9 @@ The API runs on Railway and stores project requests in Neon Postgres. The Next.j
    - `PORTAL_ADMIN_PASSWORD`: a unique password of at least 16 characters.
    - `PORTAL_SESSION_SECRET`: a separate random secret with at least 32 characters.
    - `LEARNING_SESSION_SECRET`: a separate random secret with at least 32 characters for learner sessions.
+   - `RESEND_API_KEY`: the Resend API key used to email first-login and password-reset links.
+   - `RESEND_FROM_EMAIL`: a verified sender address in Resend.
+   - `LEARNING_APP_URL`: the public Vercel origin used in learner password links, for example `https://your-site.example`.
    - `TELEGRAM_BOT_TOKEN`: the token for a private notification bot.
    - `TELEGRAM_CHAT_ID`: the private chat or group ID where notifications should be sent.
 
@@ -45,7 +48,10 @@ For local development, add the same server-only variables to the repository root
 - `RAILWAY_INTERNAL_API_KEY`
 - `PORTAL_SESSION_SECRET`
 - `LEARNING_SESSION_SECRET`
+- `RESEND_API_KEY`
+- `RESEND_FROM_EMAIL`
+- `LEARNING_APP_URL`
 
 Do not prefix any of them with `NEXT_PUBLIC_` or commit `.env.local`.
 
-Remove any old `RESEND_API_KEY` and `RESEND_FROM_EMAIL` variables from Vercel; the app no longer sends enquiries by email. EmailJS was not added to the app. The shared Railway key and admin credentials must never use `NEXT_PUBLIC_` variable names.
+Password setup and recovery links are sent through Resend by the Railway backend. Keep its API key and sender configuration on Railway only. The shared Railway key and admin credentials must never use `NEXT_PUBLIC_` variable names.

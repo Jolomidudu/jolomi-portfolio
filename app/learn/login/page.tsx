@@ -119,7 +119,7 @@ export default function LearningLoginPage() {
               </p>
               <div className="mt-8 rounded-2xl border border-white/15 bg-white/5 p-5 text-sm leading-6 text-white/75">
                 <p className="font-semibold text-[#d7f36a]">After registration</p>
-                <p className="mt-2">Your learnup profile is created automatically after payment is verified. Use the email address you registered with along with your temporary password.</p>
+                <p className="mt-2">Your LearnUp profile is created after payment is verified. Check your registration email for a secure link to set your password.</p>
               </div>
             </section>
 

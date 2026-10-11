@@ -88,6 +88,52 @@ async function notifyTelegram(message) {
   }
 }
 
+async function sendLearningPasswordReset(email, token) {
+  const apiKey = process.env.RESEND_API_KEY;
+  const from = process.env.RESEND_FROM_EMAIL;
+  const appUrl = process.env.LEARNING_APP_URL;
+  if (!apiKey || !from || !appUrl) return false;
+
+  const resetUrl = new URL("/learn/reset-password", appUrl);
+  resetUrl.hash = new URLSearchParams({ token }).toString();
+  try {
+    const result = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from,
+        to: [email],
+        subject: "Set or reset your LearnUp password",
+        html: `<p>We received a request to set or reset the password for your LearnUp account.</p><p><a href="${resetUrl}">Set a new password</a></p><p>This link expires in 30 minutes. If you did not request it, you can ignore this email.</p>`,
+        text: `Set or reset your LearnUp password using this link: ${resetUrl}\n\nThis link expires in 30 minutes. If you did not request it, you can ignore this email.`,
+      }),
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!result.ok) throw new Error(`Resend returned HTTP ${result.status}.`);
+    return true;
+  } catch (error) {
+    console.error("Failed to send learner password reset email:", error);
+    return false;
+  }
+}
+
+async function issueLearningPasswordReset(accountId, email) {
+  const token = randomBytes(32).toString("base64url");
+  const tokenHash = createHash("sha256").update(token).digest("hex");
+  await sql`
+    DELETE FROM learning_password_reset_tokens
+    WHERE account_id = ${accountId}
+  `;
+  await sql`
+    INSERT INTO learning_password_reset_tokens (account_id, token_hash, expires_at)
+    VALUES (${accountId}, ${tokenHash}, NOW() + INTERVAL '30 minutes')
+  `;
+  return sendLearningPasswordReset(email, token);
+}
+
 function telegramField(value, maxLength = 120) {
   return String(value).replace(/[\r\n\t]+/g, " ").replace(/\s+/g, " ").trim().slice(0, maxLength);
 }
@@ -104,10 +150,6 @@ function verifyPassword(password, storedHash) {
   if (!salt || !hash) return false;
   const expected = pbkdf2Sync(password, salt, 120000, 32, "sha256").toString("hex");
   return safeEqual(expected, hash);
-}
-
-function generateLearnerPassword() {
-  return randomBytes(12).toString("base64url").replace(/[-_]/g, "").slice(0, 12);
 }
 
 function getLearningSessionSecret() {
@@ -166,15 +208,14 @@ async function ensureLearningAccount(enrollmentId, fullName, email) {
     return { account: existingAccount, isNew: false };
   }
 
-  const password = generateLearnerPassword();
-  const passwordHash = hashPassword(password);
+  const passwordHash = hashPassword(randomBytes(32).toString("base64url"));
   const [created] = await sql`
     INSERT INTO learning_accounts (enrollment_id, full_name, email, password_hash, status)
     VALUES (${enrollmentId}, ${fullName}, ${normalizedEmail}, ${passwordHash}, 'active')
     RETURNING id, enrollment_id AS "enrollmentId", full_name AS "fullName", email, status
   `;
 
-  return { account: created, password, isNew: true };
+  return { account: created, isNew: true };
 }
 
 function requireInternalKey(request, response, next) {
@@ -828,35 +869,84 @@ app.post("/api/learning/reset-password", async (request, response) => {
     }
 
     const [account] = await request.sql`
-      SELECT id, email, password_hash AS "passwordHash"
+      SELECT id, email
       FROM learning_accounts
       WHERE email = ${email}
       LIMIT 1
     `;
 
-    if (!account) {
-      return response.status(200).json({
-        sent: true,
-        message: "If that email is connected to a learner account, a temporary password has been created.",
-      });
+    if (account && !await issueLearningPasswordReset(account.id, account.email)) {
+      console.error("Learner password reset email could not be sent.", { accountId: account.id });
     }
-
-    const temporaryPassword = generateLearnerPassword();
-    await request.sql`
-      UPDATE learning_accounts
-      SET password_hash = ${hashPassword(temporaryPassword)}, updated_at = NOW()
-      WHERE id = ${account.id}
-    `;
 
     return response.status(200).json({
       sent: true,
-      temporaryPassword,
-      email: account.email,
-      message: "A new temporary password has been generated for this learner account.",
+      message: "If that email is connected to a learner account, password reset instructions will arrive shortly.",
     });
   } catch (error) {
     console.error("Failed to reset learner password:", error);
     return response.status(500).json({ error: "Unable to reset your password right now. Please try again later." });
+  }
+});
+
+app.post("/api/learning/reset-password/complete", async (request, response) => {
+  const token = typeof request.body?.token === "string" ? request.body.token : "";
+  const password = typeof request.body?.password === "string" ? request.body.password : "";
+  if (!/^[A-Za-z0-9_-]{40,50}$/.test(token) || password.length < 12 || password.length > 128) {
+    return response.status(400).json({ error: "Use a valid reset link and a password with at least 12 characters." });
+  }
+
+  try {
+    const tokenHash = createHash("sha256").update(token).digest("hex");
+    const [account] = await request.sql`
+      WITH consumed AS (
+        DELETE FROM learning_password_reset_tokens
+        WHERE token_hash = ${tokenHash} AND expires_at > NOW()
+        RETURNING account_id
+      )
+      UPDATE learning_accounts
+      SET password_hash = ${hashPassword(password)}, updated_at = NOW()
+      WHERE id = (SELECT account_id FROM consumed)
+      RETURNING id
+    `;
+    if (!account) return response.status(400).json({ error: "This password reset link is invalid or expired. Request a new one." });
+    return response.json({ updated: true });
+  } catch (error) {
+    console.error("Failed to complete learner password reset:", error);
+    return response.status(500).json({ error: "Unable to update your password right now. Please try again later." });
+  }
+});
+
+app.post("/api/learning/change-password", async (request, response) => {
+  const authorization = request.get("authorization") || "";
+  const token = authorization.startsWith("Bearer ") ? authorization.slice(7) : "";
+  const session = getLearnerSession(token);
+  const currentPassword = typeof request.body?.currentPassword === "string" ? request.body.currentPassword : "";
+  const newPassword = typeof request.body?.newPassword === "string" ? request.body.newPassword : "";
+  if (!session) return response.status(401).json({ error: "Please sign in again." });
+  if (newPassword.length < 12 || newPassword.length > 128) {
+    return response.status(400).json({ error: "Your new password must be at least 12 characters." });
+  }
+
+  try {
+    const [account] = await request.sql`
+      SELECT id, password_hash AS "passwordHash"
+      FROM learning_accounts
+      WHERE id = ${Number(session.id)} AND status = 'active'
+      LIMIT 1
+    `;
+    if (!account || !verifyPassword(currentPassword, account.passwordHash)) {
+      return response.status(400).json({ error: "Your current password is incorrect." });
+    }
+    await request.sql`
+      UPDATE learning_accounts
+      SET password_hash = ${hashPassword(newPassword)}, updated_at = NOW()
+      WHERE id = ${account.id}
+    `;
+    return response.json({ updated: true });
+  } catch (error) {
+    console.error("Failed to change learner password:", error);
+    return response.status(500).json({ error: "Unable to update your password right now. Please try again later." });
   }
 });
 
@@ -1511,6 +1601,18 @@ app.post("/api/learning/payments/:reference/confirm", async (request, response) 
     `;
 
     const accountResult = await ensureLearningAccount(Number(enrollmentId), payment.fullName || "Learner", payment.email);
+    if (accountResult.isNew) {
+      try {
+        if (!await issueLearningPasswordReset(accountResult.account.id, accountResult.account.email)) {
+          console.error("Learner account was created, but the password setup email could not be sent.", { enrollmentId });
+        }
+      } catch (error) {
+        console.error("Learner account was created, but password setup could not be prepared.", {
+          enrollmentId,
+          error: error instanceof Error ? error.message : "Unknown error",
+        });
+      }
+    }
     const track = learningTracks.find(({ id }) => id === payment.trackId) ?? null;
     const balanceDue = payment.paymentPlan === "deposit" && track ? Math.max(0, track.totalAmount - track.depositAmount) : 0;
     if (updatedPayment) {
@@ -1528,7 +1630,6 @@ app.post("/api/learning/payments/:reference/confirm", async (request, response) 
       enrollmentId,
       accountCreated: accountResult.isNew,
       account: accountResult.account,
-      temporaryPassword: accountResult.password,
       paymentPlan: payment.paymentPlan,
       balanceDue,
       enrollmentStatus: payment.paymentPlan === "full" ? "enrolled" : "awaiting_balance",
@@ -1960,7 +2061,16 @@ app.delete("/api/admin/blog/:id", requireAdmin, async (request, response) => {
 });
 
 async function start() {
-  const requiredVariables = ["DATABASE_URL", "RAILWAY_INTERNAL_API_KEY", "PORTAL_ADMIN_EMAIL", "PORTAL_ADMIN_PASSWORD", "PORTAL_SESSION_SECRET"];
+  const requiredVariables = [
+    "DATABASE_URL",
+    "RAILWAY_INTERNAL_API_KEY",
+    "PORTAL_ADMIN_EMAIL",
+    "PORTAL_ADMIN_PASSWORD",
+    "PORTAL_SESSION_SECRET",
+    "RESEND_API_KEY",
+    "RESEND_FROM_EMAIL",
+    "LEARNING_APP_URL",
+  ];
   const missingVariables = requiredVariables.filter((name) => !process.env[name]);
   if (missingVariables.length) throw new Error(`Missing required environment variables: ${missingVariables.join(", ")}`);
 
@@ -2141,6 +2251,14 @@ async function start() {
       status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'disabled')),
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
       updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  await sql`
+    CREATE TABLE IF NOT EXISTS learning_password_reset_tokens (
+      account_id BIGINT PRIMARY KEY REFERENCES learning_accounts(id) ON DELETE CASCADE,
+      token_hash TEXT NOT NULL UNIQUE,
+      expires_at TIMESTAMPTZ NOT NULL,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
   `;
   await sql`

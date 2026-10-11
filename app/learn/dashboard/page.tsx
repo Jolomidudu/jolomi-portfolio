@@ -76,6 +76,11 @@ export default function LearningDashboardPage() {
   const [isSavingProgress, setIsSavingProgress] = useState(false);
   const [isUpdatingCompletion, setIsUpdatingCompletion] = useState<Record<string | number, boolean>>({});
   const [isLoading, setIsLoading] = useState(true);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [passwordUpdated, setPasswordUpdated] = useState(false);
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
 
   useEffect(() => {
     async function loadSession() {
@@ -122,6 +127,29 @@ export default function LearningDashboardPage() {
     await fetch("/api/learning/logout", { method: "POST" });
     router.push("/learn/login");
     router.refresh();
+  }
+
+  async function changePassword(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setIsChangingPassword(true);
+    setPasswordError("");
+    setPasswordUpdated(false);
+    try {
+      const response = await fetch("/api/learning/change-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ currentPassword, newPassword }),
+      });
+      const result = await response.json() as { updated?: boolean; error?: string };
+      if (!response.ok || !result.updated) throw new Error(result.error ?? "Unable to update your password.");
+      setCurrentPassword("");
+      setNewPassword("");
+      setPasswordUpdated(true);
+    } catch (error) {
+      setPasswordError(error instanceof Error ? error.message : "Unable to update your password.");
+    } finally {
+      setIsChangingPassword(false);
+    }
   }
 
   async function saveProgress(event: FormEvent<HTMLFormElement>) {
@@ -295,6 +323,25 @@ export default function LearningDashboardPage() {
                 <p className="mt-3 whitespace-pre-wrap text-sm leading-6 text-black/65">{user.enrollment.goals}</p>
               </section>
             )}
+
+            <section className="border border-black/10 bg-white p-6 sm:p-8">
+              <h2 className="text-xl font-semibold">Change password</h2>
+              <form onSubmit={changePassword} className="mt-5 grid max-w-xl gap-4">
+                <label className="block text-sm font-medium">
+                  Current password
+                  <input required autoComplete="current-password" type="password" value={currentPassword} onChange={(event) => setCurrentPassword(event.target.value)} className="mt-2 w-full border border-black/15 bg-[#f7f7f2] px-4 py-3 outline-none focus:border-[#008c87]" />
+                </label>
+                <label className="block text-sm font-medium">
+                  New password
+                  <input required minLength={12} maxLength={128} autoComplete="new-password" type="password" value={newPassword} onChange={(event) => setNewPassword(event.target.value)} className="mt-2 w-full border border-black/15 bg-[#f7f7f2] px-4 py-3 outline-none focus:border-[#008c87]" />
+                </label>
+                {passwordError && <p role="alert" className="text-sm text-red-700">{passwordError}</p>}
+                {passwordUpdated && <p role="status" className="text-sm text-[#163d34]">Your password has been updated.</p>}
+                <button type="submit" disabled={isChangingPassword} className="min-h-11 w-fit bg-[#163d34] px-5 py-3 text-sm font-semibold text-white hover:bg-[#214d47] disabled:cursor-wait disabled:opacity-60">
+                  {isChangingPassword ? "Updating password..." : "Update password"}
+                </button>
+              </form>
+            </section>
 
             <section className="border border-black/10 bg-white p-6 sm:p-8">
               <div className="border-b border-black/10 pb-5">

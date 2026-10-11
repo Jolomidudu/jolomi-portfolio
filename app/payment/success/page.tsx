@@ -11,7 +11,6 @@ type PaymentSuccessPageProps = {
     reference?: string | string[];
     type?: string | string[];
     accountCreated?: string | string[];
-    temporaryPassword?: string | string[];
     paymentPlan?: string | string[];
     balanceDue?: string | string[];
   }>;
@@ -22,7 +21,6 @@ export default async function PaymentSuccessPage({ searchParams }: PaymentSucces
   const reference = typeof params.reference === "string" ? params.reference : undefined;
   const isLearning = params.type === "learning";
   const accountCreated = typeof params.accountCreated === "string" ? params.accountCreated === "1" : false;
-  const temporaryPassword = typeof params.temporaryPassword === "string" ? params.temporaryPassword : undefined;
   const paymentPlan = typeof params.paymentPlan === "string" ? params.paymentPlan : undefined;
   const balanceDueValue = typeof params.balanceDue === "string" ? Number(params.balanceDue) : undefined;
   const isDepositPlan = isLearning && paymentPlan === "deposit";
@@ -66,7 +64,7 @@ export default async function PaymentSuccessPage({ searchParams }: PaymentSucces
                   ? isDepositPlan
                     ? "Paystack has verified your deposit. Your learner account is ready, and the remaining balance must be settled before your learning schedule begins."
                     : accountCreated
-                      ? "Paystack has verified your payment and your learning account is ready. Sign in with the email used for registration and the temporary password assigned to your learner profile."
+                      ? "Paystack has verified your payment. Check your email for a secure link to set your learner account password."
                       : "Paystack has verified your payment and your program registration is received. Tutor assignment and your learning schedule will be confirmed separately."
                   : "Paystack has verified your payment. Thank you for choosing to work with me."}
               </p>
@@ -81,7 +79,7 @@ export default async function PaymentSuccessPage({ searchParams }: PaymentSucces
                     ? isDepositPlan
                       ? "Your deposit is confirmed. Please arrange the remaining balance before your start date, then continue into the learner dashboard to monitor your course and assignments."
                       : accountCreated
-                        ? "Your learner profile is active. Use the login page to continue into your learning dashboard and track your course progress."
+                        ? "Your learner profile is ready. Use the password setup link sent to your registration email, then sign in to your dashboard."
                         : "Keep your payment reference for your records. We will follow up about tutor assignment and scheduling."
                     : "Take a look through the services and find what you'd like to build next."}
                 </p>
@@ -99,16 +97,6 @@ export default async function PaymentSuccessPage({ searchParams }: PaymentSucces
                 <div className="border-y border-[#163d34]/15 py-4">
                   <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-black/45">Transaction reference</p>
                   <p className="mt-2 break-all font-mono text-xs text-[#163d34]">{reference}</p>
-                </div>
-              )}
-
-              {isLearning && accountCreated && temporaryPassword && (
-                <div className="rounded-2xl border border-[#163d34]/15 bg-[#f7f7f2] p-4">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#547067]">Temporary password</p>
-                  <p className="mt-2 break-all font-mono text-lg font-semibold text-[#163d34]">{temporaryPassword}</p>
-                  <p className="mt-2 text-xs leading-5 text-black/60">
-                    Use this to sign in once, then change it after you access your learning dashboard.
-                  </p>
                 </div>
               )}
 

@@ -9,7 +9,6 @@ export default function ForgotPasswordPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [requestSent, setRequestSent] = useState(false);
-  const [temporaryPassword, setTemporaryPassword] = useState("");
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -17,21 +16,17 @@ export default function ForgotPasswordPage() {
 
     setIsSubmitting(true);
     setErrorMessage("");
-    setTemporaryPassword("");
     try {
       const response = await fetch("/api/learning/reset-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email.trim() }),
       });
-      const result = await response.json() as { error?: string; sent?: boolean; temporaryPassword?: string; message?: string };
+      const result = await response.json() as { error?: string; sent?: boolean; message?: string };
       if (!response.ok || !result.sent) {
         throw new Error(result.error ?? "Unable to reset your password. Please try again.");
       }
       setRequestSent(true);
-      if (typeof result.temporaryPassword === "string" && result.temporaryPassword.length > 0) {
-        setTemporaryPassword(result.temporaryPassword);
-      }
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : "Unable to reset your password. Please try again.");
     } finally {
@@ -60,7 +55,7 @@ export default function ForgotPasswordPage() {
                 Get back into your account.
               </h1>
               <p className="mt-4 max-w-md text-base leading-7 text-white/70">
-                Send a password assistance request and learner support will help verify your account and restore access.
+                Request a secure, one-time link to choose a new password for your learner account.
               </p>
               {/* <div className="mt-8 border-l-2 border-[#d7f36a] bg-white/5 px-4 py-3 text-sm leading-6 text-white/75">
                 For account security, we&apos;ll confirm your request without revealing whether an email address has a learner account.
@@ -72,22 +67,10 @@ export default function ForgotPasswordPage() {
                 <div className="flex h-full min-h-64 flex-col items-start justify-center">
                   <CheckCircle2 aria-hidden="true" className="h-9 w-9 text-[#16844a]" />
                   <p className="mt-5 text-xs font-semibold uppercase tracking-[0.16em] text-[#547067]">Password reset</p>
-                  <h2 className="mt-2 text-2xl font-semibold">A new temporary password is ready</h2>
-                  {temporaryPassword ? (
-                    <>
-                      <p className="mt-3 text-sm leading-6 text-black/60">
-                        Use the password below to sign in to your learner account. After you sign in, update it from your dashboard.
-                      </p>
-                      <div className="mt-4 w-full rounded-2xl border border-[#163d34]/15 bg-[#f7f7f2] p-4">
-                        <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#547067]">Temporary password</p>
-                        <p className="mt-2 break-all font-mono text-lg font-semibold text-[#163d34]">{temporaryPassword}</p>
-                      </div>
-                    </>
-                  ) : (
-                    <p className="mt-3 text-sm leading-6 text-black/60">
-                      If this address is connected to a learner account, the reset has been processed and you can sign in with the new temporary password.
-                    </p>
-                  )}
+                  <h2 className="mt-2 text-2xl font-semibold">Check your inbox</h2>
+                  <p className="mt-3 text-sm leading-6 text-black/60">
+                    If this address is connected to a learner account, password reset instructions will arrive shortly.
+                  </p>
                   <Link href="/learn/login" className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-[#163d34] underline-offset-4 hover:underline">
                     Return to sign in <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
                   </Link>
@@ -97,7 +80,7 @@ export default function ForgotPasswordPage() {
                   <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#547067]">Learner portal</p>
                   <h2 className="mt-2 text-2xl font-semibold">Forgot your password?</h2>
                   <p className="mt-3 text-sm leading-6 text-black/55">
-                    Enter the email address you used to register. We&apos;ll send a secure request to learner support.
+                    Enter the email address you used to register. If it matches a learner account, we&apos;ll email a one-time reset link.
                   </p>
 
                   <form onSubmit={handleSubmit} className="mt-7 space-y-5">

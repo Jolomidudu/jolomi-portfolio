@@ -7,7 +7,6 @@ function redirect(
   reference?: string,
   isLearning = false,
   accountCreated = false,
-  temporaryPassword?: string,
   paymentPlan?: string,
   balanceDue?: number,
   failureReason?: "verification" | "confirmation" | "callback",
@@ -23,9 +22,6 @@ function redirect(
       }
       if (typeof balanceDue === "number" && Number.isFinite(balanceDue) && balanceDue > 0) {
         url.searchParams.set("balanceDue", String(balanceDue));
-      }
-      if (temporaryPassword) {
-        url.searchParams.set("temporaryPassword", temporaryPassword);
       }
     }
   } else if (result === "failed") {
@@ -43,7 +39,7 @@ export async function GET(request: Request) {
   const isLearning = reference?.startsWith("jolomi-learning-") ?? false;
   if (!reference || !process.env.PAYSTACK_SECRET_KEY) {
     console.error("Payment callback is missing a reference or Paystack secret.", { hasReference: Boolean(reference) });
-    return redirect(request, "failed", reference ?? undefined, isLearning, false, undefined, undefined, undefined, "callback");
+    return redirect(request, "failed", reference ?? undefined, isLearning, false, undefined, undefined, "callback");
   }
 
   try {
@@ -60,7 +56,7 @@ export async function GET(request: Request) {
         paymentStatus: data.data?.status,
         message: data.message,
       });
-      return redirect(request, "failed", reference, isLearning, false, undefined, undefined, undefined, "verification");
+      return redirect(request, "failed", reference, isLearning, false, undefined, undefined, "verification");
     }
 
     if (isLearning) {
@@ -80,7 +76,7 @@ export async function GET(request: Request) {
           httpStatus: confirmation.status,
           error: confirmationData?.error,
         });
-        return redirect(request, "failed", reference, true, false, undefined, undefined, undefined, "confirmation");
+        return redirect(request, "failed", reference, true, false, undefined, undefined, "confirmation");
       }
       const accountCreated = Boolean(confirmationData?.accountCreated || confirmationData?.account);
       const paymentPlan = typeof confirmationData?.paymentPlan === "string" ? confirmationData.paymentPlan : undefined;
@@ -91,7 +87,6 @@ export async function GET(request: Request) {
         reference,
         isLearning,
         accountCreated,
-        typeof confirmationData?.temporaryPassword === "string" ? confirmationData.temporaryPassword : undefined,
         paymentPlan,
         balanceDue,
       );
@@ -103,6 +98,6 @@ export async function GET(request: Request) {
       reference,
       error: error instanceof Error ? error.message : "Unknown callback error",
     });
-    return redirect(request, "failed", reference, isLearning, false, undefined, undefined, undefined, "callback");
+    return redirect(request, "failed", reference, isLearning, false, undefined, undefined, "callback");
   }
 }

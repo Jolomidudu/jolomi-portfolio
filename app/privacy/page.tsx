@@ -151,9 +151,9 @@ const sections = [
         </p>
 
         <p className="mt-4">
-          Temporary passwords may be generated for learner account access when
-          necessary. These should be changed after sign-in, and access should
-          be kept secure and private.
+          Learner account setup and password recovery use time-limited,
+          single-use links sent to the email address on the account. Passwords
+          are stored as hashes, and reset tokens are stored in hashed form.
         </p>
       </>
     ),
@@ -169,7 +169,9 @@ const sections = [
         </p>
 
         <p className="mt-4">
-          For example, payment processing may be handled through Paystack.
+          For example, payment processing may be handled through Paystack, and
+          learner password setup and recovery emails may be delivered through
+          Resend.
           When you use a third-party service, information may be processed
           according to that provider&apos;s own privacy policy and terms.
         </p>
