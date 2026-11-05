@@ -51,7 +51,7 @@ const projects = [
   },
   {
     name: "BudgetAll",
-    category: "Web & Mobile",
+    category: "Web App",
     image: "/images/projects/budgetall.jpg",
     alt: "BudgetAll Financial Platform",
     href: "https://budgetall.vercel.app",
@@ -61,7 +61,7 @@ const projects = [
   },
   {
     name: "Festyvibe",
-    category: "Web & Mobile",
+    category: "Web App",
     image: "/images/projects/festyvibe.jpg",
     alt: "Festyvibe Event Website",
     href: "https://festyvibe.vercel.app",
