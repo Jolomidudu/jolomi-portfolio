@@ -30,7 +30,7 @@ const homepageProjects = [
     name: "Vueling",
     image: "/images/projects/vueling.webp",
     alt: "Vueling travel platform",
-    href: "https://vueling.vercel.app",
+    href: "https://www.vueling.com/",
   },
   
 ] as const;
