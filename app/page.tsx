@@ -9,30 +9,58 @@ import ProjectRequestLauncher from "./projects/project-request-launcher";
 import HomeAvatarLink from "./home-avatar-link";
 const homepageProjects = [
   {
-    name: "Festyvibe",
-    image: "/images/projects/festyvibe.jpg",
-    alt: "Festyvibe event platform",
-    href: "https://festyvibe.vercel.app",
+    name: "irorun",
+    image: "/images/projects/irorun.webp",
+    alt: "loan platform",
+    href: "https://irorun.com/",
   },
   {
-    name: "BudgetAll",
-    image: "/images/projects/budgetall.jpg",
-    alt: "BudgetAll financial platform",
-    href: "https://budgetall.vercel.app",
+    name: "waverlite",
+    image: "/images/projects/waverlite.webp",
+    alt: "financial platform",
+    href: "https://www.waverlite.com/",
   },
   {
-    name: "Lovenorth",
-    image: "/images/projects/lovenorth-mckp.png",
-    alt: "Lovenorth dating platform",
-    href: "https://lovenorth.vercel.app",
+    name: "Flawless Aesthetic Center",
+    image: "/images/projects/flawless.jpg",
+    alt: "Flawless Aesthetic Center website",
+    href: "https://www.flawlessaestheticcenter.com/",
   },
   {
-    name: "Kids College",
-    image: "/images/projects/kidscollege.jpg",
-    alt: "School Management Platform",
-    href: "https://kcbn.vercel.app",
+    name: "Vueling",
+    image: "/images/projects/vueling.webp",
+    alt: "Vueling travel platform",
+    href: "https://vueling.vercel.app",
   },
+  
 ] as const;
+
+// const homepageProjects = [
+//   {
+//     name: "Festyvibe",
+//     image: "/images/projects/festyvibe.jpg",
+//     alt: "Festyvibe event platform",
+//     href: "https://festyvibe.vercel.app",
+//   },
+//   {
+//     name: "BudgetAll",
+//     image: "/images/projects/budgetall.jpg",
+//     alt: "BudgetAll financial platform",
+//     href: "https://budgetall.vercel.app",
+//   },
+//   {
+//     name: "Lovenorth",
+//     image: "/images/projects/lovenorth-mckp.png",
+//     alt: "Lovenorth dating platform",
+//     href: "https://lovenorth.vercel.app",
+//   },
+//   {
+//     name: "Kids College",
+//     image: "/images/projects/kidscollege.jpg",
+//     alt: "School Management Platform",
+//     href: "https://kcbn.vercel.app",
+//   },
+// ] as const;
 
 const heroTitles = [
   "A\nTECHNOLOGY LEADER.",
@@ -734,9 +762,9 @@ export default function Home() {
 
           <div>
 
-            <p className="text-xl font-bold">
+            {/* <p className="text-xl font-bold">
               J<span className="text-[#00A9A5]">.</span>D
-            </p>
+            </p> */}
 
             <p className="mt-2 text-sm text-red/80">
               Technology Consultant

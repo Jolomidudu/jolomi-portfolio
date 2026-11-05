@@ -9,13 +9,44 @@ export const metadata: Metadata = {
 
 const projects = [
   {
-    name: "Festyvibe",
-    category: "Web & Mobile",
-    image: "/images/projects/festyvibe.jpg",
-    alt: "Festyvibe Event Website",
-    href: "https://festyvibe.vercel.app",
+    name: "Vueling",
+     category: "Web & Mobile",
+    image: "/images/projects/vueling.webp",
+    alt: "Vueling travel platform",
+    href: "https://vueling.vercel.app",
     description:
-      "A premium event platform for customers to explore events, book tickets and discover experiences through a polished digital experience.",
+      "A travel booking platform designed to help users discover, book and manage travel experiences through a seamless digital experience.",
+   
+  },
+  {
+    name: "Flawless Aesthetic Center",
+    category: "Web",
+    image: "/images/projects/flawless.jpg",
+    alt: "Flawless Aesthetic Center website",
+    href: "https://www.flawlessaestheticcenter.com/",
+    description:
+      "A Cosmetics beauty platform",
+    stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "Flutter"],
+  },
+  
+  {
+    name: "irorun",
+    category: "Web & Mobile",
+    image: "/images/projects/irorun.webp",
+    alt: "loan platform",
+    href: "https://irorun.com/",
+    description:
+      "A loan platform designed to help users discover, book and manage loan experiences through a seamless digital experience.",
+    stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "Flutter"],
+  },
+  {
+    name: "waverlite",
+    category: "Web & Mobile",
+    image: "/images/projects/waverlite.webp",
+    alt: "financial platform",
+    href: "https://www.waverlite.com/",
+    description:
+      "A financial platform designed to help users discover, book and manage financial experiences through a seamless digital experience.",
     stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "Flutter"],
   },
   {
@@ -29,15 +60,25 @@ const projects = [
     stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "Flutter"],
   },
   {
-    name: "Signvault",
+    name: "Festyvibe",
     category: "Web & Mobile",
-    image: "/images/projects/signvault.png",
-    alt: "Signvault Digital Signage Platform",
-    href: "https://signvaulty.vercel.app",
+    image: "/images/projects/festyvibe.jpg",
+    alt: "Festyvibe Event Website",
+    href: "https://festyvibe.vercel.app",
     description:
-      "A premium digital signage platform for customers to create and manage engaging content for their displays.",
+      "A premium event platform for customers to explore events, book tickets and discover experiences through a polished digital experience.",
     stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "Flutter"],
   },
+  // {
+  //   name: "Signvault",
+  //   category: "Web & Mobile",
+  //   image: "/images/projects/signvault.png",
+  //   alt: "Signvault Digital Signage Platform",
+  //   href: "https://signvaulty.vercel.app",
+  //   description:
+  //     "A premium digital signage platform for customers to create and manage engaging content for their displays.",
+  //   stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "Flutter"],
+  // },
   // {
   //   name: "Myspa",
   //   category: "Web & Mobile",
@@ -58,96 +99,96 @@ const projects = [
       "A comprehensive school management system connecting administrators, teachers, students and parents through a centralized digital platform.",
     stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL"],
   },
+  // {
+  //   name: "Lovenorth",
+  //   category: "Web App",
+  //   image: "/images/projects/loven.jpg",
+  //   alt: "Lovenorth dating platform",
+  //   href: "https://lovenorth.vercel.app",
+  //   description:
+  //     "A comprehensive dating platform connecting singles and helping them find meaningful relationships.",
+  //   stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "Railway"],
+  // },
+  // {
+  //   name: "Elvara Hotel",
+  //   category: "Web App",
+  //   image: "/images/projects/elvarahotel-mckp.jpg",
+  //   alt: "A hotel booking platform",
+  //   href: "https://elvarahotel.vercel.app",
+  //   description:
+  //     "A hotel booking platform designed to help users discover, book and manage hotel stays through a seamless digital experience.",
+  //   stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL"],
+  // },
+  // {
+  //   name: "Spinett Cosmetics",
+  //   category: "Web & Mobile",
+  //   image: "/images/projects/spinettcosmetics-mckp.png",
+  //   alt: "A cosmetics e-commerce platform",
+  //   href: "https://spinettcosmetics.vercel.app",
+  //   description:
+  //     "A cosmetics e-commerce platform that allows users to browse and purchase beauty products from various brands.",
+  //   stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "REST API"],
+  // },
+  // {
+  //   name: "Mealcourt",
+  //   category: "Web & Mobile",
+  //   image: "/images/projects/mealcourt.jpg",
+  //   alt: "A food delivery platform",
+  //   href: "https://mealcourt.vercel.app",
+  //   description:
+  //     "A food delivery platform that connects users with local restaurants and enables seamless ordering and tracking.",
+  //   stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "Flutter"],
+  // },
+  // {
+  //   name: "Misan Logistics",
+  //   category: "Web & Mobile",
+  //   image: "/images/projects/misanlogistics-mckp.png",
+  //   alt: "A logistics platform",
+  //   href: "https://misanlogistics.vercel.app",
+  //   description:
+  //     "A logistics platform designed to help users discover, book and manage logistics services through a seamless digital experience.",
+  //   stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "Flutter", "Wallet"],
+  // },
+  // {
+  //   name: "CareCrowd",
+  //   category: "Mobile App",
+  //   image: "/images/projects/carecrowd-mckp.png",
+  //   alt: "CARECROWD crowdfunding platform",
+  //   href: "https://carecrowd.vercel.app",
+  //   description:
+  //     "A crowdfunding and digital community platform designed to help people raise funds, support causes and connect with communities.",
+  //   stacks: ["Flutter"],
+  // },
   {
-    name: "Lovenorth",
-    category: "Web App",
-    image: "/images/projects/loven.jpg",
-    alt: "Lovenorth dating platform",
-    href: "https://lovenorth.vercel.app",
+    name: "Housing Anywhere",
+    category: "Mobile",
+    image: "/images/projects/ha.webp",
+    alt: "Housing Anywhere property rental platform",
+    href: "https://play.google.com/store/apps/details?id=com.housinganywhere.app",
     description:
-      "A comprehensive dating platform connecting singles and helping them find meaningful relationships.",
-    stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "Railway"],
+      "A property rental platform designed to help people find and rent apartments, houses, and other living spaces with ease.",
+    stacks: ["Angular.js", "Nest.js", "Node.js", "PostgreSQL", "Flutter"],
   },
-  {
-    name: "Elvara Hotel",
-    category: "Web App",
-    image: "/images/projects/elvarahotel-mckp.jpg",
-    alt: "A hotel booking platform",
-    href: "https://elvarahotel.vercel.app",
-    description:
-      "A hotel booking platform designed to help users discover, book and manage hotel stays through a seamless digital experience.",
-    stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL"],
-  },
-  {
-    name: "Spinett Cosmetics",
-    category: "Web & Mobile",
-    image: "/images/projects/spinettcosmetics-mckp.png",
-    alt: "A cosmetics e-commerce platform",
-    href: "https://spinettcosmetics.vercel.app",
-    description:
-      "A cosmetics e-commerce platform that allows users to browse and purchase beauty products from various brands.",
-    stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "REST API"],
-  },
-  {
-    name: "Mealcourt",
-    category: "Web & Mobile",
-    image: "/images/projects/mealcourt.jpg",
-    alt: "A food delivery platform",
-    href: "https://mealcourt.vercel.app",
-    description:
-      "A food delivery platform that connects users with local restaurants and enables seamless ordering and tracking.",
-    stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "Flutter"],
-  },
-  {
-    name: "Misan Logistics",
-    category: "Web & Mobile",
-    image: "/images/projects/misanlogistics-mckp.png",
-    alt: "A logistics platform",
-    href: "https://misanlogistics.vercel.app",
-    description:
-      "A logistics platform designed to help users discover, book and manage logistics services through a seamless digital experience.",
-    stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "Flutter", "Wallet"],
-  },
-  {
-    name: "CareCrowd",
-    category: "Mobile App",
-    image: "/images/projects/carecrowd-mckp.png",
-    alt: "CARECROWD crowdfunding platform",
-    href: "https://carecrowd.vercel.app",
-    description:
-      "A crowdfunding and digital community platform designed to help people raise funds, support causes and connect with communities.",
-    stacks: ["Flutter"],
-  },
-  {
-    name: "Routyride",
-    category: "Web & Mobile",
-    image: "/images/projects/routyride.jpg",
-    alt: "Car ride sharing platform",
-    href: "https://routyride.vercel.app",
-    description:
-      "A car ride hailing platform designed to help people find rides, connect with drivers and enjoy seamless travel experiences.",
-    stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "Flutter"],
-  },
-  {
-    name: "SkyHealth",
-    category: "Web & Mobile",
-    image: "/images/projects/skyhealth-mckp.jpg",
-    alt: "SkyHealth healthcare platform",
-    href: "https://skyhealth.vercel.app",
-    description:
-      "A healthcare platform designed to help users access medical services, connect with healthcare providers and manage their health records through a seamless digital experience.",
-    stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "Flutter"],
-  },
-  {
-    name: "Grandbox",
-    category: "Mobile App",
-    image: "/images/projects/Grandbox.png",
-    alt: "Fashion designer portfolio",
-    href: "https://grandbox.vercel.app",
-    description:
-      "Granbox portfolio website showcasing creative work and professional experience.",
-    stacks: ["Flutter"],
-  },
+  // {
+  //   name: "SkyHealth",
+  //   category: "Web & Mobile",
+  //   image: "/images/projects/skyhealth-mckp.jpg",
+  //   alt: "SkyHealth healthcare platform",
+  //   href: "https://skyhealth.vercel.app",
+  //   description:
+  //     "A healthcare platform designed to help users access medical services, connect with healthcare providers and manage their health records through a seamless digital experience.",
+  //   stacks: ["Next.js", "Nest.js", "Node.js", "PostgreSQL", "Flutter"],
+  // },
+  // {
+  //   name: "Grandbox",
+  //   category: "Mobile App",
+  //   image: "/images/projects/Grandbox.png",
+  //   alt: "Fashion designer portfolio",
+  //   href: "https://grandbox.vercel.app",
+  //   description:
+  //     "Granbox portfolio website showcasing creative work and professional experience.",
+  //   stacks: ["Flutter"],
+  // },
 ] as const;
 
 export default function ProjectsPage() {

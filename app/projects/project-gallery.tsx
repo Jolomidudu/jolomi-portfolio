@@ -12,19 +12,19 @@ type Project = {
   alt: string;
   href: string;
   description: string;
-  stacks: readonly string[];
+  // stacks: readonly string[];
 };
 
 const categories = [
   { id: "all", label: "ALL PROJECTS" },
   { id: "web-app", label: "WEB APP" },
   { id: "mobile", label: "MOBILE" },
-  { id: "uiux", label: "UIUX" },
+  // { id: "uiux", label: "UIUX" },
   { id: "analytics", label: "ANALYTICS" },
-  { id: "bdm", label: "BDM" },
-  { id: "digital-marketing", label: "DIGI-MARKETING" },
-  { id: "cybersecurity", label: "CYBERSECURITY" },
-  { id: "cloud", label: "CLOUD" },
+  // { id: "bdm", label: "BDM" },
+  // { id: "digital-marketing", label: "DIGI-MARKETING" },
+  // { id: "cybersecurity", label: "CYBERSECURITY" },
+  // { id: "cloud", label: "CLOUD" },
 ] as const;
 
 type CategoryId = (typeof categories)[number]["id"];
@@ -37,8 +37,8 @@ function matchesCategory(project: Project, category: CategoryId) {
       return project.category === "Web App" || project.category === "Web & Mobile";
     case "mobile":
       return project.category === "Mobile App" || project.category === "Web & Mobile";
-    case "cloud":
-      return project.stacks.includes("AWS");
+    // case "cloud":
+    //   return project.stacks.includes("AWS");
     default:
       return false;
   }
@@ -106,13 +106,13 @@ export default function ProjectGallery({ projects }: { projects: readonly Projec
                 <p className="mt-3 text-sm leading-6 text-black/60">{project.description}</p>
               </div>
 
-              <div className="flex flex-wrap gap-2">
+              {/* <div className="flex flex-wrap gap-2">
                 {project.stacks.map((stack) => (
                   <span key={`${project.name}-${stack}`} className="rounded-full border border-black/10 bg-[#f5f5f0] px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.08em] text-black/65">
                     {stack}
                   </span>
                 ))}
-              </div>
+              </div> */}
             </div>
           </article>
         ))}
