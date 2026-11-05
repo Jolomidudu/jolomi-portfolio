@@ -2,7 +2,7 @@ export const projectServices = [
   {
     id: "mobile-application-development",
     slug: "mobile-application-development",
-    number: "06",
+    number: "01",
     name: "Mobile Application Development",
     nigeria: "₦3M – ₦15M+",
     international: "$2,200 – $13,000+",
@@ -17,7 +17,7 @@ export const projectServices = [
    {
     id: "web-application-development",
     slug: "web-application-development",
-    number: "05",
+    number: "02",
     name: "Web Application Development",
     nigeria: "₦450K – ₦5M+",
     international: "$300 – $3,800+",
@@ -32,7 +32,7 @@ export const projectServices = [
    {
     id: "product-design-ui-ux",
     slug: "product-design-ui-ux",
-    number: "07",
+    number: "03",
     name: "Product Design / UI-UX",
     nigeria: "₦450K – ₦8M",
     international: "$300 – $6,200",
@@ -47,7 +47,7 @@ export const projectServices = [
   {
     id: "technology-strategy-advisory",
     slug: "technology-strategy-advisory",
-    number: "01",
+    number: "04",
     name: "Technology Strategy & Advisory",
     nigeria: "₦500K – ₦2.5M",
     international: "$400 – $1,800",
@@ -62,7 +62,7 @@ export const projectServices = [
   {
     id: "ict-it-leadership-consulting",
     slug: "ict-it-leadership-consulting",
-    number: "02",
+    number: "05",
     name: "ICT / IT Leadership Consulting",
     nigeria: "₦750K – ₦3M / month",
     international: "$600 – $2,000 / month",
@@ -77,7 +77,7 @@ export const projectServices = [
   {
     id: "digital-transformation",
     slug: "digital-transformation",
-    number: "03",
+    number: "06",
     name: "Digital Transformation",
     nigeria: "₦1M – ₦5M+",
     international: "$800 – $4,000+",
@@ -92,7 +92,7 @@ export const projectServices = [
   {
     id: "software-architecture",
     slug: "software-architecture",
-    number: "04",
+    number: "07",
     name: "Software Architecture",
     nigeria: "₦750K – ₦10M",
     international: "$600 – $8,000",
